@@ -1,9 +1,9 @@
-package com.szpejsoft.flashcards.common.db
+package com.szpejsoft.flashcards.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.szpejsoft.flashcards.common.db.dao.CardSetDao
-import com.szpejsoft.flashcards.common.db.entities.DbCardSet
+import com.szpejsoft.flashcards.data.db.dao.CardSetDao
+import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 
 @Database(
     version = 1,

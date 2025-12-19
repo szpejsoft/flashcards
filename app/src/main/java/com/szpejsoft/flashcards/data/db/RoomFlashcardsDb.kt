@@ -1,6 +1,6 @@
-package com.szpejsoft.flashcards.common.db
+package com.szpejsoft.flashcards.data.db
 
-import com.szpejsoft.flashcards.common.db.dao.CardSetDao
+import com.szpejsoft.flashcards.data.db.dao.CardSetDao
 
 class RoomFlashcardsDb(private val db: FlashcardsDbDefinition) : FlashcardsDb {
     override fun cardSetDao(): CardSetDao = db.cardSetDao()

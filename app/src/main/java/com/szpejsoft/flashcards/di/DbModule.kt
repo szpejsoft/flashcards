@@ -2,10 +2,10 @@ package com.szpejsoft.flashcards.di
 
 import android.app.Application
 import androidx.room.Room
-import com.szpejsoft.flashcards.common.Constants
-import com.szpejsoft.flashcards.common.db.FlashcardsDb
-import com.szpejsoft.flashcards.common.db.FlashcardsDbDefinition
-import com.szpejsoft.flashcards.common.db.RoomFlashcardsDb
+import com.szpejsoft.flashcards.Constants
+import com.szpejsoft.flashcards.data.db.FlashcardsDb
+import com.szpejsoft.flashcards.data.db.FlashcardsDbDefinition
+import com.szpejsoft.flashcards.data.db.RoomFlashcardsDb
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+class DbModule {
 
     @Provides
     @Singleton
