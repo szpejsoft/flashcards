@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
-import com.szpejsoft.flashcards.ui.screens.cardsets.CardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.CardSetList
 
@@ -14,7 +14,7 @@ typealias NavEntryProvider = (Screen) -> NavEntry<Screen>
 class ScreenNavigator {
     val backStack = mutableStateListOf<Screen>(CardSetList)
     val entryProvider: NavEntryProvider = entryProvider {
-        entry<CardSetList> { CardSetListScreen { navigateToAddCardSet() } }
+        entry<CardSetList> { CardSetListScreen(onAddButtonClick = { navigateToAddCardSet() }) }
         entry<AddCardSet> { AddCardSetScreen(onNavigateBack = { navigateBack() }) }
     }
 

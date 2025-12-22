@@ -16,6 +16,10 @@ constructor(
     private val cardSetDao: CardSetDao
 ) : CardSetRepository {
 
+    override suspend fun delete(cardSetId: Long) {
+        cardSetDao.delete(cardSetId)
+    }
+
     override suspend fun save(cardSetName: String) {
         cardSetDao.insert(DbCardSet(id = 0, name = cardSetName))
     }
@@ -23,4 +27,5 @@ constructor(
     override fun observeAll(): Flow<List<CardSet>> =
         cardSetDao.observe()
             .map { it.toDomain() }
+
 }

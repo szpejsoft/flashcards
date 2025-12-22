@@ -24,6 +24,10 @@ constructor(
 
     private val _uiState = MutableStateFlow<AddCardSetUiState>(Editing())
 
+    fun resetState() {
+        _uiState.value = Editing()
+    }
+
     fun onCardSetNameChanged(name: String) {
         if (_uiState.value is Editing) {
             _uiState.update { Editing(name, name.isNotBlank()) }

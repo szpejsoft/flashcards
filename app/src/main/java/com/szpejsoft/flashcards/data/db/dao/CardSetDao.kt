@@ -1,6 +1,7 @@
 package com.szpejsoft.flashcards.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -11,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 interface CardSetDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dbCardSet: DbCardSet)
+
+    @Query("DELETE FROM card_set WHERE id = :id")
+    suspend fun delete(id: Long)
 
     @Query("SELECT * FROM card_set")
     fun observe(): Flow<List<DbCardSet>>
