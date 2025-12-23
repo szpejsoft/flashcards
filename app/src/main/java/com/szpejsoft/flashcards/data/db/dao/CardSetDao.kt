@@ -1,7 +1,6 @@
 package com.szpejsoft.flashcards.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,6 +16,6 @@ interface CardSetDao {
     suspend fun delete(id: Long)
 
     @Query("SELECT * FROM card_set")
-    fun observe(): Flow<List<DbCardSet>>
+    fun observeAll(): Flow<List<DbCardSet>>
 
 }

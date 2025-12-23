@@ -25,7 +25,7 @@ constructor(
     }
 
     override fun observeAll(): Flow<List<CardSet>> =
-        cardSetDao.observe()
+        cardSetDao.observeAll()
             .map { it.toDomain() }
 
 }
