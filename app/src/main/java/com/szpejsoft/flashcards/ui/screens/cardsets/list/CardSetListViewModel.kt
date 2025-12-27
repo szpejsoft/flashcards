@@ -13,20 +13,20 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class CardSetListViewModel
+open class CardSetListViewModel
 @Inject constructor(
-    private val observeCardSetsUseCase: ObserveCardSetsUseCase,
+    observeCardSetsUseCase: ObserveCardSetsUseCase,
     private val deleteCardSetUseCase: DeleteCardSetUseCase
 ) : ViewModel() {
 
-    val cardSets: StateFlow<List<CardSet>> = observeCardSetsUseCase()
+    open val cardSets: StateFlow<List<CardSet>> = observeCardSetsUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = emptyList()
         )
 
-    fun onDeleteCardSetClicked(cardSetId: Long) {
+    open fun onDeleteCardSetClicked(cardSetId: Long) {
         viewModelScope.launch {
             deleteCardSetUseCase(cardSetId)
         }

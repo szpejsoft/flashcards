@@ -6,8 +6,10 @@ import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 import com.szpejsoft.flashcards.data.mappers.toDomain
 import com.szpejsoft.flashcards.data.repository.CardSetRepositoryImpl
 import com.szpejsoft.flashcards.domain.model.CardSet
+import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -18,13 +20,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("UnusedFlow")
 class CardSetRepositoryTest {
     private lateinit var sut: CardSetRepositoryImpl
+    @MockK(relaxed = true)
     private lateinit var cardSetDao: CardSetDao
 
     @Before
     fun setUp() {
-        cardSetDao = mockk(relaxed = true)
+        MockKAnnotations.init(this)
         sut = CardSetRepositoryImpl(cardSetDao)
     }
 

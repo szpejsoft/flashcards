@@ -1,7 +1,9 @@
 package com.szpejsoft.flashcards.domain.usecase
 
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
+import io.mockk.MockKAnnotations
 import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
@@ -11,12 +13,13 @@ import org.junit.Test
 
 class SaveCardSetUseCaseTest {
     private lateinit var sut: SaveCardSetUseCase
+    @MockK(relaxed = true)
     private lateinit var cardSetRepository: CardSetRepository
 
 
     @Before
     fun setUp() {
-        cardSetRepository = mockk(relaxed = true)
+        MockKAnnotations.init(this)
         sut = SaveCardSetUseCase(cardSetRepository)
     }
 

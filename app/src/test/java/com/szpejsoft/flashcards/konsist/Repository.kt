@@ -42,7 +42,7 @@ class Repository {
 
     @Test
     fun `every interface has implementation`() {
-        val implementations = Konsist.scopeFromProduction()
+        val repositories = Konsist.scopeFromProduction()
             .classes()
             .withNameEndingWith("RepositoryImpl")
             .map { it.name }
@@ -55,7 +55,7 @@ class Repository {
             .map { it.name }
             .toTypedArray()
 
-        assertArrayEquals(interfacesImplementations, implementations)
+        assertArrayEquals(interfacesImplementations, repositories)
     }
 
     @Test
@@ -65,6 +65,5 @@ class Repository {
             .withNameEndingWith("RepositoryImpl")
             .assertTrue { it.hasTestClasses() }
     }
-
 
 }
