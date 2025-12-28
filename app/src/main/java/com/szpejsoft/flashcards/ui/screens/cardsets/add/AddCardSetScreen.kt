@@ -85,7 +85,7 @@ fun AddCardSetScreen(
                     onNameChange = {},
                     onSaveClick = {}
                 )
-                Text(text = state.message, color = MaterialTheme.colorScheme.error)
+                Text(text = state.message?:stringResource(R.string.database_save_error_message), color = MaterialTheme.colorScheme.error)
             }
         }
 
@@ -116,7 +116,7 @@ fun AddCardSetContent(
             supportingText = {
                 if (isError) {
                     Text(
-                        text =stringResource(R.string.add_card_set_screen_card_set_title_empty_error_message),
+                        text = stringResource(R.string.add_card_set_screen_card_set_title_empty_error_message),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -136,7 +136,7 @@ fun AddCardSetContent(
             enabled = isSaveEnabled,
             onClick = onSaveClick
         ) {
-            Text("Save")
+            Text(stringResource(R.string.add_card_set_screen_save_button_title))
         }
     }
 }

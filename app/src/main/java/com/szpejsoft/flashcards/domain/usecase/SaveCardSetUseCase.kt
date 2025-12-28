@@ -3,7 +3,6 @@ package com.szpejsoft.flashcards.domain.usecase
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
 import javax.inject.Inject
 
-
 class SaveCardSetUseCase
 @Inject
 constructor(private val cardSetRepository: CardSetRepository) {

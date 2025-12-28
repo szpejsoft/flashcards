@@ -43,6 +43,7 @@ class CardSetRepositoryTest {
 
         //act
         sut.delete(1)
+
         //assert
         coVerify { cardSetDao.delete(1) }
     }

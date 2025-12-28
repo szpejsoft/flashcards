@@ -9,27 +9,34 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-open class CardSetListViewModel
-@Inject constructor(
+class CardSetListViewModel
+@Inject
+constructor(
     observeCardSetsUseCase: ObserveCardSetsUseCase,
     private val deleteCardSetUseCase: DeleteCardSetUseCase
 ) : ViewModel() {
 
-    open val cardSets: StateFlow<List<CardSet>> = observeCardSetsUseCase()
+    val cardSets: StateFlow<CardSetListUiState> = observeCardSetsUseCase()
+        .map { CardSetListUiState.Idle(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = emptyList()
+            initialValue = CardSetListUiState.Idle(emptyList())
         )
 
-    open fun onDeleteCardSetClicked(cardSetId: Long) {
+    fun onDeleteCardSetClicked(cardSetId: Long) {
         viewModelScope.launch {
             deleteCardSetUseCase(cardSetId)
         }
     }
 
+}
+
+sealed class CardSetListUiState {
+    data class Idle(val cardSets: List<CardSet>) : CardSetListUiState()
 }

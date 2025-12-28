@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.szpejsoft.flashcards.domain.model.CardSet
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -15,13 +16,9 @@ class CardSetListScreenTest {
     val composeTestRule = createComposeRule()
     private lateinit var viewModel: CardSetListViewModel
 
-    @Test
-    fun whenViewModelProvidesCardSets_showThem() {
-        //arrange
-        val sets = listOf(
-            CardSet(id = 1L, "my first cardset"),
-            CardSet(id = 2L, "my second cardset"),
-        )
+    @Before
+    fun setUp() {
+        viewModel = CardSetListViewModel()
         composeTestRule.setContent {
             viewModel = CardSetListViewModel()
             CardSetListScreen(
@@ -29,6 +26,15 @@ class CardSetListScreenTest {
                 onAddButtonClick = {}
             )
         }
+    }
+
+    @Test
+    fun whenViewModelProvidesCardSets_showThem() {
+        //arrange
+        val sets = listOf(
+            CardSet(id = 1L, "my first cardset"),
+            CardSet(id = 2L, "my second cardset"),
+        )
 
         //act
         viewModel.setCardSets(sets)
@@ -45,13 +51,6 @@ class CardSetListScreenTest {
             CardSet(id = 1L, "my first cardset"),
             CardSet(id = 2L, "my second cardset"),
         )
-        composeTestRule.setContent {
-            viewModel = CardSetListViewModel()
-            CardSetListScreen(
-                viewModel = viewModel,
-                onAddButtonClick = {}
-            )
-        }
 
         //act
         viewModel.setCardSets(sets)

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Flashcards</string>
     <string name="add_card_set_screen_card_set_title_hint">Title</string>
+    <string name="add_card_set_screen_save_button_title">Save</string>
     <string name="add_card_set_screen_card_set_title_empty_error_message">Title cannot be empty</string>
 
     <!-- WCAG-->
     <string name="wcag_description_success">success</string>
+    <string name="database_save_error_message">Error while saving your set</string>
 </resources>

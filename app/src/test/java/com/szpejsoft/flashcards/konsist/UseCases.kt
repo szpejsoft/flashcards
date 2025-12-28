@@ -7,7 +7,7 @@ import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
 
-class UseCase {
+class UseCases {
 
     @Test
     fun `all usecases are placed in proper package`() {

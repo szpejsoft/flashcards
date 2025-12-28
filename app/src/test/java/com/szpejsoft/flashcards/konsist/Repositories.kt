@@ -8,7 +8,7 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class Repository {
+class Repositories {
 
     @Test
     fun `repositories are defined in domain layer`() {

@@ -42,8 +42,8 @@ constructor(
                 try {
                     saveCardSetUseCase(currentState.name)
                     _uiState.value = AddCardSetUiState.Saved
-                } catch (_: Exception) {
-                    _uiState.value = AddCardSetUiState.Error("Failed to save card set.")
+                } catch (e: Exception) {
+                    _uiState.value = AddCardSetUiState.Error(e.message)
                 }
             }
         }
@@ -53,7 +53,7 @@ constructor(
 
 sealed class AddCardSetUiState {
     data class Editing(val name: String = "", val isSaveEnabled: Boolean = false) : AddCardSetUiState()
-    data class Error(val message: String) : AddCardSetUiState()
+    data class Error(val message: String?) : AddCardSetUiState()
     data object Saving : AddCardSetUiState()
     data object Saved : AddCardSetUiState()
 }

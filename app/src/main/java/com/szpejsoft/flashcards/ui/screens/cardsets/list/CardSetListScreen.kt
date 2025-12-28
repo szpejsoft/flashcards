@@ -29,8 +29,9 @@ fun CardSetListScreen(
     viewModel: CardSetListViewModel = hiltViewModel(),
     onAddButtonClick: () -> Unit
 ) {
-    val cardSets by viewModel.cardSets.collectAsState()
+    val uiState by viewModel.cardSets.collectAsState()
     var expandedCardId by rememberSaveable { mutableStateOf<Long?>(null) }
+    val cardSets = (uiState as? CardSetListUiState.Idle)?.cardSets ?: emptyList()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
