@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.ui.NavDisplay
 import com.szpejsoft.flashcards.ui.screens.navigation.ScreenNavigator
 import com.szpejsoft.flashcards.ui.theme.FlashcardsTheme
 
@@ -38,10 +37,7 @@ fun MainScreenContent(
             .padding(padding)
             .padding(horizontal = 12.dp)
     ) {
-        NavDisplay(
-            backStack = screenNavigator.backStack,
-            entryProvider = screenNavigator.entryProvider,
-            onBack = { screenNavigator.navigateBack() }
-        )
+        screenNavigator.NavDisplay()
+
     }
 }

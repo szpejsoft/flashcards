@@ -3,6 +3,7 @@ package com.szpejsoft.flashcards.domain.usecase
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
+import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

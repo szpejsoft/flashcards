@@ -1,8 +1,8 @@
 package com.szpejsoft.flashcards.screens.cardset.list
 
 import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.usecase.DeleteCardSetUseCase
-import com.szpejsoft.flashcards.domain.usecase.ObserveCardSetsUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListUiState
 import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListViewModel
 import io.mockk.MockKAnnotations

@@ -2,13 +2,12 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.szpejsoft.flashcards.domain.usecase.SaveCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetUiState.Editing
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,7 +19,7 @@ constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<AddCardSetUiState>
-        get() = _uiState.asStateFlow()
+        get() = _uiState
 
     private val _uiState = MutableStateFlow<AddCardSetUiState>(Editing())
 

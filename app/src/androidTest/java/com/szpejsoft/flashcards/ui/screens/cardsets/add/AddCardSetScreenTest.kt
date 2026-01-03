@@ -24,7 +24,7 @@ class AddCardSetScreenTest {
     fun setUp() {
         viewModel = AddCardSetViewModel()
         composeTestRule.setContent {
-            AddCardSetScreen(viewModel = viewModel, onNavigateBack = {})
+            AddCardSetScreen(viewModel = viewModel) {}
         }
     }
 

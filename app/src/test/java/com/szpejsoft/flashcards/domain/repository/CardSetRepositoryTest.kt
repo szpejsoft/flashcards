@@ -10,7 +10,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.flow
@@ -22,7 +21,8 @@ import org.junit.Test
 
 @Suppress("UnusedFlow")
 class CardSetRepositoryTest {
-    private lateinit var sut: CardSetRepositoryImpl
+    private lateinit var sut: CardSetRepository
+
     @MockK(relaxed = true)
     private lateinit var cardSetDao: CardSetDao
 

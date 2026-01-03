@@ -1,10 +1,10 @@
 package com.szpejsoft.flashcards.domain.usecase
 
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
+import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.junit.After
