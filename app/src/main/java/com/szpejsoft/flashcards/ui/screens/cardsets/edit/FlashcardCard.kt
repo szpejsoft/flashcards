@@ -17,7 +17,7 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 @Composable
 fun FlashcardCard(
     flashCard: Flashcard,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
