@@ -1,34 +1,26 @@
-package com.szpejsoft.flashcards.domain.repository
+package com.szpejsoft.flashcards.data.repository
 
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.data.db.dao.FlashcardDao
 import com.szpejsoft.flashcards.data.db.entities.DbFlashcard
 import com.szpejsoft.flashcards.data.repository.FlashcardRepositoryImpl
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.slot
-import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class FlashcardsRepositoryTest {
-    private lateinit var sut: FlashcardRepository
+class FlashcardsRepositoryTest: BaseMockKTest() {
+    private lateinit var sut: FlashcardRepositoryImpl
 
     @MockK(relaxed = true)
     private lateinit var flashcardDao: FlashcardDao
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this)
         sut = FlashcardRepositoryImpl(flashcardDao)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test

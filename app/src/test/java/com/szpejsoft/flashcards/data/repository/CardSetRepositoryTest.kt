@@ -1,40 +1,32 @@
-package com.szpejsoft.flashcards.domain.repository
+package com.szpejsoft.flashcards.data.repository
 
 import app.cash.turbine.test
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.data.db.dao.CardSetDao
 import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 import com.szpejsoft.flashcards.data.mappers.toDomain
 import com.szpejsoft.flashcards.data.repository.CardSetRepositoryImpl
 import com.szpejsoft.flashcards.domain.model.CardSet
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class CardSetRepositoryTest {
-    private lateinit var sut: CardSetRepository
+class CardSetRepositoryTest : BaseMockKTest() {
+    private lateinit var sut: CardSetRepositoryImpl
 
     @MockK(relaxed = true)
     private lateinit var cardSetDao: CardSetDao
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = CardSetRepositoryImpl(cardSetDao)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test
@@ -73,11 +65,11 @@ class CardSetRepositoryTest {
             DbCardSet(2, "name 2")
         )
 
-        val daoFlow = flow {
-            emit(emptyList())
-            emit(initialList)
-            emit(updatedList)
-        }
+        val daoFlow = flowOf(
+            emptyList(),
+            initialList,
+            updatedList,
+        )
         every { cardSetDao.observeAll() } returns daoFlow
 
         //act & assert

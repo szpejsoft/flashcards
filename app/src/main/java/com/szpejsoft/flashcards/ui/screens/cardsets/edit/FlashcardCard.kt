@@ -17,12 +17,12 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 @Composable
 fun FlashcardCard(
     flashCard: Flashcard,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick }
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier
@@ -31,12 +31,12 @@ fun FlashcardCard(
         ) {
             Text(
                 text = flashCard.obverse,
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineMedium
             )
             HorizontalDivider()
             Text(
                 text = flashCard.reverse,
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineMedium
             )
         }
     }

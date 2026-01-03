@@ -68,6 +68,7 @@ dependencies {
     //database
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.ui.test.junit4)
     ksp(libs.room.compiler)
 
     //coroutines
@@ -97,11 +98,11 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
 
-    androidTestImplementation(libs.junit)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.junit)
     androidTestImplementation(libs.mockk.android)
 
 }

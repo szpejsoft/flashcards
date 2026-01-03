@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.flashcard.DeleteFlashcardUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.SaveFlashcardUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Busy
+import com.szpejsoft.flashcards.domain.usecase.flashcard.UpdateFlashcardUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Idle
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -16,8 +17,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+//todo error handling
 
 @HiltViewModel(assistedFactory = EditCardSetViewModel.Factory::class)
 class EditCardSetViewModel
@@ -25,8 +27,10 @@ class EditCardSetViewModel
 constructor(
     @Assisted
     private val cardSetId: Long,
+    private val deleteFlashcardUseCase: DeleteFlashcardUseCase,
     private val observeCardSetUseCase: ObserveCardSetUseCase,
-    private val saveFlashcardUseCase: SaveFlashcardUseCase
+    private val saveFlashcardUseCase: SaveFlashcardUseCase,
+    private val updateFlashcardUseCase: UpdateFlashcardUseCase
 ) : ViewModel() {
 
     @AssistedFactory
@@ -36,7 +40,7 @@ constructor(
 
     val uiState: StateFlow<EditCardSetUiState> get() = _uiState
 
-    private val _uiState = MutableStateFlow<EditCardSetUiState>(Busy)
+    private val _uiState = MutableStateFlow<EditCardSetUiState>(Idle())
 
     init {
         viewModelScope.launch {
@@ -45,7 +49,7 @@ constructor(
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000L),
-                    initialValue = Busy
+                    initialValue = Idle()
                 )
                 .collect { _uiState.value = it }
         }
@@ -53,15 +57,25 @@ constructor(
 
     fun onAddFlashcard(obverse: String, reverse: String) {
         viewModelScope.launch {
-            _uiState.update { Busy } //will be updated to idle from observeCardSetUseCase
             saveFlashcardUseCase(cardSetId, obverse, reverse)
+        }
+    }
+
+    fun onDeleteFlashcard(flashcardId: Long) {
+        viewModelScope.launch {
+            deleteFlashcardUseCase(flashcardId)
+        }
+    }
+
+    fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
+        viewModelScope.launch {
+            updateFlashcardUseCase(flashcardId, obverse, reverse)
         }
     }
 
 }
 
 sealed class EditCardSetUiState {
-    data object Busy : EditCardSetUiState()
-    data class Idle(val cardSetName: String, val flashCards: List<Flashcard>) : EditCardSetUiState()
+    data class Idle(val cardSetName: String = "", val flashCards: List<Flashcard> = emptyList()) : EditCardSetUiState()
     data class Error(val message: String?) : EditCardSetUiState()
 }

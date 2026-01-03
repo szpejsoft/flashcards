@@ -1,38 +1,28 @@
-package com.szpejsoft.flashcards.domain.usecase
+package com.szpejsoft.flashcards.domain.usecase.cardset
 
 import app.cash.turbine.test
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
-import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class ObserveCardSetUseCaseTest {
+class ObserveCardSetsUseCaseTest : BaseMockKTest() {
     private lateinit var sut: ObserveCardSetsUseCase
 
     @MockK(relaxed = true)
     private lateinit var cardSetRepository: CardSetRepository
 
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = ObserveCardSetsUseCase(cardSetRepository)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test
@@ -48,18 +38,18 @@ class ObserveCardSetUseCaseTest {
             CardSet(2, "name 2")
         )
 
-        val repositoryFlow = flow {
-            emit(emptyList())
-            emit(initialList)
-            emit(updatedList)
-        }
+        val repositoryFlow = flowOf(
+            emptyList(),
+            initialList,
+            updatedList,
+        )
         every { cardSetRepository.observeAll() } returns repositoryFlow
 
         //act & assert
         sut().test {
-            assertEquals(emptyList<CardSet>(), awaitItem())
-            assertEquals(initialList, awaitItem())
-            assertEquals(updatedList, awaitItem())
+            Assert.assertEquals(emptyList<CardSet>(), awaitItem())
+            Assert.assertEquals(initialList, awaitItem())
+            Assert.assertEquals(updatedList, awaitItem())
             awaitComplete()
         }
         verify(exactly = 1) { cardSetRepository.observeAll() }

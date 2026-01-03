@@ -1,23 +1,21 @@
-package com.szpejsoft.flashcards.screens.cardset.add
+package com.szpejsoft.flashcards.screens.cardsets.add
 
 import app.cash.turbine.test
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetUiState
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetViewModel
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AddCardSetViewModelTest {
+class AddCardSetViewModelTest : BaseMockKTest() {
 
     private lateinit var sut: AddCardSetViewModel
 
@@ -27,13 +25,7 @@ class AddCardSetViewModelTest {
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = AddCardSetViewModel(saveCardSetUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test

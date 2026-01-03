@@ -12,28 +12,28 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AddCardSetViewModel
+open class AddCardSetViewModel
 @Inject
 constructor(
     private val saveCardSetUseCase: SaveCardSetUseCase
 ) : ViewModel() {
 
-    val uiState: StateFlow<AddCardSetUiState>
+   open val uiState: StateFlow<AddCardSetUiState>
         get() = _uiState
 
     private val _uiState = MutableStateFlow<AddCardSetUiState>(Editing())
 
-    fun resetState() {
+    open fun resetState() {
         _uiState.value = Editing()
     }
 
-    fun onCardSetNameChanged(name: String) {
+    open fun onCardSetNameChanged(name: String) {
         if (_uiState.value is Editing) {
             _uiState.update { Editing(name, name.isNotBlank()) }
         }
     }
 
-    fun onSaveClicked() {
+    open fun onSaveClicked() {
         val currentState = _uiState.value
         if (currentState is Editing && currentState.isSaveEnabled) {
             viewModelScope.launch {

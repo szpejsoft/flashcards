@@ -1,31 +1,22 @@
-package com.szpejsoft.flashcards.domain.usecase
+package com.szpejsoft.flashcards.domain.usecase.cardset
 
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
-import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class SaveCardSetUseCaseTest {
+class SaveCardSetUseCaseTest : BaseMockKTest() {
     private lateinit var sut: SaveCardSetUseCase
+
     @MockK(relaxed = true)
     private lateinit var cardSetRepository: CardSetRepository
 
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = SaveCardSetUseCase(cardSetRepository)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test

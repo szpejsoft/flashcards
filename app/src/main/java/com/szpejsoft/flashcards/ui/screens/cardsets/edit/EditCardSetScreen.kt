@@ -10,13 +10,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,47 +29,66 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Busy
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Error
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Idle
+import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
 fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit
+    viewModel: EditCardSetViewModel = hiltViewModel()
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
         is Error -> RenderError(uiState as Error)
-        is Idle -> RenderIdle(uiState as Idle, viewModel::onAddFlashcard)
-        Busy -> RenderLoading()
-    }
-
-}
-
-@Composable
-fun RenderLoading() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+        is Idle -> RenderIdle(
+            uiState as Idle,
+            viewModel::onAddFlashcard,
+            viewModel::onDeleteFlashcard,
+            viewModel::onUpdateFlashcard
+        )
     }
 }
 
 @Composable
 fun RenderIdle(
     state: Idle,
-    onAddFlashcard: (String, String) -> Unit
+    onAddFlashcard: (String, String) -> Unit,
+    onDeleteFlashcard: (Long) -> Unit,
+    onUpdateFlashcard: (Long, String, String) -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    var showAddFlashCardDialog by remember { mutableStateOf(false) }
+    var expandedCardId by remember { mutableStateOf<Long?>(null) }
+    var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
+    var isActionInProgress by remember { mutableStateOf(false) }
 
-    if (showDialog) {
+    LaunchedEffect(state.flashCards) {
+        isActionInProgress = false
+    }
+
+    if (showAddFlashCardDialog) {
         AddFlashcardDialog(
-            onDismiss = { showDialog = false },
+            onDismiss = { showAddFlashCardDialog = false },
             onConfirm = { obverse, reverse ->
-                showDialog = false
+                showAddFlashCardDialog = false
                 onAddFlashcard(obverse, reverse)
             }
+        )
+    }
+
+    if (editedFlashcardId != null) {
+        val id = editedFlashcardId ?: return
+        val flashcard = state.flashCards.first { it.id == id }
+
+        UpdateFlashcardDialog(
+            flashcardId = id,
+            obverse = flashcard.obverse,
+            reverse = flashcard.reverse,
+            onConfirm = { id, obverse, reverse ->
+                onUpdateFlashcard(id, obverse, reverse)
+                editedFlashcardId = null
+            },
+            onDismiss = { editedFlashcardId = null },
         )
     }
 
@@ -76,24 +96,55 @@ fun RenderIdle(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(text = state.cardSetName)
+            Text(
+                text = state.cardSetName,
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(12.dp)
+            )
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(
                     count = state.flashCards.size,
-                    key = { index -> state.flashCards[index].id },
-                    itemContent = { index -> FlashcardCard(state.flashCards[index]) }
-                )
+                    key = { index -> state.flashCards[index].id }
+                ) { index ->
+                    Box {
+                        val flashcardId = state.flashCards[index].id
+                        FlashcardCard(
+                            flashCard = state.flashCards[index],
+                            onClick = {
+                                expandedCardId = flashcardId
+                                editedFlashcardId = null
+                                showAddFlashCardDialog = false
+                            }
+                        )
+                        Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                            Toolbox(
+                                enabled = !isActionInProgress,
+                                expanded = expandedCardId == flashcardId,
+                                onDeleteClicked = {
+                                    isActionInProgress = true
+                                    onDeleteFlashcard(flashcardId)
+                                },
+                                onEditClicked = {
+                                    editedFlashcardId = flashcardId
+                                    expandedCardId = null
+                                    showAddFlashCardDialog = false
+                                },
+                                onDismissRequest = { expandedCardId = null }
+                            )
+                        }
+                    }
+                }
             }
         }
 
         FloatingActionButton(
-            onClick = { showDialog = true },
+            onClick = { if (!isActionInProgress) showAddFlashCardDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
         }
@@ -139,6 +190,51 @@ fun AddFlashcardDialog(
                 onClick = { onConfirm(obverse, reverse) }
             ) {
                 Text(text = stringResource(R.string.action_add))
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text(text = stringResource(R.string.action_cancel))
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UpdateFlashcardDialog(
+    flashcardId: Long,
+    obverse: String,
+    reverse: String,
+    onDismiss: () -> Unit,
+    onConfirm: (flashcardId: Long, obverse: String, reverse: String) -> Unit
+) {
+    var obverse by remember { mutableStateOf(obverse) }
+    var reverse by remember { mutableStateOf(reverse) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_title)) },
+        text = {
+            Column {
+                TextField(
+                    value = obverse,
+                    onValueChange = { obverse = it },
+                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_obverse_label)) }
+                )
+                TextField(
+                    value = reverse,
+                    onValueChange = { reverse = it },
+                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_reverse_label)) }
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                enabled = obverse.isNotBlank() && reverse.isNotBlank(),
+                onClick = { onConfirm(flashcardId, obverse, reverse) }
+            ) {
+                Text(text = stringResource(R.string.action_update))
             }
         },
         dismissButton = {

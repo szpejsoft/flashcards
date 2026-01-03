@@ -1,31 +1,22 @@
-package com.szpejsoft.flashcards.domain.usecase
+package com.szpejsoft.flashcards.domain.usecase.cardset
 
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
-import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class DeleteCardSetUseCaseTest {
+class DeleteCardSetUseCaseTest: BaseMockKTest() {
     private lateinit var sut: DeleteCardSetUseCase
+
     @MockK(relaxed = true)
     private lateinit var cardSetRepository: CardSetRepository
 
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = DeleteCardSetUseCase(cardSetRepository)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test
@@ -36,7 +27,6 @@ class DeleteCardSetUseCaseTest {
         sut.invoke(1)
         //assert
         coVerify { cardSetRepository.delete(1) }
-
     }
 
 }

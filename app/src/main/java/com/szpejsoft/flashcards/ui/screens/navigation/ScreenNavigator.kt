@@ -38,9 +38,7 @@ class ScreenNavigator {
             val viewModel = hiltViewModel<EditCardSetViewModel, EditCardSetViewModel.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
-            EditCardSetScreen(
-                viewModel = viewModel,
-                onNavigateBack = { navigateBack() })
+            EditCardSetScreen(viewModel = viewModel)
         }
     }
 
