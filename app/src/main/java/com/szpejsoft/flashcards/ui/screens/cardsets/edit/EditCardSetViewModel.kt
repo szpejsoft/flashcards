@@ -19,10 +19,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-//todo error handling
 
 @HiltViewModel(assistedFactory = EditCardSetViewModel.Factory::class)
-class EditCardSetViewModel
+open class EditCardSetViewModel
 @AssistedInject
 constructor(
     @Assisted
@@ -38,7 +37,7 @@ constructor(
         fun create(cardSetId: Long): EditCardSetViewModel
     }
 
-    val uiState: StateFlow<EditCardSetUiState> get() = _uiState
+    open val uiState: StateFlow<EditCardSetUiState> get() = _uiState
 
     private val _uiState = MutableStateFlow<EditCardSetUiState>(Idle())
 
@@ -55,19 +54,19 @@ constructor(
         }
     }
 
-    fun onAddFlashcard(obverse: String, reverse: String) {
+    open fun onAddFlashcard(obverse: String, reverse: String) {
         viewModelScope.launch {
             saveFlashcardUseCase(cardSetId, obverse, reverse)
         }
     }
 
-    fun onDeleteFlashcard(flashcardId: Long) {
+    open fun onDeleteFlashcard(flashcardId: Long) {
         viewModelScope.launch {
             deleteFlashcardUseCase(flashcardId)
         }
     }
 
-    fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
+    open fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
         viewModelScope.launch {
             updateFlashcardUseCase(flashcardId, obverse, reverse)
         }

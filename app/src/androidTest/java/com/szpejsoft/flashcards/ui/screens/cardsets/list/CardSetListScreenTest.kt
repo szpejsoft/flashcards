@@ -17,6 +17,9 @@ class CardSetListScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+    private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
+    private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
+
     private lateinit var viewModel: CardSetListViewModelTestDouble
 
     private val editCardSetCalls = mutableListOf<Long>()
@@ -44,7 +47,7 @@ class CardSetListScreenTest {
 
         //act
         viewModel.setCardSets(sets)
-        println("ptsz ${viewModel.uiState.value}")
+
         //assert
         composeTestRule.onNodeWithText("my first cardset", ignoreCase = true).assertIsDisplayed()
         composeTestRule.onNodeWithText("my second cardset", ignoreCase = true).assertIsDisplayed()
@@ -57,8 +60,6 @@ class CardSetListScreenTest {
             CardSet(id = 1L, "my first cardset"),
             CardSet(id = 2L, "my second cardset"),
         )
-
-        val deleteText = composeTestRule.activity.getString(R.string.action_delete)
 
         //act
         viewModel.setCardSets(sets)
@@ -76,7 +77,6 @@ class CardSetListScreenTest {
             CardSet(id = 1L, "my first cardset"),
             CardSet(id = 2L, "my second cardset"),
         )
-        val editText = composeTestRule.activity.getString(R.string.action_edit)
 
         //act
         viewModel.setCardSets(sets)

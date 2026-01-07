@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -175,12 +176,12 @@ fun AddFlashcardDialog(
                 TextField(
                     value = obverse,
                     onValueChange = { obverse = it },
-                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_obverse_label)) }
+                    label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_obverse_label)) }
                 )
                 TextField(
                     value = reverse,
                     onValueChange = { reverse = it },
-                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_reverse_label)) }
+                    label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_reverse_label)) }
                 )
             }
         },
@@ -214,18 +215,20 @@ fun UpdateFlashcardDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_title)) },
+        title = { Text(text = stringResource(R.string.edit_card_set_screen_update_flashcard_dialog_title)) },
         text = {
             Column {
                 TextField(
+                    modifier = Modifier.testTag("update_dialog_obverse_field"),
                     value = obverse,
                     onValueChange = { obverse = it },
-                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_obverse_label)) }
+                    label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_obverse_label)) }
                 )
                 TextField(
+                    modifier = Modifier.testTag("update_dialog_reverse_field"),
                     value = reverse,
                     onValueChange = { reverse = it },
-                    label = { Text(stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_reverse_label)) }
+                    label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_reverse_label)) }
                 )
             }
         },
