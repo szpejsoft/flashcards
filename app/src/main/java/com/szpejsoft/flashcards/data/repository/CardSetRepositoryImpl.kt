@@ -24,6 +24,10 @@ constructor(
         cardSetDao.insert(DbCardSet(id = 0, name = cardSetName))
     }
 
+    override suspend fun update(id: Long, cardSetName: String) {
+        cardSetDao.update(id, cardSetName)
+    }
+
     override fun observeAll(): Flow<List<CardSet>> =
         cardSetDao.observeAll()
             .map { it.toDomain() }

@@ -8,28 +8,29 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class SaveCardSetUseCaseTest : BaseMockKTest() {
-    private lateinit var sut: SaveCardSetUseCase
+class UpdateCardSetUseCaseTest : BaseMockKTest() {
+    private lateinit var sut: UpdateCardSetUseCase
 
     @MockK(relaxed = true)
     private lateinit var cardSetRepository: CardSetRepository
 
     @Before
     fun setUp() {
-        sut = SaveCardSetUseCase(cardSetRepository)
+        sut = UpdateCardSetUseCase(cardSetRepository)
     }
 
     @Test
-    fun `when invoke called, repository save called with proper parameter`() = runTest {
+    fun `when invoke called, repository update called with proper parameters`() = runTest {
         //arrange
+        val cardSetId = 1L
         val cardSetName = "name"
 
         //act
-        sut.invoke(cardSetName)
+        sut.invoke(cardSetId, cardSetName)
 
         //assert
-        coVerify(exactly = 1) { cardSetRepository.save(cardSetName) }
-
+        coVerify(exactly = 1) { cardSetRepository.update(cardSetId, cardSetName) }
     }
+
 
 }

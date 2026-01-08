@@ -17,6 +17,9 @@ interface CardSetDao {
     @Query("DELETE FROM card_set WHERE id = :id")
     suspend fun delete(id: Long)
 
+    @Query("UPDATE card_set SET name = :name WHERE id = :id")
+    suspend fun update(id: Long, name: String)
+
     @Query("SELECT * FROM card_set")
     fun observeAll(): Flow<List<DbCardSet>>
 

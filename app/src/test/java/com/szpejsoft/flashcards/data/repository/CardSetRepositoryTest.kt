@@ -5,7 +5,6 @@ import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.data.db.dao.CardSetDao
 import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 import com.szpejsoft.flashcards.data.mappers.toDomain
-import com.szpejsoft.flashcards.data.repository.CardSetRepositoryImpl
 import com.szpejsoft.flashcards.domain.model.CardSet
 import io.mockk.coVerify
 import io.mockk.every
@@ -80,6 +79,19 @@ class CardSetRepositoryTest : BaseMockKTest() {
             awaitComplete()
         }
         verify(exactly = 1) { cardSetDao.observeAll() }
+    }
+
+    @Test
+    fun `when update called, dao update called with proper parameters`() = runTest {
+        //arrange
+        val cardSetId = 1L
+        val cardSetName = "name"
+
+        //act
+        sut.update(cardSetId, cardSetName)
+
+        //assert
+        coVerify(exactly = 1) { cardSetDao.update(cardSetId, cardSetName) }
     }
 
 }

@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.DeleteFlashcardUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.SaveFlashcardUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.UpdateFlashcardUseCase
+import com.szpejsoft.flashcards.ui.log
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Idle
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -29,7 +31,8 @@ constructor(
     private val deleteFlashcardUseCase: DeleteFlashcardUseCase,
     private val observeCardSetUseCase: ObserveCardSetUseCase,
     private val saveFlashcardUseCase: SaveFlashcardUseCase,
-    private val updateFlashcardUseCase: UpdateFlashcardUseCase
+    private val updateFlashcardUseCase: UpdateFlashcardUseCase,
+    private val updateCardSetUseCase: UpdateCardSetUseCase
 ) : ViewModel() {
 
     @AssistedFactory
@@ -42,6 +45,7 @@ constructor(
     private val _uiState = MutableStateFlow<EditCardSetUiState>(Idle())
 
     init {
+        log("EditCardSetViewModel cardSetId $cardSetId")
         viewModelScope.launch {
             observeCardSetUseCase(cardSetId)
                 .map { Idle(it.cardSet.name, it.flashcards) }
@@ -69,6 +73,12 @@ constructor(
     open fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
         viewModelScope.launch {
             updateFlashcardUseCase(flashcardId, obverse, reverse)
+        }
+    }
+
+    open fun onUpdateCardSetName(cardSetName: String) {
+        viewModelScope.launch {
+            updateCardSetUseCase(cardSetId, cardSetName)
         }
     }
 

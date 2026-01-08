@@ -6,6 +6,7 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.DeleteFlashcardUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.SaveFlashcardUseCase
 import com.szpejsoft.flashcards.domain.usecase.flashcard.UpdateFlashcardUseCase
@@ -38,6 +39,9 @@ class EditCardSetViewModelTest : BaseMockKTest() {
     @MockK(relaxed = true)
     private lateinit var updateFlashcardUseCase: UpdateFlashcardUseCase
 
+    @MockK(relaxed = true)
+    private lateinit var updateCardSetUseCase: UpdateCardSetUseCase
+
     @Before
     fun setUp() {
         sut = EditCardSetViewModel(
@@ -45,7 +49,8 @@ class EditCardSetViewModelTest : BaseMockKTest() {
             deleteFlashcardUseCase,
             observeCardSetUseCase,
             saveFlashcardUseCase,
-            updateFlashcardUseCase
+            updateFlashcardUseCase,
+            updateCardSetUseCase
         )
     }
 
@@ -78,7 +83,8 @@ class EditCardSetViewModelTest : BaseMockKTest() {
             deleteFlashcardUseCase,
             observeCardSetUseCase,
             saveFlashcardUseCase,
-            updateFlashcardUseCase
+            updateFlashcardUseCase,
+            updateCardSetUseCase
         )
 
         //act & assert
@@ -130,6 +136,18 @@ class EditCardSetViewModelTest : BaseMockKTest() {
         //assert
         coVerify(exactly = 1) { updateFlashcardUseCase(FLASHCARD_ID, OBVERSE, REVERSE) }
     }
+
+    @Test
+    fun `when onUpdateCardSetName is called, proper useCase is called with proper parameters`() = runTest {
+        //arrange
+
+        //act
+        sut.onUpdateCardSetName("new name")
+
+        //assert
+        coVerify(exactly = 1) { updateCardSetUseCase(CARD_SET_ID, "new name") }
+    }
+
 
     companion object {
         private const val CARD_SET_ID = 1L

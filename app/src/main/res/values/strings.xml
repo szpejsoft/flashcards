@@ -21,4 +21,5 @@
     <!-- WCAG-->
     <string name="wcag_action_add">Add</string>
     <string name="wcag_description_success">success</string>
+    <string name="wcag_action_save">Save</string>
 </resources>
