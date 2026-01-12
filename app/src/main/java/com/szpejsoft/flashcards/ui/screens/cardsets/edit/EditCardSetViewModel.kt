@@ -5,11 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
-import com.szpejsoft.flashcards.domain.usecase.flashcard.DeleteFlashcardUseCase
-import com.szpejsoft.flashcards.domain.usecase.flashcard.SaveFlashcardUseCase
-import com.szpejsoft.flashcards.domain.usecase.flashcard.UpdateFlashcardUseCase
-import com.szpejsoft.flashcards.ui.log
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState.Idle
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -28,10 +24,7 @@ open class EditCardSetViewModel
 constructor(
     @Assisted
     private val cardSetId: Long,
-    private val deleteFlashcardUseCase: DeleteFlashcardUseCase,
     private val observeCardSetUseCase: ObserveCardSetUseCase,
-    private val saveFlashcardUseCase: SaveFlashcardUseCase,
-    private val updateFlashcardUseCase: UpdateFlashcardUseCase,
     private val updateCardSetUseCase: UpdateCardSetUseCase
 ) : ViewModel() {
 
@@ -42,49 +35,90 @@ constructor(
 
     open val uiState: StateFlow<EditCardSetUiState> get() = _uiState
 
-    private val _uiState = MutableStateFlow<EditCardSetUiState>(Idle())
+    private val _uiState = MutableStateFlow(EditCardSetUiState())
+    private val deletedFlashcardIds = mutableSetOf<Long>()
 
     init {
-        log("EditCardSetViewModel cardSetId $cardSetId")
         viewModelScope.launch {
             observeCardSetUseCase(cardSetId)
-                .map { Idle(it.cardSet.name, it.flashcards) }
+                .map {
+                    EditCardSetUiState(
+                        setName = it.cardSet.name,
+                        flashCards = it.flashcards,
+                        isModified = false,
+                        isSaving = false
+                    )
+                }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000L),
-                    initialValue = Idle()
+                    initialValue = EditCardSetUiState()
                 )
                 .collect { _uiState.value = it }
         }
     }
 
     open fun onAddFlashcard(obverse: String, reverse: String) {
-        viewModelScope.launch {
-            saveFlashcardUseCase(cardSetId, obverse, reverse)
+        _uiState.update { state ->
+            val newCard = Flashcard(0, obverse, reverse)
+            state.copy(
+                flashCards = state.flashCards + newCard,
+                isModified = true
+            )
         }
     }
 
     open fun onDeleteFlashcard(flashcardId: Long) {
-        viewModelScope.launch {
-            deleteFlashcardUseCase(flashcardId)
+        deletedFlashcardIds.add(flashcardId)
+        _uiState.update { state ->
+            state.copy(
+                flashCards = state.flashCards.filterNot { it.id == flashcardId },
+                isModified = true
+            )
         }
     }
 
     open fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
-        viewModelScope.launch {
-            updateFlashcardUseCase(flashcardId, obverse, reverse)
+        _uiState.update { state ->
+            val updatedCard = state.flashCards.first { it.id == flashcardId }.copy(
+                obverse = obverse,
+                reverse = reverse
+            )
+            state.copy(
+                flashCards = state.flashCards.filterNot { it.id == flashcardId } + updatedCard,
+                isModified = true
+            )
+
         }
     }
 
     open fun onUpdateCardSetName(cardSetName: String) {
+        _uiState.update { state ->
+            state.copy(setName = cardSetName, isModified = true)
+        }
+    }
+
+    open fun onSaveClicked() {
         viewModelScope.launch {
-            updateCardSetUseCase(cardSetId, cardSetName)
+            _uiState.update { it.copy(isSaving = true) }
+            try {
+                updateCardSetUseCase(
+                    cardSetId = cardSetId,
+                    cardSetName = _uiState.value.setName,
+                    flashcardsToSave = _uiState.value.flashCards,
+                    flashcardIdsToDelete = deletedFlashcardIds.toList()
+                )
+            } catch (_: Exception) {
+                _uiState.update { it.copy(isSaving = false) }
+            }
         }
     }
 
 }
 
-sealed class EditCardSetUiState {
-    data class Idle(val cardSetName: String = "", val flashCards: List<Flashcard> = emptyList()) : EditCardSetUiState()
-    data class Error(val message: String?) : EditCardSetUiState()
-}
+data class EditCardSetUiState(
+    val setName: String = "",
+    val flashCards: List<Flashcard> = emptyList(),
+    val isModified: Boolean = false,
+    val isSaving: Boolean = false
+)

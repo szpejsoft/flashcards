@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 class CardSetRepositoryImpl
 @Inject
 constructor(
-    private val cardSetDao: CardSetDao
+    private val cardSetDao: CardSetDao,
 ) : CardSetRepository {
 
     override suspend fun delete(cardSetId: Long) {

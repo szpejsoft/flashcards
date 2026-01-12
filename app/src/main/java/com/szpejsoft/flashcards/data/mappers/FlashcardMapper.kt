@@ -10,3 +10,12 @@ fun DbFlashcard.toDomain() = Flashcard(
 )
 
 fun List<DbFlashcard>.toDomain() = map { it.toDomain() }
+
+fun Flashcard.toDb(cardSetId: Long) = DbFlashcard(
+    id = id,
+    cardSetId = cardSetId,
+    obverse = obverse,
+    reverse = reverse
+)
+
+fun List<Flashcard>.toDb(cardSetId: Long) = map { it.toDb(cardSetId) }

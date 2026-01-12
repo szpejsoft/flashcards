@@ -5,16 +5,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditCardSetViewModelTestDouble : EditCardSetViewModel(
     cardSetId = 1L,
-    deleteFlashcardUseCase = mockk(relaxed = true),
     observeCardSetUseCase = mockk(relaxed = true),
-    saveFlashcardUseCase = mockk(relaxed = true),
-    updateFlashcardUseCase = mockk(relaxed = true),
+    updateCardSetUseCase = mockk(relaxed = true),
 ) {
-    override val uiState = MutableStateFlow<EditCardSetUiState>(EditCardSetUiState.Idle())
+    override val uiState = MutableStateFlow(EditCardSetUiState())
 
     val addFlashcardCalls: List<Pair<String, String>> get() = _addFlashcardsCalls
     val deleteFlashcardsCalls: List<Long> get() = _deleteFlashcardsCalls
     val updateFlashcardsCalls: List<Triple<Long, String, String>> get() = _updateFlashcardsCalls
+
+    var saveClickedCallsNumber = 0
+        private set
 
     private val _addFlashcardsCalls = mutableListOf<Pair<String, String>>()
     private val _deleteFlashcardsCalls = mutableListOf<Long>()
@@ -30,6 +31,10 @@ class EditCardSetViewModelTestDouble : EditCardSetViewModel(
 
     override fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
         _updateFlashcardsCalls.add(Triple(flashcardId, obverse, reverse))
+    }
+
+    override fun onSaveClicked() {
+        saveClickedCallsNumber++
     }
 
     fun setUiState(state: EditCardSetUiState) {

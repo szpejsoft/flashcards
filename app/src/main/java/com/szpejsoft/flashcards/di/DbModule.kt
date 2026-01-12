@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.room.Room
 import com.szpejsoft.flashcards.Constants
 import com.szpejsoft.flashcards.data.db.FlashcardsDb
-import com.szpejsoft.flashcards.data.db.FlashcardsDbDefinition
-import com.szpejsoft.flashcards.data.db.RoomFlashcardsDb
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,12 +16,11 @@ class DbModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(app: Application): FlashcardsDb {
-        val dbDef = Room.databaseBuilder(
+    fun provideRoomDb(app: Application): FlashcardsDb =
+        Room.databaseBuilder(
             app,
-            FlashcardsDbDefinition::class.java,
+            FlashcardsDb::class.java,
             Constants.DATABASE_NAME
         ).build()
-        return RoomFlashcardsDb(dbDef)
-    }
+
 }

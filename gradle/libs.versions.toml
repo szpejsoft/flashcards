@@ -11,7 +11,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5" #androidx.compose.ui:ui-test-junit4:1.10.0 needs this version
 kotlin = "2.3.0"
 konsist = "0.17.3"
-ksp = "2.2.21-2.0.4"
+ksp = "2.3.4"
 lifecycle = "2.10.0"
 materialIcons = "1.7.8"
 mockk = "1.14.7"
@@ -24,30 +24,30 @@ uiTestJunit4 = "1.10.0"
 
 [libraries]
 #android
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name="lifecycle-viewmodel-navigation3", version.ref = "lifecycle" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 
 #compose
-androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended-android", version.ref = "materialIcons" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended-android", version.ref = "materialIcons" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version = "1.10.0" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 #coroutines
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 
 #database
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 
 #dependency injection
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -58,9 +58,9 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 #navigation
+androidx-material3-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
-androidx-material3-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material" }
 
 #tests
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

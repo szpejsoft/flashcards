@@ -19,6 +19,6 @@ class DaoModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseFlashCardDao(db: FlashcardsDb): FlashcardDao = db.flashCardDao()
+    fun provideDatabaseFlashCardDao(db: FlashcardsDb): FlashcardDao = db.flashcardDao()
 
 }

@@ -2,6 +2,8 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.edit
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -24,6 +26,7 @@ class EditCardSetScreenTest {
     private val actionCancel by lazy { composeTestRule.activity.getString(R.string.action_cancel) }
     private val actionDelete by lazy { composeTestRule.activity.getString(R.string.action_delete) }
     private val actionEdit by lazy { composeTestRule.activity.getString(R.string.action_edit) }
+    private val actionSave by lazy { composeTestRule.activity.getString(R.string.action_save) }
     private val actionUpdate by lazy { composeTestRule.activity.getString(R.string.action_update) }
     private val addContentDescription by lazy { composeTestRule.activity.getString(R.string.wcag_action_add) }
     private val addFlashcardText by lazy { composeTestRule.activity.getString(R.string.edit_card_set_screen_add_flashcard_dialog_title) }
@@ -42,21 +45,9 @@ class EditCardSetScreenTest {
     }
 
     @Test
-    fun whenViewModelEmitsError_screenShowsError() {
-        //arrange
-        val uiState = EditCardSetUiState.Error("some error")
-
-        //act
-        viewModel.setUiState(uiState)
-
-        //assert
-        composeTestRule.onNodeWithText("some error").assertIsDisplayed()
-    }
-
-    @Test
     fun whenViewModelEmitsCardSet_screenShowsCardSet() {
         //arrange
-        val uiState = EditCardSetUiState.Idle(
+        val uiState = EditCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -78,7 +69,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenDeleteIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState.Idle(
+        val uiState = EditCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -100,7 +91,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenFABIsClicked_addFlashcardDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState.Idle("set name")
+        val uiState = EditCardSetUiState("set name")
         viewModel.setUiState(uiState)
 
         //act
@@ -113,7 +104,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenAddCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState.Idle("set name")
+        val uiState = EditCardSetUiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -131,7 +122,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileCardIsClicked_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState.Idle("set name")
+        val uiState = EditCardSetUiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -149,7 +140,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenEditCardIsClicked_properDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState.Idle(
+        val uiState = EditCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -171,7 +162,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenUpdateClickedWhileEditingCard_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState.Idle(
+        val uiState = EditCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -197,7 +188,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileEditingCard_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState.Idle(
+        val uiState = EditCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -218,5 +209,68 @@ class EditCardSetScreenTest {
         //assert
         assertEquals(0, viewModel.updateFlashcardsCalls.size)
     }
+
+    @Test
+    fun whenSetModified_saveButtonIsEnabled() {
+        //arrange
+        val uiState = EditCardSetUiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            isModified = true,
+            isSaving = false
+        )
+
+        //act
+        viewModel.setUiState(uiState)
+
+        //assert
+        composeTestRule.onNodeWithText(actionSave).assertIsEnabled()
+    }
+
+    @Test
+    fun whenSetNotModified_saveButtonIsDisabled() {
+        //arrange
+        val uiState = EditCardSetUiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            isModified = false,
+            isSaving = false
+        )
+
+        //act
+        viewModel.setUiState(uiState)
+
+        //assert
+        composeTestRule.onNodeWithText(actionSave).assertIsNotEnabled()
+    }
+
+    @Test
+    fun whenSaveButtonClicked_properMethodOnViewModelIsCalled() {
+        //arrange
+        val uiState = EditCardSetUiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            isModified = true,
+            isSaving = false
+        )
+
+        //act
+        viewModel.setUiState(uiState)
+        composeTestRule.onNodeWithText(actionSave).performClick()
+
+        //assert
+        assertEquals(1, viewModel.saveClickedCallsNumber)
+    }
+
+
 
 }

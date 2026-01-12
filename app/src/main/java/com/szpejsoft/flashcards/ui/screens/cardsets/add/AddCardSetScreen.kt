@@ -136,7 +136,7 @@ fun AddCardSetContent(
             enabled = isSaveEnabled,
             onClick = onSaveClick
         ) {
-            Text(stringResource(R.string.add_card_set_screen_save_button_title))
+            Text(stringResource(R.string.action_save))
         }
     }
 }
