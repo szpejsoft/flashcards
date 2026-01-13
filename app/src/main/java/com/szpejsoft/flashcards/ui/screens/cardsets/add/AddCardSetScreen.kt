@@ -32,8 +32,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun AddCardSetScreen(
-    onNavigateBack: () -> Unit,
-    viewModel: AddCardSetViewModel = hiltViewModel()
+    viewModel: AddCardSetViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showError by remember { mutableStateOf(false) }
@@ -129,14 +129,14 @@ fun AddCardSetContent(
             )
         )
 
-        Spacer(modifier = Modifier.weight(0.5f))
+        Spacer(modifier = Modifier.weight(1.0f))
 
         Button(
             modifier = Modifier.fillMaxWidth(),
             enabled = isSaveEnabled,
             onClick = onSaveClick
         ) {
-            Text(stringResource(R.string.add_card_set_screen_save_button_title))
+            Text(stringResource(R.string.action_save))
         }
     }
 }

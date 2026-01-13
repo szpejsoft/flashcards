@@ -1,9 +1,11 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.list
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.CardSet
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -13,19 +15,25 @@ import org.junit.Test
 class CardSetListScreenTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
-    private lateinit var viewModel: CardSetListViewModel
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    private val editCardSetCalls = mutableListOf<Long>()
+    private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
+    private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
+
+    private lateinit var viewModel: CardSetListViewModelTestDouble
 
     @Before
     fun setUp() {
-        viewModel = CardSetListViewModel()
+        viewModel = CardSetListViewModelTestDouble()
         composeTestRule.setContent {
-            viewModel = CardSetListViewModel()
             CardSetListScreen(
                 viewModel = viewModel,
-                onAddButtonClick = {}
+                onAddButtonClick = {},
+                onEditButtonClick = { id -> editCardSetCalls.add(id) }
             )
         }
+        editCardSetCalls.clear()
     }
 
     @Test
@@ -40,8 +48,8 @@ class CardSetListScreenTest {
         viewModel.setCardSets(sets)
 
         //assert
-        composeTestRule.onNodeWithText("my first cardset").assertIsDisplayed()
-        composeTestRule.onNodeWithText("my second cardset").assertIsDisplayed()
+        composeTestRule.onNodeWithText("my first cardset", ignoreCase = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText("my second cardset", ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -55,10 +63,27 @@ class CardSetListScreenTest {
         //act
         viewModel.setCardSets(sets)
         composeTestRule.onNodeWithText("my first cardset").performClick()
-        composeTestRule.onNodeWithText("Delete").performClick()
+        composeTestRule.onNodeWithText(deleteText).performClick()
 
         //assert
         assertEquals(listOf(1L), viewModel.deleteCardSetCalls)
+    }
+
+    @Test
+    fun whenUserClicksEdit_callProperLambda() {
+        //arrange
+        val sets = listOf(
+            CardSet(id = 1L, "my first cardset"),
+            CardSet(id = 2L, "my second cardset"),
+        )
+
+        //act
+        viewModel.setCardSets(sets)
+        composeTestRule.onNodeWithText("my second cardset").performClick()
+        composeTestRule.onNodeWithText(editText).performClick()
+
+        //assert
+        assertEquals(listOf(2L), editCardSetCalls)
     }
 
 }

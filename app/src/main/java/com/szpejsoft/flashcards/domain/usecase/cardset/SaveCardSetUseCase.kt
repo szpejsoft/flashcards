@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.domain.usecase
+package com.szpejsoft.flashcards.domain.usecase.cardset
 
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
 import javax.inject.Inject

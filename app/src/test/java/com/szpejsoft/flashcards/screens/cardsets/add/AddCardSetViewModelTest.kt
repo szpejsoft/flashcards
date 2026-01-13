@@ -1,39 +1,30 @@
-package com.szpejsoft.flashcards.screens.cardset.add
+package com.szpejsoft.flashcards.screens.cardsets.add
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.domain.usecase.SaveCardSetUseCase
+import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetUiState
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetViewModel
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AddCardSetViewModelTest {
+class AddCardSetViewModelTest : BaseMockKTest() {
 
     private lateinit var sut: AddCardSetViewModel
 
     @MockK(relaxed = true)
     private lateinit var saveCardSetUseCase: SaveCardSetUseCase
 
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = AddCardSetViewModel(saveCardSetUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test
@@ -48,7 +39,7 @@ class AddCardSetViewModelTest {
         val state = sut.uiState.value
         assertTrue(state is AddCardSetUiState.Editing)
         assertTrue((state as AddCardSetUiState.Editing).isSaveEnabled)
-        assertEquals(setName, (state as AddCardSetUiState.Editing).name)
+        assertEquals(setName, state.name)
     }
 
 
@@ -64,7 +55,7 @@ class AddCardSetViewModelTest {
         val state = sut.uiState.value
         assertTrue(state is AddCardSetUiState.Editing)
         assertFalse((state as AddCardSetUiState.Editing).isSaveEnabled)
-        assertEquals("", (state as AddCardSetUiState.Editing).name)
+        assertEquals("", state.name)
     }
 
     @Test

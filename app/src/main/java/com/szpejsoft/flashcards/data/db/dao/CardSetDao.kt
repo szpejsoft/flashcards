@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.szpejsoft.flashcards.data.db.entities.DbCardSet
+import com.szpejsoft.flashcards.data.db.entities.DbCardSetWithFlashcards
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,7 +17,14 @@ interface CardSetDao {
     @Query("DELETE FROM card_set WHERE id = :id")
     suspend fun delete(id: Long)
 
+    @Query("UPDATE card_set SET name = :name WHERE id = :id")
+    suspend fun update(id: Long, name: String)
+
     @Query("SELECT * FROM card_set")
     fun observeAll(): Flow<List<DbCardSet>>
+
+    @Transaction
+    @Query("SELECT * FROM card_set WHERE id = :cardSetId")
+    fun observeCardSetWithFlashcards(cardSetId: Long): Flow<DbCardSetWithFlashcards>
 
 }

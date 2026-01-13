@@ -1,23 +1,24 @@
-package com.szpejsoft.flashcards.screens.cardset.list
+package com.szpejsoft.flashcards.screens.cardsets.list
 
+import app.cash.turbine.test
+import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.usecase.DeleteCardSetUseCase
-import com.szpejsoft.flashcards.domain.usecase.ObserveCardSetsUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
+import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListUiState
 import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListViewModel
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class CardSetListViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class CardSetListViewModelTest : BaseMockKTest() {
     private lateinit var sut: CardSetListViewModel
 
     @MockK(relaxed = true)
@@ -26,16 +27,9 @@ class CardSetListViewModelTest {
     @MockK(relaxed = true)
     private lateinit var deleteCardSetUseCase: DeleteCardSetUseCase
 
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         sut = CardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
     }
 
     @Test
@@ -45,17 +39,19 @@ class CardSetListViewModelTest {
             CardSet(1, "set 1"),
             CardSet(2, "set 2")
         )
-        val stateFlow = MutableStateFlow<List<CardSet>>(emptyList())
-        every { observeCardSetsUseCase() } returns stateFlow
+        val useCaseFlow = flowOf(sets)
+        every { observeCardSetsUseCase() } returns useCaseFlow
 
-        //act
-        stateFlow.value = sets
+        sut = CardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
 
-        //assert
-        val uiState = (sut.cardSets.value as CardSetListUiState.Idle).cardSets
-        assertEquals(2, uiState.size)
-        assertEquals(CardSet(1, "set 1"), uiState[0])
-        assertEquals(CardSet(2, "set 2"), uiState[1])
+        //act & assert
+        sut.uiState.test {
+            val sets = (expectMostRecentItem() as CardSetListUiState.Idle).cardSets
+            assertEquals(2, sets.size)
+            assertEquals(CardSet(1, "set 1"), sets[0])
+            assertEquals(CardSet(2, "set 2"), sets[1])
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -69,6 +65,5 @@ class CardSetListViewModelTest {
         //assert
         coVerify(exactly = 1) { deleteCardSetUseCase(setToDeleteId) }
     }
-
 
 }

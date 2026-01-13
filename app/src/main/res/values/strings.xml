@@ -1,10 +1,25 @@
 <resources>
     <string name="app_name">Flashcards</string>
+
+    <!-- screens -->
     <string name="add_card_set_screen_card_set_title_hint">Title</string>
-    <string name="add_card_set_screen_save_button_title">Save</string>
     <string name="add_card_set_screen_card_set_title_empty_error_message">Title cannot be empty</string>
+    <string name="edit_card_set_screen_add_flashcard_dialog_title">Add flashcard</string>
+    <string name="edit_card_set_screen_update_flashcard_dialog_title">Update flashcard</string>
+    <string name="edit_card_set_screen_edit_flashcard_dialog_obverse_label">Question</string>
+    <string name="edit_card_set_screen_edit_flashcard_dialog_reverse_label">Answer</string>
+
+    <!-- generic messages -->
+    <string name="database_save_error_message">Error while saving your set</string>
+    <string name="action_add">Add</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_save">Save</string>
+    <string name="action_update">Update</string>
 
     <!-- WCAG-->
+    <string name="wcag_action_add">Add</string>
     <string name="wcag_description_success">success</string>
-    <string name="database_save_error_message">Error while saving your set</string>
+    <string name="wcag_action_save">save</string>
 </resources>

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 class CardSetRepositoryImpl
 @Inject
 constructor(
-    private val cardSetDao: CardSetDao
+    private val cardSetDao: CardSetDao,
 ) : CardSetRepository {
 
     override suspend fun delete(cardSetId: Long) {
@@ -22,6 +22,10 @@ constructor(
 
     override suspend fun save(cardSetName: String) {
         cardSetDao.insert(DbCardSet(id = 0, name = cardSetName))
+    }
+
+    override suspend fun update(id: Long, cardSetName: String) {
+        cardSetDao.update(id, cardSetName)
     }
 
     override fun observeAll(): Flow<List<CardSet>> =

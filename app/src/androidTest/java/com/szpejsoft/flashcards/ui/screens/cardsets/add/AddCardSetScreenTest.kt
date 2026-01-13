@@ -15,16 +15,16 @@ class AddCardSetScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-    private lateinit var viewModel: AddCardSetViewModel
+    val textFieldLabel by lazy { composeTestRule.activity.getString(R.string.add_card_set_screen_card_set_title_hint) }
+    val saveButtonText by lazy { composeTestRule.activity.getString(R.string.action_save) }
 
-    val textFieldLabel = composeTestRule.activity.getString(R.string.add_card_set_screen_card_set_title_hint)
-    val saveButtonText = composeTestRule.activity.getString(R.string.add_card_set_screen_save_button_title)
+    private lateinit var viewModel: AddCardSetViewModelTestDouble
 
     @Before
     fun setUp() {
-        viewModel = AddCardSetViewModel()
+        viewModel = AddCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            AddCardSetScreen(viewModel = viewModel, onNavigateBack = {})
+            AddCardSetScreen(viewModel = viewModel) {}
         }
     }
 
