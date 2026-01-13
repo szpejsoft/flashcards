@@ -271,6 +271,4 @@ class EditCardSetScreenTest {
         assertEquals(1, viewModel.saveClickedCallsNumber)
     }
 
-
-
 }

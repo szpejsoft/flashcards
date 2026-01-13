@@ -85,7 +85,6 @@ class EditCardSetViewModelTest : BaseMockKTest() {
         }
     }
 
-    //todo
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when save clicked proper useCase is called`() = runTest {
@@ -142,13 +141,3 @@ class EditCardSetViewModelTest : BaseMockKTest() {
     }
 
 }
-
-
-/*
- [Flashcard(id=2, obverse=obverse 2_1, reverse=reverse 2_1), Flashcard(id=0, obverse=obverse 3, reverse=reverse 3)], matcher:
-  [Flashcard(id=0, obverse=obverse 3, reverse=reverse 3), Flashcard(id=2, obverse=obverse 2_1, reverse=reverse 2_1)]), result: -
-
-
- */
-
-

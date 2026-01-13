@@ -40,6 +40,5 @@ class EditCardSetViewModelTestDouble : EditCardSetViewModel(
     fun setUiState(state: EditCardSetUiState) {
         uiState.value = state
     }
+
 }
-
-

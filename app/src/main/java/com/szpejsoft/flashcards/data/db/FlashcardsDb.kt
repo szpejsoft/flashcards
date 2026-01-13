@@ -14,7 +14,7 @@ import com.szpejsoft.flashcards.data.db.entities.DbFlashcard
         DbFlashcard::class
     ]
 )
-abstract class FlashcardsDb : RoomDatabase(){
+abstract class FlashcardsDb : RoomDatabase() {
     abstract fun cardSetDao(): CardSetDao
     abstract fun flashcardDao(): FlashcardDao
 }

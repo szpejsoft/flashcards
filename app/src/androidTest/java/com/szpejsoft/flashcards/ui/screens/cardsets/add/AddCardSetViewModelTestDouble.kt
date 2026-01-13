@@ -9,9 +9,9 @@ class AddCardSetViewModelTestDouble : AddCardSetViewModel(
 ) {
     override val uiState = MutableStateFlow<AddCardSetUiState>(Editing())
 
+    val onCardSetNameChangedCalls: List<String> get() = _onCardSetNameChanged
     var onSaveClickedCounter = 0
         private set
-    val onCardSetNameChangedCalls: List<String> get() = _onCardSetNameChanged
 
     private val _onCardSetNameChanged = mutableListOf<String>()
 
@@ -35,4 +35,3 @@ class AddCardSetViewModelTestDouble : AddCardSetViewModel(
     }
 
 }
-

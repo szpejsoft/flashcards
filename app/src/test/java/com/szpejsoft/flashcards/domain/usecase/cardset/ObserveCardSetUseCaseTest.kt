@@ -22,7 +22,6 @@ class ObserveCardSetUseCaseTest : BaseMockKTest() {
     @MockK(relaxed = true)
     private lateinit var cardSetWithFlashcardsRepository: CardSetWithFlashcardsRepository
 
-
     @Before
     fun setUp() {
         sut = ObserveCardSetUseCase(cardSetWithFlashcardsRepository)

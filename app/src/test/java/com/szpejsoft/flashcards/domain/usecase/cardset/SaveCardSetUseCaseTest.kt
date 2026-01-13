@@ -29,7 +29,6 @@ class SaveCardSetUseCaseTest : BaseMockKTest() {
 
         //assert
         coVerify(exactly = 1) { cardSetRepository.save(cardSetName) }
-
     }
 
 }

@@ -18,14 +18,12 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCardSetRepository(
-        carSetDao: CardSetDao
-    ): CardSetRepository = CardSetRepositoryImpl(carSetDao)
+    fun provideCardSetRepository(carSetDao: CardSetDao): CardSetRepository = CardSetRepositoryImpl(carSetDao)
 
     @Provides
     @Singleton
-    fun provideCardSetWithFlashcardsRepository(
-        db: FlashcardsDb
-    ): CardSetWithFlashcardsRepository = CardSetWithFlashcardsRepositoryImpl(db)
+    fun provideCardSetWithFlashcardsRepository(db: FlashcardsDb): CardSetWithFlashcardsRepository =
+        CardSetWithFlashcardsRepositoryImpl(db)
 
 }
+

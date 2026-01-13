@@ -38,7 +38,8 @@ import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
 fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel()
+    viewModel: EditCardSetViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -140,7 +141,10 @@ fun EditCardSetScreen(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.isModified,
-                onClick = viewModel::onSaveClicked
+                onClick = {
+                    viewModel.onSaveClicked()
+                    onNavigateBack()
+                }
             ) {
                 Text(stringResource(R.string.action_save))
             }

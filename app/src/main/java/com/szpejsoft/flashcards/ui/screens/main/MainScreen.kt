@@ -16,7 +16,7 @@ import com.szpejsoft.flashcards.ui.theme.FlashcardsTheme
 fun MainScreen() {
     val screenNavigator = rememberSaveable(saver = ScreenNavigator.saver) { ScreenNavigator() }
 
-    FlashcardsTheme() {
+    FlashcardsTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             content = { innerPadding ->
@@ -38,6 +38,5 @@ fun MainScreenContent(
             .padding(horizontal = 12.dp)
     ) {
         screenNavigator.NavDisplay()
-
     }
 }

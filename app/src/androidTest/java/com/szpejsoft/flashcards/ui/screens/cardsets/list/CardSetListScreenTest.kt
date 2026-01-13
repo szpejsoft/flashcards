@@ -17,12 +17,11 @@ class CardSetListScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+    private val editCardSetCalls = mutableListOf<Long>()
     private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
     private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
 
     private lateinit var viewModel: CardSetListViewModelTestDouble
-
-    private val editCardSetCalls = mutableListOf<Long>()
 
     @Before
     fun setUp() {

@@ -50,4 +50,5 @@ class UseCases {
             .withNameEndingWith("UseCase")
             .assertTrue { it.hasTestClasses() }
     }
+
 }

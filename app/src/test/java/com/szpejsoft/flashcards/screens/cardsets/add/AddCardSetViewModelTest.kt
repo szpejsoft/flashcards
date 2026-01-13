@@ -22,7 +22,6 @@ class AddCardSetViewModelTest : BaseMockKTest() {
     @MockK(relaxed = true)
     private lateinit var saveCardSetUseCase: SaveCardSetUseCase
 
-
     @Before
     fun setUp() {
         sut = AddCardSetViewModel(saveCardSetUseCase)
@@ -40,7 +39,7 @@ class AddCardSetViewModelTest : BaseMockKTest() {
         val state = sut.uiState.value
         assertTrue(state is AddCardSetUiState.Editing)
         assertTrue((state as AddCardSetUiState.Editing).isSaveEnabled)
-        assertEquals(setName, (state as AddCardSetUiState.Editing).name)
+        assertEquals(setName, state.name)
     }
 
 
@@ -56,7 +55,7 @@ class AddCardSetViewModelTest : BaseMockKTest() {
         val state = sut.uiState.value
         assertTrue(state is AddCardSetUiState.Editing)
         assertFalse((state as AddCardSetUiState.Editing).isSaveEnabled)
-        assertEquals("", (state as AddCardSetUiState.Editing).name)
+        assertEquals("", state.name)
     }
 
     @Test

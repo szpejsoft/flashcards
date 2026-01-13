@@ -15,9 +15,7 @@ class AddCardSetScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-
     val textFieldLabel by lazy { composeTestRule.activity.getString(R.string.add_card_set_screen_card_set_title_hint) }
-
     val saveButtonText by lazy { composeTestRule.activity.getString(R.string.action_save) }
 
     private lateinit var viewModel: AddCardSetViewModelTestDouble

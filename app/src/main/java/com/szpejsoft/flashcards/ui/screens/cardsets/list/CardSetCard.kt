@@ -31,5 +31,4 @@ fun CardSetCard(
             style = MaterialTheme.typography.titleSmall
         )
     }
-
 }

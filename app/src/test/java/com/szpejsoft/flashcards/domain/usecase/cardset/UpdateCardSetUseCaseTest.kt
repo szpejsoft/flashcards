@@ -28,13 +28,11 @@ class UpdateCardSetUseCaseTest : BaseMockKTest() {
         val flashcards = emptyList<Flashcard>()
         val flashcardIdsToDelete = listOf(1L)
 
-
         //act
         sut.invoke(cardSetId, cardSetName, flashcards, flashcardIdsToDelete)
 
         //assert
         coVerify(exactly = 1) { cardSetRepository.update(cardSetId, cardSetName, flashcards, flashcardIdsToDelete) }
     }
-
 
 }

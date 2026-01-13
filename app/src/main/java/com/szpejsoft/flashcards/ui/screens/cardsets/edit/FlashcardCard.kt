@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.domain.model.Flashcard
 
-
 @Composable
 fun FlashcardCard(
     flashCard: Flashcard,
@@ -22,6 +21,7 @@ fun FlashcardCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(12.dp)
             .clickable(onClick = onClick)
     ) {
         Column(
