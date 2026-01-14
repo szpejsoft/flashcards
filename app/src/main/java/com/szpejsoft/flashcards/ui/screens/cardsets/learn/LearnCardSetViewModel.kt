@@ -1,17 +1,23 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.ui.screens.getRandom
+import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
+//todo what to do when card set is empty?
 @HiltViewModel(assistedFactory = LearnCardSetViewModel.Factory::class)
 open class LearnCardSetViewModel
 @AssistedInject
@@ -29,27 +35,65 @@ constructor(
     open val uiState: StateFlow<LearnCardSetUiState> get() = _uiState
     private val _uiState = MutableStateFlow<LearnCardSetUiState>(
         FlashcardToLearn(
-            setName = "my set",
-            cardSetSize = 2,
+            setName = "",
+            cardSetSize = 0,
             learnedCards = 0,
-            flashcardToLearn = Flashcard(0, "obverse", "reverse")
+            flashcardToLearn = Flashcard()
         )
     )
 
+    private lateinit var cardSetName: String
+    private val flashCardsToLearn = mutableListOf<Flashcard>()
+    private var setSize: Int = 0
+
+    init {
+        viewModelScope.launch {
+            val cardSet = observeCardSetUseCase(cardSetId).first()
+            cardSetName = cardSet.cardSet.name
+            setSize = cardSet.flashcards.size
+            flashCardsToLearn.replaceWith(cardSet.flashcards)
+            _uiState.update {
+                FlashcardToLearn(
+                    setName = cardSetName,
+                    cardSetSize = setSize,
+                    learnedCards = setSize - flashCardsToLearn.size,
+                    flashcardToLearn = flashCardsToLearn.getRandom()
+                )
+            }
+        }
+    }
+
     fun onCardLearned() {
         val state = _uiState.value as FlashcardToLearn
-        if (state.learnedCards + 1 < state.cardSetSize) {
-            _uiState.update { _ ->
-                state.copy(learnedCards = state.learnedCards + 1)
+        val learnedCard = state.flashcardToLearn
+        flashCardsToLearn.remove(learnedCard)
+        if (flashCardsToLearn.isNotEmpty()) {
+            _uiState.update {
+                state.copy(
+                    learnedCards = setSize - flashCardsToLearn.size,
+                    flashcardToLearn = flashCardsToLearn.getRandom()
+                )
             }
         } else {
-            _uiState.value = LearnCardSetUiState.Success
+            _uiState.value = LearnCardSetUiState.LearningFinished
+        }
+    }
+
+    fun onCardNotLearned() {
+        _uiState.update {
+            FlashcardToLearn(
+                setName = cardSetName,
+                cardSetSize = setSize,
+                flashcardToLearn = flashCardsToLearn.getRandom(),
+                learnedCards = setSize - flashCardsToLearn.size
+            )
         }
     }
 
 }
 
 sealed class LearnCardSetUiState {
+
     data class FlashcardToLearn(
         val setName: String = "",
         val cardSetSize: Int,
@@ -57,5 +101,5 @@ sealed class LearnCardSetUiState {
         val flashcardToLearn: Flashcard
     ) : LearnCardSetUiState()
 
-    data object Success : LearnCardSetUiState()
+    data object LearningFinished : LearnCardSetUiState()
 }

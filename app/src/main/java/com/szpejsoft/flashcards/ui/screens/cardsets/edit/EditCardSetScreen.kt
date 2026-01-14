@@ -107,7 +107,7 @@ fun EditCardSetScreen(
             ) {
                 items(
                     count = state.flashCards.size,
-                    key = { index -> state.flashCards[index].id }
+                   // key = { index -> state.flashCards[index].id }  TODO
                 ) { index ->
                     Box {
                         val flashcardId = state.flashCards[index].id
