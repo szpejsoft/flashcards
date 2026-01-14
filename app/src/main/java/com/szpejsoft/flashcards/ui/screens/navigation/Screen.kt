@@ -13,4 +13,7 @@ sealed class Screen : Parcelable {
     @Parcelize
     data class EditCardSet(val id: Long) : Screen()
 
+    @Parcelize
+    data class LearnCardSet(val id: Long) : Screen()
+
 }

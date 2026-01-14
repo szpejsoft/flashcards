@@ -12,12 +12,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+//TODO test clicking on learn button
 class CardSetListScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val editCardSetCalls = mutableListOf<Long>()
+    private val learnCardSetCalls = mutableListOf<Long>()
     private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
     private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
 
@@ -30,7 +32,8 @@ class CardSetListScreenTest {
             CardSetListScreen(
                 viewModel = viewModel,
                 onAddButtonClick = {},
-                onEditButtonClick = { id -> editCardSetCalls.add(id) }
+                onEditButtonClick = { id -> editCardSetCalls.add(id) },
+                onLearnButtonClick = { id -> learnCardSetCalls.add(id) }
             )
         }
         editCardSetCalls.clear()

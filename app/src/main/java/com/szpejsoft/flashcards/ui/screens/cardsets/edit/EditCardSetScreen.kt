@@ -123,17 +123,16 @@ fun EditCardSetScreen(
                             Toolbox(
                                 enabled = !isActionInProgress,
                                 expanded = expandedCardId == flashcardId,
+                                onDismissRequest = { expandedCardId = null },
                                 onDeleteClicked = {
                                     isActionInProgress = true
                                     viewModel.onDeleteFlashcard(flashcardId)
-                                },
-                                onEditClicked = {
-                                    editedFlashcardId = flashcardId
-                                    expandedCardId = null
-                                    showAddFlashCardDialog = false
-                                },
-                                onDismissRequest = { expandedCardId = null }
-                            )
+                                }
+                            ) {
+                                editedFlashcardId = flashcardId
+                                expandedCardId = null
+                                showAddFlashCardDialog = false
+                            }
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 package com.szpejsoft.flashcards.ui.screens.common
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DropdownMenu
@@ -15,35 +16,53 @@ import com.szpejsoft.flashcards.R
 fun Toolbox(
     enabled: Boolean,
     expanded: Boolean,
-    onDeleteClicked: () -> Unit,
-    onEditClicked: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onDeleteClicked: (() -> Unit)? = null,
+    onEditClicked: (() -> Unit)? = null,
+    onLearnClicked: (() -> Unit)? = null
 ) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest
     ) {
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.action_edit)) },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.action_edit)
-                )
-            },
-            onClick = onEditClicked,
-            enabled = enabled
-        )
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.action_delete)) },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.action_delete)
-                )
-            },
-            onClick = onDeleteClicked,
-            enabled = enabled
-        )
+        onLearnClicked?.let {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.action_learn)) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Book,
+                        contentDescription = stringResource(R.string.action_learn)
+                    )
+                },
+                onClick = onLearnClicked,
+                enabled = enabled
+            )
+        }
+        onEditClicked?.let {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.action_edit)) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.action_edit)
+                    )
+                },
+                onClick = onEditClicked,
+                enabled = enabled
+            )
+        }
+        onDeleteClicked?.let {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.action_delete)) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.action_delete)
+                    )
+                },
+                onClick = onDeleteClicked,
+                enabled = enabled
+            )
+        }
     }
 }
