@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,9 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.FlashcardToLearn
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.LearningFinished
 
@@ -56,6 +63,12 @@ fun LearnCardSetContent(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.headlineLarge,
+            text = state.setName,
+        )
         LearningProgress(state.learnedCards, state.cardSetSize)
 
         Card(
@@ -82,20 +95,31 @@ fun LearnCardSetContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier
+                    .weight(0.5f)
+                    .testTag("cardNotLearnedButton"),
                 onClick = onCardNotLearned
             ) {
-                Text("Not Learned")
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.wcag_button_not_learned_description)
+                )
             }
             Button(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier
+                    .weight(0.5f)
+                    .testTag("cardLearnedButton"),
                 onClick = onCardLearned
             ) {
-                Text("Learned")
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = stringResource(R.string.wcag_button_learned_description)
+                )
             }
         }
     }
 }
+
 
 @Composable
 fun LearningFinished(
@@ -107,7 +131,7 @@ fun LearningFinished(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Success",
+                text = stringResource(R.string.learn_card_set_screen_learning_finished_title),
                 style = MaterialTheme.typography.headlineLarge
             )
         }
@@ -116,7 +140,7 @@ fun LearningFinished(
             modifier = Modifier.fillMaxWidth(),
             onClick = onBackButtonClicked
         ) {
-            Text("Back")
+            Text(stringResource(R.string.learn_card_set_screen_learning_go_to_card_set_list))
         }
     }
 }

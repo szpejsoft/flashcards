@@ -40,7 +40,7 @@ class EditCardSetScreenTest {
     fun setUp() {
         viewModel = EditCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            EditCardSetScreen(viewModel = viewModel)
+            EditCardSetScreen(viewModel = viewModel, onNavigateBack = {})
         }
     }
 

@@ -12,7 +12,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-//TODO test clicking on learn button
 class CardSetListScreenTest {
 
     @get:Rule

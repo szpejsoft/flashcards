@@ -63,7 +63,7 @@ constructor(
         }
     }
 
-    fun onCardLearned() {
+    open fun onCardLearned() {
         val state = _uiState.value as FlashcardToLearn
         val learnedCard = state.flashcardToLearn
         flashCardsToLearn.remove(learnedCard)
@@ -79,7 +79,7 @@ constructor(
         }
     }
 
-    fun onCardNotLearned() {
+    open fun onCardNotLearned() {
         _uiState.update {
             FlashcardToLearn(
                 setName = cardSetName,
