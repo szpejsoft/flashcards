@@ -18,8 +18,10 @@ class CardSetListScreenTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val editCardSetCalls = mutableListOf<Long>()
+    private val learnCardSetCalls = mutableListOf<Long>()
     private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
     private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
+    private val learnText by lazy { composeTestRule.activity.getString(R.string.action_learn) }
 
     private lateinit var viewModel: CardSetListViewModelTestDouble
 
@@ -30,7 +32,8 @@ class CardSetListScreenTest {
             CardSetListScreen(
                 viewModel = viewModel,
                 onAddButtonClick = {},
-                onEditButtonClick = { id -> editCardSetCalls.add(id) }
+                onEditButtonClick = { id -> editCardSetCalls.add(id) },
+                onLearnButtonClick = { id -> learnCardSetCalls.add(id) }
             )
         }
         editCardSetCalls.clear()
@@ -84,6 +87,23 @@ class CardSetListScreenTest {
 
         //assert
         assertEquals(listOf(2L), editCardSetCalls)
+    }
+
+    @Test
+    fun whenUserClicksLearn_callProperLambda() {
+        //arrange
+        val sets = listOf(
+            CardSet(id = 1L, "my first cardset"),
+            CardSet(id = 2L, "my second cardset"),
+        )
+
+        //act
+        viewModel.setCardSets(sets)
+        composeTestRule.onNodeWithText("my first cardset").performClick()
+        composeTestRule.onNodeWithText(learnText).performClick()
+
+        //assert
+        assertEquals(listOf(1L), learnCardSetCalls)
     }
 
 }

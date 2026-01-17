@@ -12,24 +12,28 @@ import androidx.navigation3.ui.NavDisplay
 import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetViewModel
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.cardsets.list.CardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.CardSetList
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
+import com.szpejsoft.flashcards.ui.screens.navigation.Screen.LearnCardSet
 
 typealias NavEntryProvider = (Screen) -> NavEntry<Screen>
 
 class ScreenNavigator {
-    val backStack = mutableStateListOf<Screen>(CardSetList)
+    private val backStack = mutableStateListOf<Screen>(CardSetList)
 
-    val entryProvider: NavEntryProvider = entryProvider {
+    private val entryProvider: NavEntryProvider = entryProvider {
         entry<CardSetList> {
             CardSetListScreen(
                 onAddButtonClick = { navigateToAddCardSet() },
-                onEditButtonClick = { navigateToEditCardSet(it) }
+                onEditButtonClick = { navigateToEditCardSet(it) },
+                onLearnButtonClick = { navigateToLearnCardSet(it) }
             )
-
         }
+
         entry<AddCardSet> {
             AddCardSetScreen(onNavigateBack = { navigateBack() })
         }
@@ -41,6 +45,16 @@ class ScreenNavigator {
             EditCardSetScreen(
                 viewModel = viewModel,
                 onNavigateBack = { navigateBack() })
+        }
+
+        entry<LearnCardSet> { key ->
+            val viewModel = hiltViewModel<LearnCardSetViewModel, LearnCardSetViewModel.Factory>(
+                creationCallback = { factory -> factory.create(key.id) }
+            )
+            LearnCardSetScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navigateBack() }
+            )
         }
     }
 
@@ -65,6 +79,10 @@ class ScreenNavigator {
         backStack.add(EditCardSet(id))
     }
 
+    private fun navigateToLearnCardSet(id: Long) {
+        backStack.add(LearnCardSet(id))
+    }
+
     private fun navigateBack() {
         backStack.removeLastOrNull()
     }
@@ -82,4 +100,5 @@ class ScreenNavigator {
             }
         )
     }
+
 }

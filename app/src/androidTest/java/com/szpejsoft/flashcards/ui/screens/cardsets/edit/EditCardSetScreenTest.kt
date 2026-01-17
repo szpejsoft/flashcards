@@ -36,11 +36,14 @@ class EditCardSetScreenTest {
 
     private lateinit var viewModel: EditCardSetViewModelTestDouble
 
+    private var onNavigateBackCalls = 0
+
     @Before
     fun setUp() {
         viewModel = EditCardSetViewModelTestDouble()
+        onNavigateBackCalls = 0
         composeTestRule.setContent {
-            EditCardSetScreen(viewModel = viewModel)
+            EditCardSetScreen(viewModel = viewModel, onNavigateBack = { onNavigateBackCalls++ })
         }
     }
 
@@ -154,6 +157,7 @@ class EditCardSetScreenTest {
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(actionEdit).performClick()
         composeTestRule.waitForIdle()
+
         //assert
         composeTestRule.onNodeWithText(updateFlashcardText).assertIsDisplayed()
     }
@@ -269,6 +273,28 @@ class EditCardSetScreenTest {
 
         //assert
         assertEquals(1, viewModel.saveClickedCallsNumber)
+
+    }
+
+    @Test
+    fun whenSaveButtonClicked_returnToPreviousScreen() {
+        //arrange
+        val uiState = EditCardSetUiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            isModified = true,
+            isSaving = false
+        )
+
+        //act
+        viewModel.setUiState(uiState)
+        composeTestRule.onNodeWithText(actionSave).performClick()
+
+        //assert
+        assertEquals(1, onNavigateBackCalls)
     }
 
 }

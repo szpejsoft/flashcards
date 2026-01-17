@@ -40,7 +40,6 @@ class EditCardSetViewModelTest : BaseMockKTest() {
     }
 
     @Suppress("UnusedFlow")
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when viewmodel created, it observes proper cardSet`() = runTest {
         //arrange
@@ -53,7 +52,7 @@ class EditCardSetViewModelTest : BaseMockKTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `when usecase emits cardSet, viewmodel emits Idle state with proper cardSet`() = runTest {
+    fun `when usecase emits cardSet, viewmodel emits state with proper cardSet`() = runTest {
         //arrange
         val cardSet = CardSetWithFlashcards(
             cardSet = CardSet(1, "card set name"),

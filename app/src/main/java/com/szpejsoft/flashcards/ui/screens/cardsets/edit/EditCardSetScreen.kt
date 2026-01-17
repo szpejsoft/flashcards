@@ -107,7 +107,8 @@ fun EditCardSetScreen(
             ) {
                 items(
                     count = state.flashCards.size,
-                    key = { index -> state.flashCards[index].id }
+                    //todo what to do when user puts 2 cards with the same content
+                    key = { index -> state.flashCards[index].hashCode() }
                 ) { index ->
                     Box {
                         val flashcardId = state.flashCards[index].id
@@ -123,6 +124,7 @@ fun EditCardSetScreen(
                             Toolbox(
                                 enabled = !isActionInProgress,
                                 expanded = expandedCardId == flashcardId,
+                                onDismissRequest = { expandedCardId = null },
                                 onDeleteClicked = {
                                     isActionInProgress = true
                                     viewModel.onDeleteFlashcard(flashcardId)
@@ -131,8 +133,7 @@ fun EditCardSetScreen(
                                     editedFlashcardId = flashcardId
                                     expandedCardId = null
                                     showAddFlashCardDialog = false
-                                },
-                                onDismissRequest = { expandedCardId = null }
+                                }
                             )
                         }
                     }

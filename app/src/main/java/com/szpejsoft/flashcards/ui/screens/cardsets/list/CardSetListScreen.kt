@@ -27,7 +27,8 @@ import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 fun CardSetListScreen(
     viewModel: CardSetListViewModel = hiltViewModel(),
     onAddButtonClick: () -> Unit,
-    onEditButtonClick: (Long) -> Unit
+    onEditButtonClick: (Long) -> Unit,
+    onLearnButtonClick: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var expandedCardId by rememberSaveable { mutableStateOf<Long?>(null) }
@@ -54,6 +55,7 @@ fun CardSetListScreen(
                         Toolbox(
                             enabled = true,
                             expanded = expandedCardId == cardSetId,
+                            onDismissRequest = { expandedCardId = null },
                             onDeleteClicked = {
                                 viewModel.onDeleteCardSetClicked(cardSetId)
                                 expandedCardId = null
@@ -62,7 +64,10 @@ fun CardSetListScreen(
                                 onEditButtonClick(cardSetId)
                                 expandedCardId = null
                             },
-                            onDismissRequest = { expandedCardId = null }
+                            onLearnClicked = {
+                                onLearnButtonClick(cardSetId)
+                                expandedCardId = null
+                            }
                         )
                     }
                 }
