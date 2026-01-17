@@ -51,7 +51,7 @@ class LearnCardSetScreenTest {
     }
 
     @Test
-    fun whenInFinishedStateAndGoToListIsClicked_navigateBackIsCalled() {
+    fun whenInFinishedStateAndGoToListClicked_navigateBackIsCalled() {
         //arrange
         viewModel.uiState.value = LearnCardSetUiState.LearningFinished
 
@@ -115,9 +115,6 @@ class LearnCardSetScreenTest {
         assertTrue(viewModel.onCardLearnedCalled)
         assertFalse(viewModel.onCardNotLearnedCalled)
     }
-
-
-
 
     companion object {
         private val TEST_FLASHCARD_TO_LEARN = LearnCardSetUiState.FlashcardToLearn(

@@ -13,7 +13,7 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel(
     cardSetId = 1L,
     observeCardSetUseCase = mockk(relaxed = true) {
         every { this@mockk(any()) } returns flowOf(dummyCardSet)
-    },
+    }
 ) {
 
     var onCardLearnedCalled = false

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,8 +62,6 @@ fun LearnCardSetContent(
     onCardLearned: () -> Unit,
     onCardNotLearned: () -> Unit
 ) {
-    var showObverse by remember(state) { mutableStateOf(true) }
-
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -74,27 +73,37 @@ fun LearnCardSetContent(
         )
         LearningProgress(state.learnedCards, state.cardSetSize)
         Spacer(modifier = Modifier.weight(0.19f))
-        Card(
-            modifier = Modifier
-                .weight(0.62f)
-                .clickable(onClick = { showObverse = !showObverse }),
-            shape = RoundedCornerShape(16.dp)
-        )
-        {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = if (showObverse) state.flashcardToLearn.obverse else state.flashcardToLearn.reverse,
-                    style = MaterialTheme.typography.headlineLarge,
-                )
-            }
-        }
+        FlashCard(state.flashcardToLearn.obverse, state.flashcardToLearn.reverse, Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
         Buttons(onCardNotLearned, onCardLearned)
+    }
+}
+
+@Composable
+private fun ColumnScope.FlashCard(
+    obverse: String,
+    reverse: String,
+    modifier: Modifier = Modifier
+) {
+    var showObverse by remember("$obverse $reverse") { mutableStateOf(true) }
+    Card(
+        modifier = Modifier
+            .clickable(onClick = { showObverse = !showObverse })
+            .then(modifier),
+        shape = RoundedCornerShape(16.dp)
+    )
+    {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                text = if (showObverse) obverse else reverse,
+                style = MaterialTheme.typography.headlineLarge,
+            )
+        }
     }
 }
 
