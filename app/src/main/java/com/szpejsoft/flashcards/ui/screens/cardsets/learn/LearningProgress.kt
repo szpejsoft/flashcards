@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,23 +26,31 @@ import com.szpejsoft.flashcards.R
 @Composable
 fun LearningProgress(
     learned: Int = 1,
-    setSize: Int = 1
+    setSize: Int = 2
 ) {
     val ratio = if (setSize == 0) 0f else learned.toFloat() / setSize.toFloat()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(top = 12.dp, bottom = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp)
+                .testTag("learningProgress"),
+            text = stringResource(R.string.progress, learned, setSize),
+            textAlign = TextAlign.Start,
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .height(24.dp)
-                .background(MaterialTheme.colorScheme.secondary)
+                .background(MaterialTheme.colorScheme.primaryFixed)
 
         ) {
             Box(
@@ -51,18 +58,8 @@ fun LearningProgress(
                     .fillMaxWidth(ratio)
                     .clip(RoundedCornerShape(12.dp))
                     .height(24.dp)
-                    .background(MaterialTheme.colorScheme.onSecondary)
+                    .background(MaterialTheme.colorScheme.onPrimaryFixed)
                     .align(Alignment.CenterStart)
-            )
-
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(2.dp)
-                    .testTag("learningProgress"),
-                textAlign = TextAlign.Center,
-                color = Color.Red,
-                text = stringResource(R.string.progress, learned, setSize)
             )
         }
     }

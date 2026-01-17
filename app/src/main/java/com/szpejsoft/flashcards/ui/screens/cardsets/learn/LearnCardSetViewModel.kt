@@ -64,6 +64,7 @@ constructor(
     }
 
     open fun onCardLearned() {
+        println("ptsz LCSVM onCardLearned()")
         val state = _uiState.value as FlashcardToLearn
         val learnedCard = state.flashcardToLearn
         flashCardsToLearn.remove(learnedCard)
@@ -80,6 +81,7 @@ constructor(
     }
 
     open fun onCardNotLearned() {
+        println("ptsz LCSVM onCardNotLearned()")
         _uiState.update {
             FlashcardToLearn(
                 setName = cardSetName,

@@ -10,7 +10,7 @@
     <string name="edit_card_set_screen_edit_flashcard_dialog_obverse_label">Question</string>
     <string name="edit_card_set_screen_edit_flashcard_dialog_reverse_label">Answer</string>
 
-    <string name="learn_card_set_screen_learning_finished_title">Success!!!</string>>
+    <string name="learn_card_set_screen_learning_finished_title">Congratulations!!!</string>>
     <string name="learn_card_set_screen_learning_go_to_card_set_list">Go to card set list</string>>
     <string name="progress">%1$d/%2$d"</string>
 

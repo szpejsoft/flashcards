@@ -107,7 +107,7 @@ fun EditCardSetScreen(
             ) {
                 items(
                     count = state.flashCards.size,
-                   // key = { index -> state.flashCards[index].id }  TODO
+                    // key = { index -> state.flashCards[index].id }  TODO
                 ) { index ->
                     Box {
                         val flashcardId = state.flashCards[index].id
@@ -127,12 +127,13 @@ fun EditCardSetScreen(
                                 onDeleteClicked = {
                                     isActionInProgress = true
                                     viewModel.onDeleteFlashcard(flashcardId)
+                                },
+                                onEditClicked = {
+                                    editedFlashcardId = flashcardId
+                                    expandedCardId = null
+                                    showAddFlashCardDialog = false
                                 }
-                            ) {
-                                editedFlashcardId = flashcardId
-                                expandedCardId = null
-                                showAddFlashCardDialog = false
-                            }
+                            )
                         }
                     }
                 }
