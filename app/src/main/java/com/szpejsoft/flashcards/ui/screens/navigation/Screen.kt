@@ -5,9 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 sealed class Screen : Parcelable {
     @Parcelize
-    data object CardSetList : Screen()
-
-    @Parcelize
     data object AddCardSet : Screen()
 
     @Parcelize
@@ -15,5 +12,14 @@ sealed class Screen : Parcelable {
 
     @Parcelize
     data class LearnCardSet(val id: Long) : Screen()
+
+    @Parcelize
+    data object LearnCardSetList : Screen()
+
+    @Parcelize
+    data object EditCardSetList : Screen()
+
+    @Parcelize
+    data object TestCardSetList : Screen()
 
 }

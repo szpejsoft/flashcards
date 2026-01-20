@@ -7,8 +7,8 @@ import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetUiState
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetViewModel
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetUiState
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewModel
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

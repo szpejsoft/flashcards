@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.FlashcardToLearn
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.LearningFinished
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.LearningFinished
 
 @Composable
 fun LearnCardSetScreen(

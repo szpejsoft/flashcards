@@ -1,10 +1,10 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted

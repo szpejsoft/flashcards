@@ -6,8 +6,8 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetViewModel
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every

@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
 
 
 import androidx.compose.foundation.background

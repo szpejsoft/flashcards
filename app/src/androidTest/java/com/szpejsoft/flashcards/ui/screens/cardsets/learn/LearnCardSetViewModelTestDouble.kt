@@ -3,7 +3,9 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow

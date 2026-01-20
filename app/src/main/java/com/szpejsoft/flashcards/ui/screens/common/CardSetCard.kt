@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.list
+package com.szpejsoft.flashcards.ui.screens.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth

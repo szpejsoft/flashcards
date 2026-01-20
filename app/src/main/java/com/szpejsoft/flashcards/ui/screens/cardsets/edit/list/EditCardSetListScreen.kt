@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.list
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,15 +25,14 @@ import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
-fun CardSetListScreen(
-    viewModel: CardSetListViewModel = hiltViewModel(),
+fun EditCardSetListScreen(
+    viewModel: EditCardSetListViewModel = hiltViewModel(),
     onAddButtonClick: () -> Unit,
     onEditButtonClick: (Long) -> Unit,
-    onLearnButtonClick: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var expandedCardId by rememberSaveable { mutableStateOf<Long?>(null) }
-    val cardSets = (uiState as? CardSetListUiState.Idle)?.cardSets ?: emptyList()
+    val cardSets = uiState.cardSets
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -63,10 +62,6 @@ fun CardSetListScreen(
                             },
                             onEditClicked = {
                                 onEditButtonClick(cardSetId)
-                                expandedCardId = null
-                            },
-                            onLearnClicked = {
-                                onLearnButtonClick(cardSetId)
                                 expandedCardId = null
                             }
                         )
