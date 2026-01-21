@@ -1,0 +1,52 @@
+package com.szpejsoft.flashcards.screens.cardsets.test.list
+
+import app.cash.turbine.test
+import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.domain.model.CardSet
+import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
+import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListViewModel
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class TestCardSetListViewModelTest : BaseMockKTest() {
+    private lateinit var sut: TestCardSetListViewModel
+
+    @MockK(relaxed = true)
+    private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
+
+    @Before
+    fun setUp() {
+        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+    }
+
+    @Test
+    fun `when usecase shows cardsets, viewmodel shows cardsets`() = runTest {
+        //arrange
+        val sets = listOf(
+            CardSet(1, "set 1"),
+            CardSet(2, "set 2")
+        )
+        val useCaseFlow = flowOf(sets)
+        every { observeCardSetsUseCase() } returns useCaseFlow
+
+        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+
+        //act & assert
+        sut.uiState.test {
+            val sets = expectMostRecentItem().cardSets
+            assertEquals(2, sets.size)
+            assertEquals(CardSet(1, "set 1"), sets[0])
+            assertEquals(CardSet(2, "set 2"), sets[1])
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+
+}

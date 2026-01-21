@@ -19,9 +19,8 @@ fun MainScreen() {
     FlashcardsTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            content = { innerPadding ->
-                MainScreenContent(innerPadding, screenNavigator)
-            }
+            content = { innerPadding -> MainScreenContent(innerPadding, screenNavigator) },
+            bottomBar = { screenNavigator.BottomNavBar() }
         )
     }
 }
