@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.list
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.list
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
@@ -12,28 +12,25 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CardSetListScreenTest {
+class EditCardSetListScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val editCardSetCalls = mutableListOf<Long>()
-    private val learnCardSetCalls = mutableListOf<Long>()
     private val deleteText by lazy { composeTestRule.activity.getString(R.string.action_delete) }
     private val editText by lazy { composeTestRule.activity.getString(R.string.action_edit) }
-    private val learnText by lazy { composeTestRule.activity.getString(R.string.action_learn) }
 
-    private lateinit var viewModel: CardSetListViewModelTestDouble
+    private lateinit var viewModel: EditCardSetListViewModelTestDouble
 
     @Before
     fun setUp() {
-        viewModel = CardSetListViewModelTestDouble()
+        viewModel = EditCardSetListViewModelTestDouble()
         composeTestRule.setContent {
-            CardSetListScreen(
+            EditCardSetListScreen(
                 viewModel = viewModel,
                 onAddButtonClick = {},
                 onEditButtonClick = { id -> editCardSetCalls.add(id) },
-                onLearnButtonClick = { id -> learnCardSetCalls.add(id) }
             )
         }
         editCardSetCalls.clear()
@@ -89,21 +86,6 @@ class CardSetListScreenTest {
         assertEquals(listOf(2L), editCardSetCalls)
     }
 
-    @Test
-    fun whenUserClicksLearn_callProperLambda() {
-        //arrange
-        val sets = listOf(
-            CardSet(id = 1L, "my first cardset"),
-            CardSet(id = 2L, "my second cardset"),
-        )
 
-        //act
-        viewModel.setCardSets(sets)
-        composeTestRule.onNodeWithText("my first cardset").performClick()
-        composeTestRule.onNodeWithText(learnText).performClick()
-
-        //assert
-        assertEquals(listOf(1L), learnCardSetCalls)
-    }
 
 }

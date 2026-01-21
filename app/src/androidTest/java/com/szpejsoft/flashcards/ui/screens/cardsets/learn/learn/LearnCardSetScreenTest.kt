@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,8 +10,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -82,9 +80,9 @@ class LearnCardSetScreenTest {
     @Test
     fun flashcardToLearnState_whenUserClicksQuestion_answerIsDisplayed() {
         //arrange
+        viewModel.uiState.value = TEST_FLASHCARD_TO_LEARN
 
         //act
-        viewModel.uiState.value = TEST_FLASHCARD_TO_LEARN
         composeTestRule.onNodeWithText("question").performClick()
 
         //assert

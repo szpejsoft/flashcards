@@ -16,7 +16,7 @@ import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewMod
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.setlist.LearnCardSetListScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet

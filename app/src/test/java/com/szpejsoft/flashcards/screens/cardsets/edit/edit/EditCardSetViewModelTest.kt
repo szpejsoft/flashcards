@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit
+package com.szpejsoft.flashcards.screens.cardsets.edit.edit
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseMockKTest
@@ -17,7 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -70,15 +70,15 @@ class EditCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            assertEquals(EditCardSetUiState(), awaitItem())
+            Assert.assertEquals(EditCardSetUiState(), awaitItem())
             advanceUntilIdle()
             val state = awaitItem()
 
             val flashcards = state.flashCards
-            assertEquals("card set name", state.setName)
-            assertEquals(2, flashcards.size)
-            assertEquals(Flashcard(1, "obverse 1", "reverse 1"), flashcards[0])
-            assertEquals(Flashcard(2, "obverse 2", "reverse 2"), flashcards[1])
+            Assert.assertEquals("card set name", state.setName)
+            Assert.assertEquals(2, flashcards.size)
+            Assert.assertEquals(Flashcard(1, "obverse 1", "reverse 1"), flashcards[0])
+            Assert.assertEquals(Flashcard(2, "obverse 2", "reverse 2"), flashcards[1])
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -125,15 +125,15 @@ class EditCardSetViewModelTest : BaseMockKTest() {
             }
             cancelAndIgnoreRemainingEvents()
             val capturedFlashcards = flashcardsSlot.captured
-            assertEquals(2, capturedFlashcards.size)
+            Assert.assertEquals(2, capturedFlashcards.size)
 
             val editedFlashcard = capturedFlashcards.first { it.id == 2L }
-            assertEquals("obverse 2_1", editedFlashcard.obverse)
-            assertEquals("reverse 2_1", editedFlashcard.reverse)
+            Assert.assertEquals("obverse 2_1", editedFlashcard.obverse)
+            Assert.assertEquals("reverse 2_1", editedFlashcard.reverse)
 
             val newFlashcard = capturedFlashcards.first { it.id == 0L }
-            assertEquals("obverse 3", newFlashcard.obverse)
-            assertEquals("reverse 3", newFlashcard.reverse)
+            Assert.assertEquals("obverse 3", newFlashcard.obverse)
+            Assert.assertEquals("reverse 3", newFlashcard.reverse)
 
         }
 

@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.screens.cardsets.learn
+package com.szpejsoft.flashcards.screens.cardsets.learn.learn
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseMockKTest

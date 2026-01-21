@@ -3,7 +3,6 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.test.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -16,8 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 open class TestCardSetListViewModel
 @Inject
 constructor(
-    observeCardSetsUseCase: ObserveCardSetsUseCase,
-    private val deleteCardSetUseCase: DeleteCardSetUseCase
+    observeCardSetsUseCase: ObserveCardSetsUseCase
 ) : ViewModel() {
 
     open val uiState: StateFlow<TestCardSetListUiState> =

@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,8 +13,6 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

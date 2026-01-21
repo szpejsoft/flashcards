@@ -1,9 +1,8 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn.setlist
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -11,31 +10,23 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @HiltViewModel
 open class LearnCardSetListViewModel
 @Inject
 constructor(
-    observeCardSetsUseCase: ObserveCardSetsUseCase,
-    private val deleteCardSetUseCase: DeleteCardSetUseCase
+    observeCardSetsUseCase: ObserveCardSetsUseCase
 ) : ViewModel() {
 
-    open val uiState: StateFlow<CardSetListUiState> =
+    open val uiState: StateFlow<LearnCardSetListUiState> =
         observeCardSetsUseCase()
-            .map { CardSetListUiState(it) }
+            .map { LearnCardSetListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Eagerly,
-                initialValue = CardSetListUiState(emptyList())
+                initialValue = LearnCardSetListUiState(emptyList())
             )
-
-    open fun onDeleteCardSetClicked(cardSetId: Long) {
-        viewModelScope.launch {
-            deleteCardSetUseCase(cardSetId)
-        }
-    }
 }
 
-data class CardSetListUiState(val cardSets: List<CardSet>)
+data class LearnCardSetListUiState(val cardSets: List<CardSet>)
 
