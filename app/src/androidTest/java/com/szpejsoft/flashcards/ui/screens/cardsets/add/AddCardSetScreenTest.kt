@@ -8,11 +8,9 @@ import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-@Ignore("bo nie")
 class AddCardSetScreenTest {
 
     @get:Rule
