@@ -36,4 +36,26 @@ class Screens {
         }
     }
 
+    @Test
+    fun `every Screen subclass has a corresponding entry in ScreenNavigator entryProvider`() {
+
+        val screenSubclasses = Konsist.scopeFromProduction()
+            .classes()
+            .first { it.name == "Screen" }
+            .children()
+            .map { it.name }
+
+        // 2. Get the content of the ScreenNavigator file
+        val navigatorFile = Konsist.scopeFromProduction()
+            .files
+            .first { it.name == "ScreenNavigator" }
+
+        screenSubclasses.forEach { screenName ->
+            assertTrue(
+                "ScreenNavigator is missing entry<$screenName> in entryProvider",
+                navigatorFile.text.contains("entry<$screenName>")
+            )
+        }
+    }
+
 }

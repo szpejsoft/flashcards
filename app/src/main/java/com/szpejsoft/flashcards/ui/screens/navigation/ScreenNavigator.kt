@@ -86,7 +86,6 @@ class ScreenNavigator {
                 onNavigateBack = { navigateBack() }
             )
         }
-
     }
 
     @Composable

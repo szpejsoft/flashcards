@@ -19,7 +19,6 @@ sealed class Screen : Parcelable {
     @Parcelize
     data object LearnCardSetList : Screen()
 
-
     @Parcelize
     data object TestCardSetList : Screen()
 

@@ -50,7 +50,6 @@ fun TestCardSetScreen(
             onNavigateBack
         )
     }
-
 }
 
 @Composable
@@ -85,8 +84,7 @@ private fun FlashCard(
         modifier = Modifier
             .then(modifier),
         shape = RoundedCornerShape(16.dp)
-    )
-    {
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -136,9 +134,8 @@ private fun Buttons(
     }
 }
 
-
 @Composable
-fun LearningFinished(
+private fun LearningFinished(
     state: TestFinished,
     onBackButtonClicked: () -> Unit = {}
 ) {
@@ -163,7 +160,7 @@ fun LearningFinished(
                         state.learnedCards,
                         state.cardSetSize
                     ),
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
         }
