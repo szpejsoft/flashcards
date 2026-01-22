@@ -8,6 +8,9 @@ sealed class Screen : Parcelable {
     data object AddCardSet : Screen()
 
     @Parcelize
+    data object EditCardSetList : Screen()
+
+    @Parcelize
     data class EditCardSet(val id: Long) : Screen()
 
     @Parcelize
@@ -17,9 +20,9 @@ sealed class Screen : Parcelable {
     data object LearnCardSetList : Screen()
 
     @Parcelize
-    data object EditCardSetList : Screen()
+    data object TestCardSetList : Screen()
 
     @Parcelize
-    data object TestCardSetList : Screen()
+    data class TestCardSet(val id: Long) : Screen()
 
 }
