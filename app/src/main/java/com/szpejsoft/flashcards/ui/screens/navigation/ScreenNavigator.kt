@@ -18,11 +18,14 @@ import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScre
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSetList
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.LearnCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.LearnCardSetList
+import com.szpejsoft.flashcards.ui.screens.navigation.Screen.TestCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.TestCardSetList
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -70,7 +73,17 @@ class ScreenNavigator {
 
         entry<TestCardSetList> {
             TestCardSetListScreen(
-                onTestButtonClick = {  }
+                onTestButtonClick = { navigateToTestCardSet(it) }
+            )
+        }
+
+        entry<TestCardSet> { key ->
+            val viewModel = hiltViewModel<TestCardSetViewModel, TestCardSetViewModel.Factory>(
+                creationCallback = { factory -> factory.create(key.id) }
+            )
+            TestCardSetScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navigateBack() }
             )
         }
 
@@ -89,6 +102,16 @@ class ScreenNavigator {
         )
     }
 
+    @Composable
+    fun BottomNavBar() {
+        BottomNavigationBar(
+            selectedTab = currentTab.collectAsState().value,
+            onTabSelected = { tab ->
+                onTabSelected(tab)
+            }
+        )
+    }
+
     private fun onTabSelected(tab: BottomTab) {
         currentTab.value = tab
         val screen = when (tab) {
@@ -100,17 +123,6 @@ class ScreenNavigator {
         backStack.add(screen)
     }
 
-    @Composable
-    fun BottomNavBar() {
-        BottomNavigationBar(
-            selectedTab = currentTab.collectAsState().value,
-            onTabSelected = { tab ->
-                onTabSelected(tab)
-            }
-        )
-    }
-
-
     private fun navigateToAddCardSet() {
         backStack.add(AddCardSet)
     }
@@ -121,6 +133,10 @@ class ScreenNavigator {
 
     private fun navigateToLearnCardSet(id: Long) {
         backStack.add(LearnCardSet(id))
+    }
+
+    private fun navigateToTestCardSet(id: Long) {
+        backStack.add(TestCardSet(id))
     }
 
     private fun navigateBack() {
