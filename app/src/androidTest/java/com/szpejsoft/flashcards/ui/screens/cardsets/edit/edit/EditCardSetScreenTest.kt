@@ -223,7 +223,7 @@ class EditCardSetScreenTest {
                 Flashcard(1L, "obverse_1", "reverse_1"),
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
-            isModified = true,
+            saveEnabled = true,
             isSaving = false
         )
 
@@ -243,7 +243,7 @@ class EditCardSetScreenTest {
                 Flashcard(1L, "obverse_1", "reverse_1"),
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
-            isModified = false,
+            saveEnabled = false,
             isSaving = false
         )
 
@@ -263,7 +263,7 @@ class EditCardSetScreenTest {
                 Flashcard(1L, "obverse_1", "reverse_1"),
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
-            isModified = true,
+            saveEnabled = true,
             isSaving = false
         )
 
@@ -285,7 +285,7 @@ class EditCardSetScreenTest {
                 Flashcard(1L, "obverse_1", "reverse_1"),
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
-            isModified = true,
+            saveEnabled = true,
             isSaving = false
         )
 

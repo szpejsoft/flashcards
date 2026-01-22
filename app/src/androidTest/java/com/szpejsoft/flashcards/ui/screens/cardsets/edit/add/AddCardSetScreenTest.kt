@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.add
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule

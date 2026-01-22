@@ -1,6 +1,6 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.add
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
 
-import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetUiState.Editing
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetUiState.Editing
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 

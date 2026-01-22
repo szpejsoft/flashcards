@@ -2,6 +2,7 @@ package com.szpejsoft.flashcards.data.repository
 
 import androidx.room.withTransaction
 import com.szpejsoft.flashcards.data.db.FlashcardsDb
+import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 import com.szpejsoft.flashcards.data.mappers.toDb
 import com.szpejsoft.flashcards.data.mappers.toDomain
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
@@ -38,6 +39,14 @@ constructor(
             if (flashcardsToSave.isNotEmpty()) {
                 flashcardDao.insert(flashcardsToSave.toDb(cardSetId))
             }
+        }
+    }
+
+    override suspend fun insert(cardSetName: String, flashcards: List<Flashcard>) {
+        db.withTransaction {
+            val cardSetId = cardSetDao.insert(DbCardSet(0, cardSetName))
+            val flashcardsDb = flashcards.toDb(cardSetId)
+            flashcardDao.insert(flashcardsDb)
         }
     }
 

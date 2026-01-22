@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,8 +36,8 @@ import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
-fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel(),
+fun AddCardSetScreen(
+    viewModel: AddCardSetViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -95,7 +95,7 @@ fun EditCardSetScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        viewModel.onUpdateCardSetName(setName)
+                        viewModel.onCardSetNameChanged(setName)
                         //todo clear focus and hide keyboard
                     }
                 )
@@ -106,8 +106,7 @@ fun EditCardSetScreen(
             ) {
                 items(
                     count = state.flashCards.size,
-                    //todo what to do when user puts 2 cards with the same content
-                    key = { index -> state.flashCards[index].hashCode() }
+                    key = { index -> state.flashCards[index].id }
                 ) { index ->
                     Box {
                         val flashcardId = state.flashCards[index].id
@@ -159,5 +158,4 @@ fun EditCardSetScreen(
             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
         }
     }
-
 }
