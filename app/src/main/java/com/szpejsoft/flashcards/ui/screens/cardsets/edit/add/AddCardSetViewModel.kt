@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
-import com.szpejsoft.flashcards.ui.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,12 +40,10 @@ constructor(
         _uiState.update { state ->
             val newCard = Flashcard(newFlashcardId++, obverse, reverse)
             val newFlashcards = state.flashCards + newCard
-            val a = state.copy(
+            state.copy(
                 flashCards = newFlashcards,
                 saveEnabled = isSaveEnabled(state.setName, newFlashcards)
             )
-            log("$a")
-            a
         }
     }
 
@@ -78,7 +75,7 @@ constructor(
         viewModelScope.launch {
             saveCardSetUseCase(
                 cardSetName = _uiState.value.setName,
-                flashcards = _uiState.value.flashCards.map { it.copy(id = 0) }
+                flashcards = _uiState.value.flashCards
             )
         }
     }

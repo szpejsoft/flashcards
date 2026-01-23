@@ -44,7 +44,7 @@ constructor(
 
     override suspend fun insert(cardSetName: String, flashcards: List<Flashcard>) {
         db.withTransaction {
-            val cardSetId = cardSetDao.insert(DbCardSet(0, cardSetName))
+            val cardSetId = cardSetDao.insert(DbCardSet(name = cardSetName))
             val flashcardsDb = flashcards.toDb(cardSetId)
             flashcardDao.insert(flashcardsDb)
         }
