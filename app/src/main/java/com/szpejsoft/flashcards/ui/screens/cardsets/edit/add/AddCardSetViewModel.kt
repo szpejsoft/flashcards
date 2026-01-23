@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
+import com.szpejsoft.flashcards.ui.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,10 +41,12 @@ constructor(
         _uiState.update { state ->
             val newCard = Flashcard(newFlashcardId++, obverse, reverse)
             val newFlashcards = state.flashCards + newCard
-            state.copy(
+            val a = state.copy(
                 flashCards = newFlashcards,
                 saveEnabled = isSaveEnabled(state.setName, newFlashcards)
             )
+            log("$a")
+            a
         }
     }
 
@@ -73,16 +76,14 @@ constructor(
 
     open fun onSaveClicked() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isSaving = true) }
             saveCardSetUseCase(
                 cardSetName = _uiState.value.setName,
                 flashcards = _uiState.value.flashCards.map { it.copy(id = 0) }
             )
-            _uiState.update { it.copy(isSaving = false) }
         }
     }
 
-    private fun isSaveEnabled(setName: String, flashCards: List<Flashcard>) =
+    protected fun isSaveEnabled(setName: String, flashCards: List<Flashcard>) =
         setName.isNotBlank() && flashCards.isNotEmpty()
 
 }
@@ -91,5 +92,4 @@ data class AddCardSetUiState(
     val setName: String = "",
     val flashCards: List<Flashcard> = emptyList(),
     val saveEnabled: Boolean = false,
-    val isSaving: Boolean = false
 )

@@ -70,7 +70,7 @@ class EditCardSetScreenTest {
     }
 
     @Test
-    fun whenDeleteIsClicked_properViewModelMethodIsCalled() {
+    fun whenDeleteFlashCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
         val uiState = EditCardSetUiState(
             "set name",
@@ -185,8 +185,8 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionUpdate).performClick()
 
         //assert
-        assertEquals(1, viewModel.updateFlashcardsCalls.size)
-        assertEquals(Triple(1L, "obverse1", "reverse_1"), viewModel.updateFlashcardsCalls[0])
+        assertEquals(1, viewModel.updateFlashcardCalls.size)
+        assertEquals(Triple(1L, "obverse1", "reverse_1"), viewModel.updateFlashcardCalls[0])
     }
 
     @Test
@@ -211,7 +211,7 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionCancel).performClick()
 
         //assert
-        assertEquals(0, viewModel.updateFlashcardsCalls.size)
+        assertEquals(0, viewModel.updateFlashcardCalls.size)
     }
 
     @Test
@@ -224,7 +224,6 @@ class EditCardSetScreenTest {
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
             saveEnabled = true,
-            isSaving = false
         )
 
         //act
@@ -244,7 +243,6 @@ class EditCardSetScreenTest {
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
             saveEnabled = false,
-            isSaving = false
         )
 
         //act
@@ -264,7 +262,6 @@ class EditCardSetScreenTest {
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
             saveEnabled = true,
-            isSaving = false
         )
 
         //act
@@ -286,7 +283,6 @@ class EditCardSetScreenTest {
                 Flashcard(2L, "obverse_2", "reverse_2")
             ),
             saveEnabled = true,
-            isSaving = false
         )
 
         //act

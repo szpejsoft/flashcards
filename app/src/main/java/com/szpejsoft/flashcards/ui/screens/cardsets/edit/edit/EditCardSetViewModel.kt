@@ -46,7 +46,6 @@ constructor(
                         setName = it.cardSet.name,
                         flashCards = it.flashcards,
                         saveEnabled = false,
-                        isSaving = false
                     )
                 }
                 .stateIn(
@@ -102,21 +101,20 @@ constructor(
 
     open fun onSaveClicked() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isSaving = true) }
             updateCardSetUseCase(
                 cardSetId = cardSetId,
                 cardSetName = _uiState.value.setName,
                 flashcardsToSave = _uiState.value.flashCards,
                 flashcardIdsToDelete = deletedFlashcardIds.toList()
             )
-            _uiState.update { it.copy(isSaving = false) }
+            _uiState.update { it.copy(saveEnabled = false) }
         }
     }
 
-    data class EditCardSetUiState(
-        val setName: String = "",
-        val flashCards: List<Flashcard> = emptyList(),
-        val saveEnabled: Boolean = false,
-        val isSaving: Boolean = false
-    )
 }
+
+data class EditCardSetUiState(
+    val setName: String = "",
+    val flashCards: List<Flashcard> = emptyList(),
+    val saveEnabled: Boolean = false,
+)
