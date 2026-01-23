@@ -12,7 +12,7 @@ class EditCardSetViewModelTestDouble : EditCardSetViewModel(
 
     val addFlashcardCalls: List<Pair<String, String>> get() = _addFlashcardsCalls
     val deleteFlashcardsCalls: List<Long> get() = _deleteFlashcardsCalls
-    val updateFlashcardsCalls: List<Triple<Long, String, String>> get() = _updateFlashcardsCalls
+    val updateFlashcardCalls: List<Triple<Long, String, String>> get() = _updateFlashcardsCalls
 
     var saveClickedCallsNumber = 0
         private set

@@ -45,8 +45,7 @@ constructor(
                     EditCardSetUiState(
                         setName = it.cardSet.name,
                         flashCards = it.flashcards,
-                        isModified = false,
-                        isSaving = false
+                        saveEnabled = false,
                     )
                 }
                 .stateIn(
@@ -61,9 +60,10 @@ constructor(
     open fun onAddFlashcard(obverse: String, reverse: String) {
         _uiState.update { state ->
             val newCard = Flashcard(0, obverse, reverse)
+            val newFlashcards = state.flashCards + newCard
             state.copy(
-                flashCards = state.flashCards + newCard,
-                isModified = true
+                flashCards = newFlashcards,
+                saveEnabled = newFlashcards.isNotEmpty()
             )
         }
     }
@@ -71,9 +71,10 @@ constructor(
     open fun onDeleteFlashcard(flashcardId: Long) {
         deletedFlashcardIds.add(flashcardId)
         _uiState.update { state ->
+            val newFlashcards = state.flashCards.filterNot { it.id == flashcardId }
             state.copy(
-                flashCards = state.flashCards.filterNot { it.id == flashcardId },
-                isModified = true
+                flashCards = newFlashcards,
+                saveEnabled = newFlashcards.isNotEmpty()
             )
         }
     }
@@ -84,33 +85,29 @@ constructor(
                 obverse = obverse,
                 reverse = reverse
             )
+            val newFlashcards = state.flashCards.filterNot { it.id == flashcardId } + updatedCard
             state.copy(
-                flashCards = state.flashCards.filterNot { it.id == flashcardId } + updatedCard,
-                isModified = true
+                flashCards = newFlashcards,
+                saveEnabled = newFlashcards.isNotEmpty()
             )
-
         }
     }
 
     open fun onUpdateCardSetName(cardSetName: String) {
         _uiState.update { state ->
-            state.copy(setName = cardSetName, isModified = true)
+            state.copy(setName = cardSetName, saveEnabled = state.flashCards.isNotEmpty())
         }
     }
 
     open fun onSaveClicked() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isSaving = true) }
-            try {
-                updateCardSetUseCase(
-                    cardSetId = cardSetId,
-                    cardSetName = _uiState.value.setName,
-                    flashcardsToSave = _uiState.value.flashCards,
-                    flashcardIdsToDelete = deletedFlashcardIds.toList()
-                )
-            } catch (_: Exception) {
-                _uiState.update { it.copy(isSaving = false) }
-            }
+            updateCardSetUseCase(
+                cardSetId = cardSetId,
+                cardSetName = _uiState.value.setName,
+                flashcardsToSave = _uiState.value.flashCards,
+                flashcardIdsToDelete = deletedFlashcardIds.toList()
+            )
+            _uiState.update { it.copy(saveEnabled = false) }
         }
     }
 
@@ -119,6 +116,5 @@ constructor(
 data class EditCardSetUiState(
     val setName: String = "",
     val flashCards: List<Flashcard> = emptyList(),
-    val isModified: Boolean = false,
-    val isSaving: Boolean = false
+    val saveEnabled: Boolean = false,
 )

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CardSetDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(dbCardSet: DbCardSet)
+    suspend fun insert(dbCardSet: DbCardSet): Long
 
     @Query("DELETE FROM card_set WHERE id = :id")
     suspend fun delete(id: Long)

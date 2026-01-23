@@ -1,7 +1,6 @@
 package com.szpejsoft.flashcards.ui.screens.common
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DropdownMenu
@@ -18,26 +17,12 @@ fun Toolbox(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onDeleteClicked: (() -> Unit)? = null,
-    onEditClicked: (() -> Unit)? = null,
-    onLearnClicked: (() -> Unit)? = null
+    onEditClicked: (() -> Unit)? = null
 ) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest
     ) {
-        onLearnClicked?.let {
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.action_learn)) },
-                leadingIcon = {
-                    Icon(
-                        Icons.Default.Book,
-                        contentDescription = stringResource(R.string.action_learn)
-                    )
-                },
-                onClick = onLearnClicked,
-                enabled = enabled
-            )
-        }
         onEditClicked?.let {
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.action_edit)) },

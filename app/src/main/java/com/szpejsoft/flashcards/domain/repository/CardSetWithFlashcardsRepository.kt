@@ -12,5 +12,7 @@ interface CardSetWithFlashcardsRepository {
         flashcardIdsToDelete: List<Long>
     )
 
+    suspend fun insert(cardSetName: String, flashcards: List<Flashcard>)
+
     fun observe(cardSetId: Long): Flow<CardSetWithFlashcards>
 }

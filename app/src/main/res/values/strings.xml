@@ -20,8 +20,7 @@
     <string name="learn_card_set_screen_learning_go_to_card_set_list">Go to card set list</string>>
     <string name="progress">%1$d/%2$d"</string>
     <string name="test_card_set_screen_test_finished_title">Congratulations!!!</string>>
-    <string name="test_card_set_screen_test_finished_score">You have learned %1$d/%2$d cards</string>>
-
+    <string name="test_card_set_screen_test_finished_score">You have learned %1$d/%2$d cards</string>
 
     <!-- generic messages -->
     <string name="database_save_error_message">Error while saving your set</string>
@@ -29,7 +28,6 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
-    <string name="action_learn">Learn</string>
     <string name="action_save">Save</string>
     <string name="action_update">Update</string>
 

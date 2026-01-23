@@ -132,4 +132,24 @@ class CardSetWithFlashcardsRepositoryTest : BaseMockKTest() {
         coVerify(exactly = 1) { flashcardDao.insert(flashcardsToSave.toDb(17L)) }
     }
 
+    @Test
+    fun `when insert called proper method on daos are called`() = runTest {
+        //arrange
+        val cardSetName = "the most random number"
+        val flashcardsToSave = listOf(
+            Flashcard(0, "obverse", "reverse"),
+        )
+        coEvery { cardSetDao.insert(any()) } returns 17L
+
+        //act
+        sut.insert(cardSetName, flashcardsToSave)
+
+        //assert
+        val expectedDbFlashcards = listOf(DbFlashcard(0, 17L, "obverse", "reverse"))
+
+        coVerify(exactly = 1) { cardSetDao.insert(DbCardSet(name = cardSetName)) }
+        coVerify(exactly = 1) { flashcardDao.insert(expectedDbFlashcards) }
+    }
 }
+
+

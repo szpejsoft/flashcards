@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit
+package com.szpejsoft.flashcards.ui.screens.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

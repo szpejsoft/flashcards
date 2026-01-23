@@ -1,14 +1,13 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
@@ -18,10 +17,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class EditCardSetScreenTest {
+class AddCardSetScreenTest {
+
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-
+    val titleTextFieldLabel by lazy { composeTestRule.activity.getString(R.string.add_card_set_screen_card_set_title_hint) }
     private val actionAdd by lazy { composeTestRule.activity.getString(R.string.action_add) }
     private val actionCancel by lazy { composeTestRule.activity.getString(R.string.action_cancel) }
     private val actionDelete by lazy { composeTestRule.activity.getString(R.string.action_delete) }
@@ -34,23 +34,38 @@ class EditCardSetScreenTest {
     private val obverseDialogText by lazy { composeTestRule.activity.getString(R.string.edit_card_set_screen_edit_flashcard_dialog_obverse_label) }
     private val reverseDialogText by lazy { composeTestRule.activity.getString(R.string.edit_card_set_screen_edit_flashcard_dialog_reverse_label) }
 
-    private lateinit var viewModel: EditCardSetViewModelTestDouble
+    private lateinit var viewModel: AddCardSetViewModelTestDouble
 
     private var onNavigateBackCalls = 0
 
     @Before
     fun setUp() {
-        viewModel = EditCardSetViewModelTestDouble()
-        onNavigateBackCalls = 0
+        viewModel = AddCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            EditCardSetScreen(viewModel = viewModel, onNavigateBack = { onNavigateBackCalls++ })
+            AddCardSetScreen(viewModel = viewModel, onNavigateBack = { onNavigateBackCalls++ })
         }
+    }
+
+    @Test
+    fun whenUserEntersSetName_properViewModelMethodIsCalled() {
+        //arrange
+        val cardSetName = "my cardset"
+
+        //act
+        composeTestRule.onNodeWithText(titleTextFieldLabel).apply {
+            performTextInput(cardSetName)
+            performImeAction()
+        }
+
+        //assert
+        assertEquals(1, viewModel.onCardSetNameChangedCalls.size)
+        assertEquals(cardSetName, viewModel.onCardSetNameChangedCalls[0])
     }
 
     @Test
     fun whenViewModelEmitsCardSet_screenShowsCardSet() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -72,7 +87,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenDeleteFlashCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -87,14 +102,14 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionDelete).performClick()
 
         //assert
-        assertEquals(1, viewModel.deleteFlashcardsCalls.size)
-        assertEquals(1L, viewModel.deleteFlashcardsCalls[0])
+        assertEquals(1, viewModel.onDeleteFlashcardCalls.size)
+        assertEquals(1L, viewModel.onDeleteFlashcardCalls[0])
     }
 
     @Test
     fun whenFABIsClicked_addFlashcardDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = AddCardSetUiState("set name")
         viewModel.setUiState(uiState)
 
         //act
@@ -107,7 +122,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenAddCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = AddCardSetUiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -118,14 +133,14 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionAdd).performClick()
 
         //assert
-        assertEquals(1, viewModel.addFlashcardCalls.size)
-        assertEquals("obverse1" to "reverse1", viewModel.addFlashcardCalls[0])
+        assertEquals(1, viewModel.onAddFlashcardCalls.size)
+        assertEquals("obverse1" to "reverse1", viewModel.onAddFlashcardCalls[0])
     }
 
     @Test
     fun whenCancelClickedWhileCardIsClicked_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = AddCardSetUiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -136,14 +151,13 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionCancel).performClick()
 
         //assert
-        assertEquals(0, viewModel.addFlashcardCalls.size)
+        assertEquals(0, viewModel.onAddFlashcardCalls.size)
     }
-
 
     @Test
     fun whenEditCardIsClicked_properDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -162,11 +176,10 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(updateFlashcardText).assertIsDisplayed()
     }
 
-
     @Test
     fun whenUpdateClickedWhileEditingCard_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -185,14 +198,14 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionUpdate).performClick()
 
         //assert
-        assertEquals(1, viewModel.updateFlashcardCalls.size)
-        assertEquals(Triple(1L, "obverse1", "reverse_1"), viewModel.updateFlashcardCalls[0])
+        assertEquals(1, viewModel.onUpdateFlashcardCalls.size)
+        assertEquals(Triple(1L, "obverse1", "reverse_1"), viewModel.onUpdateFlashcardCalls[0])
     }
 
     @Test
     fun whenCancelClickedWhileEditingCard_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -211,72 +224,25 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithText(actionCancel).performClick()
 
         //assert
-        assertEquals(0, viewModel.updateFlashcardCalls.size)
+        assertEquals(0, viewModel.onUpdateFlashcardCalls.size)
     }
 
     @Test
-    fun whenSetModified_saveButtonIsEnabled() {
+    fun whenUserClicksSave_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
-            "set name",
-            listOf(
-                Flashcard(1L, "obverse_1", "reverse_1"),
-                Flashcard(2L, "obverse_2", "reverse_2")
-            ),
-            saveEnabled = true,
-        )
+        viewModel.setUiState(AddCardSetUiState("setName", saveEnabled = true))
 
         //act
-        viewModel.setUiState(uiState)
-
-        //assert
-        composeTestRule.onNodeWithText(actionSave).assertIsEnabled()
-    }
-
-    @Test
-    fun whenSetNotModified_saveButtonIsDisabled() {
-        //arrange
-        val uiState = EditCardSetUiState(
-            "set name",
-            listOf(
-                Flashcard(1L, "obverse_1", "reverse_1"),
-                Flashcard(2L, "obverse_2", "reverse_2")
-            ),
-            saveEnabled = false,
-        )
-
-        //act
-        viewModel.setUiState(uiState)
-
-        //assert
-        composeTestRule.onNodeWithText(actionSave).assertIsNotEnabled()
-    }
-
-    @Test
-    fun whenSaveButtonClicked_properMethodOnViewModelIsCalled() {
-        //arrange
-        val uiState = EditCardSetUiState(
-            "set name",
-            listOf(
-                Flashcard(1L, "obverse_1", "reverse_1"),
-                Flashcard(2L, "obverse_2", "reverse_2")
-            ),
-            saveEnabled = true,
-        )
-
-        //act
-        viewModel.setUiState(uiState)
         composeTestRule.onNodeWithText(actionSave).performClick()
 
         //assert
-        assertEquals(1, viewModel.saveClickedCallsNumber)
-
+        assertEquals(1, viewModel.onSaveClickedCounter)
     }
 
     @Test
     fun whenSaveButtonClicked_returnToPreviousScreen() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = AddCardSetUiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),

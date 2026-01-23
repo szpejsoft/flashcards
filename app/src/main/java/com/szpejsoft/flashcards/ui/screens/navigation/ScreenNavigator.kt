@@ -10,7 +10,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.szpejsoft.flashcards.ui.screens.cardsets.add.AddCardSetScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListScreen
