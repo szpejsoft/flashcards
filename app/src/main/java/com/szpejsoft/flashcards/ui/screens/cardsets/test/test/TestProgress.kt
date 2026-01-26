@@ -26,6 +26,7 @@ import com.szpejsoft.flashcards.R
 @Preview
 @Composable
 fun TestProgress(
+    modifier: Modifier = Modifier,
     learned: Int = 1,
     failed: Int = 1,
     setSize: Int = 3
@@ -36,7 +37,7 @@ fun TestProgress(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp, bottom = 12.dp),
+            .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

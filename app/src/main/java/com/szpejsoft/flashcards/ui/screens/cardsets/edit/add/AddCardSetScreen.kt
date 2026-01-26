@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,7 @@ fun AddCardSetScreen(
     var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
     var isActionInProgress by remember { mutableStateOf(false) }
     var setName by remember(state.setName) { mutableStateOf(state.setName) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(state.flashCards) {
         isActionInProgress = false
@@ -96,7 +98,10 @@ fun AddCardSetScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         viewModel.onCardSetNameChanged(setName)
-                        //todo clear focus and hide keyboard
+                        keyboardController?.hide()
+                        if (state.flashCards.isEmpty()) {
+                            showAddFlashCardDialog = true
+                        }
                     }
                 )
             )

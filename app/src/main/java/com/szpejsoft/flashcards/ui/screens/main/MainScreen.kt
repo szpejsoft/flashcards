@@ -30,10 +30,12 @@ fun MainScreenContent(
     padding: PaddingValues,
     screenNavigator: ScreenNavigator
 ) {
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .padding(top = 12.dp)
             .padding(horizontal = 12.dp)
     ) {
         screenNavigator.NavDisplay()

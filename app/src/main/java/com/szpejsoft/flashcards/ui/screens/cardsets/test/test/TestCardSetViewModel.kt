@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-//todo what to do when card set is empty?
 @HiltViewModel(assistedFactory = TestCardSetViewModel.Factory::class)
 open class TestCardSetViewModel
 @AssistedInject
@@ -40,7 +39,9 @@ constructor(
             cardSetSize = 0,
             learnedCards = 0,
             failedCards = 0,
-            flashcardToTest = Flashcard()
+            flashcardToTest = Flashcard(),
+            testMode = TestMode.Click,
+            caseSensitive = true
         )
     )
 
@@ -62,7 +63,9 @@ constructor(
                     cardSetSize = setSize,
                     learnedCards = 0,
                     failedCards = 0,
-                    flashcardToTest = flashCardsToLearn.getRandom()
+                    flashcardToTest = flashCardsToLearn.getRandom(),
+                    testMode = TestMode.Click,
+                    caseSensitive = true
                 )
             }
         }
@@ -102,20 +105,47 @@ constructor(
         }
     }
 
+    open fun onAnswerProvided(answer: String) {
+        val state = _uiState.value as FlashcardToTest
+        val expectedAnswer = state.flashcardToTest.reverse
+        if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
+            onCardLearned()
+        } else {
+            onCardNotLearned()
+        }
+    }
+
+    private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
+        expectedAnswer.equals(answer, !caseSensitive)
+
+    open fun onTestModeChanged(newMode: TestMode) {
+        _uiState.update { (it as FlashcardToTest).copy(testMode = newMode) }
+    }
+
+    open fun onCaseSensitiveChanged(caseSensitive: Boolean) {
+        _uiState.update { (it as FlashcardToTest).copy(caseSensitive = caseSensitive) }
+    }
+
 }
 
 sealed class TestCardSetUiState {
 
     data class FlashcardToTest(
-        val setName: String = "",
+        val setName: String,
         val cardSetSize: Int,
         val learnedCards: Int,
         val failedCards: Int,
-        val flashcardToTest: Flashcard
+        val flashcardToTest: Flashcard,
+        val testMode: TestMode,
+        val caseSensitive: Boolean
     ) : TestCardSetUiState()
 
     data class TestFinished(
         val learnedCards: Int,
         val cardSetSize: Int
     ) : TestCardSetUiState()
+}
+
+enum class TestMode {
+    Click, Write
 }
