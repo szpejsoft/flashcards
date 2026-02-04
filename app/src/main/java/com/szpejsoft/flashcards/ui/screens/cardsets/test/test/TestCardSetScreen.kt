@@ -138,7 +138,9 @@ private fun AnswerProvider(
         TextField(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 4.dp),
+                .padding(end = 4.dp)
+                .testTag("answerTextField"),
+
             value = answer,
             onValueChange = { answer = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -187,7 +189,7 @@ private fun SettingsButtonWithMenu(
                 TestModeMenuItem(
                     testMode = TestMode.Click,
                     isSelected = TestMode.Click == currentMode,
-                    onTestModeChanged = { onTestModeChanged(TestMode.Click); isSettingsMenuVisible = false }
+                    onTestModeChanged = { onTestModeChanged(TestMode.Click) }
                 )
                 HorizontalDivider()
                 TestModeMenuItem(
@@ -204,7 +206,7 @@ private fun SettingsButtonWithMenu(
                     text = {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 modifier = Modifier
@@ -212,9 +214,11 @@ private fun SettingsButtonWithMenu(
                                     .padding(end = 4.dp),
                                 style = MaterialTheme.typography.labelLarge,
                                 text = stringResource(R.string.test_card_set_screen_settings_case_sensitive),
-                                textAlign = TextAlign.Start
+                                textAlign = TextAlign.Start,
                             )
                             Switch(
+                                modifier = Modifier.testTag("caseSensitiveSwitch"),
+                                enabled = currentMode == TestMode.Write,
                                 checked = caseSensitive,
                                 onCheckedChange = { onCaseSensitiveChanged(it) }
                             )
@@ -252,6 +256,7 @@ private fun ColumnScope.TestModeMenuItem(
                     textAlign = TextAlign.Start
                 )
                 RadioButton(
+                    modifier = Modifier.testTag(testMode.getName()),
                     selected = isSelected,
                     onClick = {
                         onTestModeChanged(testMode)

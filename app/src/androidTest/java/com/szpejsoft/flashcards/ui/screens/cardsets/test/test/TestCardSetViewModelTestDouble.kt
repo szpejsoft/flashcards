@@ -8,13 +8,20 @@ import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.F
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-class TestCardSetViewModelTestDouble : TestCardSetViewModel{
+class TestCardSetViewModelTestDouble : TestCardSetViewModel {
+    val onAnswerProvidedCalls: List<String> get() = _onAnswerProvidedCalls
+    val onTestModeChangedCalls: List<TestMode> get() = _onTestModeChangedCalls
+    val onCaseSensitiveChangedCalls: List<Boolean> get() = _onCaseSensitiveChangedCalls
 
     var onCardLearnedCalled = false
         private set
 
     var onCardNotLearnedCalled = false
         private set
+
+    private val _onAnswerProvidedCalls = mutableListOf<String>()
+    private val _onTestModeChangedCalls = mutableListOf<TestMode>()
+    private val _onCaseSensitiveChangedCalls = mutableListOf<Boolean>()
 
     override val uiState: MutableStateFlow<UiState> = MutableStateFlow(
         FlashcardToTest(
@@ -30,7 +37,6 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel{
 
     override fun onCardLearned() {
         onCardLearnedCalled = true
-
     }
 
     override fun onCardNotLearned() {
@@ -38,14 +44,15 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel{
     }
 
     override fun onAnswerProvided(answer: String) {
-        TODO()
+        _onAnswerProvidedCalls.add(answer)
     }
 
     override fun onTestModeChanged(newMode: TestMode) {
-        TODO()
+        _onTestModeChangedCalls.add(newMode)
     }
 
     override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
-        TODO()
+        _onCaseSensitiveChangedCalls.add(caseSensitive)
     }
+
 }

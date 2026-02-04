@@ -6,15 +6,14 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel.UiState
+import com.szpejsoft.flashcards.presentation.common.stateInUi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -30,7 +29,7 @@ constructor(
 ) : ViewModel(), EditCardSetViewModel {
 
     @AssistedFactory
-    interface Factory: EditCardSetViewModel.Factory {
+    interface Factory : EditCardSetViewModel.Factory {
         override fun create(cardSetId: Long): EditCardSetViewModelImpl
     }
 
@@ -49,11 +48,7 @@ constructor(
                         saveEnabled = false,
                     )
                 }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000L),
-                    initialValue = UiState()
-                )
+                .stateInUi(initialValue = UiState())
                 .collect { _uiState.value = it }
         }
     }

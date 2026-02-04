@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
@@ -264,9 +265,9 @@ class EditCardSetScreenTest {
             ),
             saveEnabled = true,
         )
+        viewModel.setUiState(uiState)
 
         //act
-        viewModel.setUiState(uiState)
         composeTestRule.onNodeWithText(actionSave).performClick()
 
         //assert
@@ -285,13 +286,42 @@ class EditCardSetScreenTest {
             ),
             saveEnabled = true,
         )
+        viewModel.setUiState(uiState)
 
         //act
-        viewModel.setUiState(uiState)
         composeTestRule.onNodeWithText(actionSave).performClick()
 
         //assert
         assertEquals(1, onNavigateBackCalls)
+    }
+
+    @Test
+    fun whenUserUpdatesCardSetName_properViewModelMethodIsCalled() {
+        //arrange
+        val uiState = UiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            saveEnabled = true,
+        )
+        viewModel.setUiState(uiState)
+        composeTestRule.waitForIdle()
+
+        //act
+        composeTestRule.onNodeWithTag("set title")
+            .performTextClearance()
+        composeTestRule.onNodeWithTag("set title")
+            .performTextInput("new name")
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("set title")
+            .performImeAction()
+
+
+        //assert
+        viewModel.updateCardSetNameCalls.size == 1
+        assertEquals("new name", viewModel.updateCardSetNameCalls[0])
     }
 
 }
