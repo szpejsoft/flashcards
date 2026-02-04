@@ -10,13 +10,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetUiState
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+
 
 class LearnCardSetScreenTest {
 
@@ -44,7 +46,7 @@ class LearnCardSetScreenTest {
         //arrange
 
         //act
-        viewModel.uiState.value = LearnCardSetUiState.LearningFinished
+        viewModel.uiState.value = LearningFinished
 
         //assert
         composeTestRule.onNodeWithText(successText).assertIsDisplayed()
@@ -54,7 +56,7 @@ class LearnCardSetScreenTest {
     @Test
     fun whenInFinishedStateAndGoToListClicked_navigateBackIsCalled() {
         //arrange
-        viewModel.uiState.value = LearnCardSetUiState.LearningFinished
+        viewModel.uiState.value = LearningFinished
 
         //act
         composeTestRule.onNodeWithText(goToListButton).performClick()
@@ -118,7 +120,7 @@ class LearnCardSetScreenTest {
     }
 
     companion object {
-        private val TEST_FLASHCARD_TO_LEARN = LearnCardSetUiState.FlashcardToLearn(
+        private val TEST_FLASHCARD_TO_LEARN = FlashcardToLearn(
             setName = "setname",
             cardSetSize = 17,
             learnedCards = 6,

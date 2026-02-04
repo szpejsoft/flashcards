@@ -7,7 +7,7 @@ import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetUiState
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every
@@ -28,7 +28,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
     @MockK(relaxed = true)
     private lateinit var observeCardSetUseCase: ObserveCardSetUseCase
 
-    private lateinit var sut: LearnCardSetViewModel
+    private lateinit var sut: LearnCardSetViewModelImpl
 
     @Suppress("UnusedFlow")
     @Test
@@ -41,7 +41,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
 
         //act
-        sut = LearnCardSetViewModel(1, observeCardSetUseCase)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //assert
@@ -62,7 +62,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1, cardSet2)
 
-        sut = LearnCardSetViewModel(1, observeCardSetUseCase)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
 
         //act & assert
         sut.uiState.test {
@@ -92,7 +92,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
             flashcards = cardList
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = LearnCardSetViewModel(1, observeCardSetUseCase)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
@@ -124,7 +124,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
             flashcards = cardList
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = LearnCardSetViewModel(1, observeCardSetUseCase)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
@@ -151,7 +151,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
             flashcards = listOf(card1)
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = LearnCardSetViewModel(1, observeCardSetUseCase)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
         //act & assert
         sut.uiState.test {
             skipItems(2)
