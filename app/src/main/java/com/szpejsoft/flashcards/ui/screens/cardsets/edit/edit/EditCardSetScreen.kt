@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
 import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
@@ -38,7 +39,7 @@ import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
 fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel(),
+    viewModel: EditCardSetViewModel = hiltViewModel<EditCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()

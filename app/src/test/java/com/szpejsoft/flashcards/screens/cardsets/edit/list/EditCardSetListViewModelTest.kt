@@ -5,7 +5,7 @@ import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModelImpl
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -18,7 +18,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EditCardSetListViewModelTest : BaseMockKTest() {
-    private lateinit var sut: EditCardSetListViewModel
+    private lateinit var sut: EditCardSetListViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
@@ -36,7 +36,7 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
+        sut = EditCardSetListViewModelImpl(observeCardSetsUseCase, deleteCardSetUseCase)
 
         //act & assert
         sut.uiState.test {
@@ -61,7 +61,7 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
+        sut = EditCardSetListViewModelImpl(observeCardSetsUseCase, deleteCardSetUseCase)
 
 
         //act

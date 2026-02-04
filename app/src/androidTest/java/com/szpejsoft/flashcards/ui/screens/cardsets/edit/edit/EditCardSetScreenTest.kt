@@ -13,7 +13,7 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetUiState
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel.UiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -51,7 +51,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenViewModelEmitsCardSet_screenShowsCardSet() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -73,7 +73,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenDeleteFlashCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -95,7 +95,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenFABIsClicked_addFlashcardDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
 
         //act
@@ -108,7 +108,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenAddCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -126,7 +126,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileCardIsClicked_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -144,7 +144,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenEditCardIsClicked_properDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -167,7 +167,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenUpdateClickedWhileEditingCard_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -193,7 +193,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileEditingCard_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -218,7 +218,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSetModified_saveButtonIsEnabled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -237,7 +237,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSetNotModified_saveButtonIsDisabled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -256,7 +256,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSaveButtonClicked_properMethodOnViewModelIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -277,7 +277,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSaveButtonClicked_returnToPreviousScreen() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),

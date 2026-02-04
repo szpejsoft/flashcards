@@ -12,7 +12,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetScreen
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScreen
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
@@ -49,7 +49,7 @@ class ScreenNavigator {
         }
 
         entry<EditCardSet> { key ->
-            val viewModel = hiltViewModel<EditCardSetViewModel, EditCardSetViewModel.Factory>(
+            val viewModel = hiltViewModel<EditCardSetViewModelImpl, EditCardSetViewModelImpl.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
             EditCardSetScreen(

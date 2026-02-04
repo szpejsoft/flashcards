@@ -7,7 +7,7 @@ import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -21,7 +21,7 @@ import org.junit.Before
 import org.junit.Test
 
 class EditCardSetViewModelTest : BaseMockKTest() {
-    private lateinit var sut: EditCardSetViewModel
+    private lateinit var sut: EditCardSetViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetUseCase: ObserveCardSetUseCase
@@ -31,7 +31,7 @@ class EditCardSetViewModelTest : BaseMockKTest() {
 
     @Before
     fun setUp() {
-        sut = EditCardSetViewModel(
+        sut = EditCardSetViewModelImpl(
             1,
             observeCardSetUseCase,
             updateCardSetUseCase
@@ -61,7 +61,7 @@ class EditCardSetViewModelTest : BaseMockKTest() {
             )
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = EditCardSetViewModel(
+        sut = EditCardSetViewModelImpl(
             1,
             observeCardSetUseCase,
             updateCardSetUseCase
@@ -93,7 +93,7 @@ class EditCardSetViewModelTest : BaseMockKTest() {
             )
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = EditCardSetViewModel(
+        sut = EditCardSetViewModelImpl(
             1,
             observeCardSetUseCase,
             updateCardSetUseCase
