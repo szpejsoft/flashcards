@@ -24,7 +24,6 @@ class AddCardSetViewModelTest : BaseMockKTest() {
         sut = AddCardSetViewModel(saveCardSetUseCase)
     }
 
-
     @Test
     fun `when viewmodel created, it emits empty cardset`() = runTest {
         //arrange

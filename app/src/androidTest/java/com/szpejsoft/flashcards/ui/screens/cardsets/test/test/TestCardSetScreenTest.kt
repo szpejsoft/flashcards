@@ -116,7 +116,9 @@ class TestCardSetScreenTest {
             flashcardToTest = Flashcard(
                 obverse = "question",
                 reverse = "answer"
-            )
+            ),
+            testMode = TestMode.Click,
+            caseSensitive = true
         )
     }
 

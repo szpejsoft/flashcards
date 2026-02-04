@@ -28,7 +28,9 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel(
             cardSetSize = 0,
             learnedCards = 0,
             failedCards = 0,
-            flashcardToTest = Flashcard()
+            flashcardToTest = Flashcard(),
+            testMode = TestMode.Click,
+            caseSensitive = true
         )
     )
 
@@ -40,9 +42,26 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel(
     override fun onCardNotLearned() {
         onCardNotLearnedCalled = true
     }
+
+    override fun onAnswerProvided(answer: String) {
+        TODO()
+    }
+
+    override fun onTestModeChanged(newMode: TestMode) {
+        TODO()
+    }
+
+    override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
+        TODO()
+    }
+
+    companion object {
+        private val dummyCardSet = CardSetWithFlashcards(
+            cardSet = CardSet(1, "name"),
+            flashcards = listOf(Flashcard(1, "q", "a"))
+        )
+
+    }
+
 }
 
-val dummyCardSet = CardSetWithFlashcards(
-    cardSet = CardSet(1, "name"),
-    flashcards = listOf(Flashcard(1, "q", "a"))
-)

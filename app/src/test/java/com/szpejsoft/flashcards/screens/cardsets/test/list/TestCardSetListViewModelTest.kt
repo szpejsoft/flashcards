@@ -40,7 +40,8 @@ class TestCardSetListViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            val sets = expectMostRecentItem().cardSets
+            skipItems(1)
+            val sets = awaitItem().cardSets
             assertEquals(2, sets.size)
             assertEquals(CardSet(1, "set 1"), sets[0])
             assertEquals(CardSet(2, "set 2"), sets[1])

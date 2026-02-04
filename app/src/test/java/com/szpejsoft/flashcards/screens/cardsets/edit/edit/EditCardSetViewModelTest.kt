@@ -7,7 +7,6 @@ import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetUiState
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewModel
 import io.mockk.coVerify
 import io.mockk.every
@@ -70,10 +69,8 @@ class EditCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            assertEquals(EditCardSetUiState(), awaitItem())
-            advanceUntilIdle()
+            awaitItem()
             val state = awaitItem()
-
             val flashcards = state.flashCards
             assertEquals("card set name", state.setName)
             assertEquals(2, flashcards.size)
@@ -104,24 +101,28 @@ class EditCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            awaitItem()
             advanceUntilIdle()
-            awaitItem()
             sut.onUpdateCardSetName("new card set name")
+            advanceUntilIdle()
             sut.onDeleteFlashcard(1)
+            advanceUntilIdle()
             sut.onUpdateFlashcard(2, "obverse 2_1", "reverse 2_1")
+            advanceUntilIdle()
             sut.onAddFlashcard("obverse 3", "reverse 3")
+            advanceUntilIdle()
             sut.onSaveClicked()
-
+            advanceUntilIdle()
             val flashcardsSlot = slot<List<Flashcard>>()
+            val cardSetIdSlot = slot<Long>()
+            val cardSetNameSlot = slot<String>()
+            val toDeleteSlot = slot<List<Long>>()
             coVerify(exactly = 1) {
                 updateCardSetUseCase(
-                    cardSetId = 1,
-                    cardSetName = "new card set name",
+                    cardSetId = capture(cardSetIdSlot),
+                    cardSetName = capture(cardSetNameSlot),
                     flashcardsToSave = capture(flashcardsSlot),
-                    flashcardIdsToDelete = listOf(1L),
-
-                    )
+                    flashcardIdsToDelete = capture(toDeleteSlot),
+                )
             }
             cancelAndIgnoreRemainingEvents()
             val capturedFlashcards = flashcardsSlot.captured

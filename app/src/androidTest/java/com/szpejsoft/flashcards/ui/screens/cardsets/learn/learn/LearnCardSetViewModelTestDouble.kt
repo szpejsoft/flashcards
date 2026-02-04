@@ -38,9 +38,14 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel(
     override fun onCardNotLearned() {
         onCardNotLearnedCalled = true
     }
+
+    companion object {
+        private val dummyCardSet = CardSetWithFlashcards(
+            cardSet = CardSet(1, "name"),
+            flashcards = listOf(Flashcard(1, "q", "a"))
+        )
+
+    }
+
 }
 
-val dummyCardSet = CardSetWithFlashcards(
-    cardSet = CardSet(1, "name"),
-    flashcards = listOf(Flashcard(1, "q", "a"))
-)

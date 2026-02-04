@@ -97,10 +97,8 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            awaitItem()//skip first -empty- emission
-            val state1 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
-            assertEquals(2, state1.flashcardToLearn.id)
-
+            val state = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            assertEquals(2, state.flashcardToLearn.id)
             sut.onCardLearned()
             advanceUntilIdle()
             val state2 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
@@ -131,7 +129,6 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            awaitItem() //skip first -empty- emission
             val state1 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
             assertEquals(2, state1.flashcardToLearn.id)
 
@@ -155,17 +152,12 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
         sut = LearnCardSetViewModel(1, observeCardSetUseCase)
-        advanceUntilIdle()
-
         //act & assert
         sut.uiState.test {
-            awaitItem() //emit first flashcard to learn
-            advanceUntilIdle()
-
+            skipItems(2)
             sut.onCardLearned()
-            advanceUntilIdle()
-
             val state = awaitItem()
+            println("3 $state")
             assertTrue(state is LearnCardSetUiState.LearningFinished)
         }
     }

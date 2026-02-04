@@ -11,9 +11,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -25,11 +25,6 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
 
     @MockK(relaxed = true)
     private lateinit var deleteCardSetUseCase: DeleteCardSetUseCase
-
-    @Before
-    fun setUp() {
-        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
-    }
 
     @Test
     fun `when usecase shows cardsets, viewmodel shows cardsets`() = runTest {
@@ -45,10 +40,12 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            val sets = expectMostRecentItem().cardSets
-            assertEquals(2, sets.size)
-            assertEquals(CardSet(1, "set 1"), sets[0])
-            assertEquals(CardSet(2, "set 2"), sets[1])
+            skipItems(1)
+            val state = awaitItem()
+            println("1 $state")
+            assertEquals(2, state.cardSets.size)
+            assertEquals(CardSet(1, "set 1"), state.cardSets[0])
+            assertEquals(CardSet(2, "set 2"), state.cardSets[1])
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -57,10 +54,19 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
     fun `when delete clicked, deleteCardSetUseCase called with proper parameters`() = runTest {
         //arrange
         val setToDeleteId = 17L
+        val sets = listOf(
+            CardSet(1, "set 1"),
+            CardSet(2, "set 2")
+        )
+        val useCaseFlow = flowOf(sets)
+        every { observeCardSetsUseCase() } returns useCaseFlow
+
+        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
+
 
         //act
         sut.onDeleteCardSetClicked(setToDeleteId)
-
+        advanceUntilIdle()
         //assert
         coVerify(exactly = 1) { deleteCardSetUseCase(setToDeleteId) }
     }

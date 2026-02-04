@@ -115,9 +115,6 @@ constructor(
         }
     }
 
-    private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
-        expectedAnswer.equals(answer, !caseSensitive)
-
     open fun onTestModeChanged(newMode: TestMode) {
         _uiState.update { (it as FlashcardToTest).copy(testMode = newMode) }
     }
@@ -125,6 +122,9 @@ constructor(
     open fun onCaseSensitiveChanged(caseSensitive: Boolean) {
         _uiState.update { (it as FlashcardToTest).copy(caseSensitive = caseSensitive) }
     }
+
+    private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
+        expectedAnswer.equals(answer, !caseSensitive)
 
 }
 
