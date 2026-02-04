@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetUiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

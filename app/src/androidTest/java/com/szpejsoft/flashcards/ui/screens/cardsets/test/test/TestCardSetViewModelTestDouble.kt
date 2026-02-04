@@ -3,7 +3,10 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.test.test
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestMode
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow

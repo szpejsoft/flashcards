@@ -6,10 +6,10 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestMode
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestMode.Click
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestMode.Click
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every

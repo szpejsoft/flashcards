@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.test.list
+package com.szpejsoft.flashcards.presentation.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

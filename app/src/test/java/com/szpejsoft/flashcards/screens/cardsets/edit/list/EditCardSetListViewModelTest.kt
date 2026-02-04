@@ -5,7 +5,7 @@ import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModel
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

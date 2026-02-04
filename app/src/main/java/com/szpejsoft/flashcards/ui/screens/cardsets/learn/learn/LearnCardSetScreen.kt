@@ -34,8 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetUiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 
 @Composable
 fun LearnCardSetScreen(

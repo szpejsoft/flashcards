@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseMockKTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -44,8 +44,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.FlashcardToTest
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestMode
 
 @Composable
 fun TestCardSetScreen(

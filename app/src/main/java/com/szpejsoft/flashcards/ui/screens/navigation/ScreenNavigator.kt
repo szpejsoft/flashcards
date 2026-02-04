@@ -12,14 +12,14 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSetList

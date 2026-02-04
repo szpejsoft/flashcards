@@ -1,11 +1,11 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.test.test
+package com.szpejsoft.flashcards.presentation.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.FlashcardToTest
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.TestFinished
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
