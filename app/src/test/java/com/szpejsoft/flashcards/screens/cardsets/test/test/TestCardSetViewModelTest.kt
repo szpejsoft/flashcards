@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.screens.cardsets.test.test
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
@@ -26,7 +26,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestCardSetViewModelTest : BaseMockKTest() {
+class TestCardSetViewModelTest : BaseTest() {
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetUseCase: ObserveCardSetUseCase

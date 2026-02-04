@@ -1,10 +1,10 @@
 package com.szpejsoft.flashcards.screens.cardsets.learn.list
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModelImpl
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,15 +15,15 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class LearnCardSetListViewModelTest : BaseMockKTest() {
-    private lateinit var sut: LearnCardSetListViewModel
+class LearnCardSetListViewModelTest : BaseTest() {
+    private lateinit var sut: LearnCardSetListViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
 
     @Before
     fun setUp() {
-        sut = LearnCardSetListViewModel(observeCardSetsUseCase)
+        sut = LearnCardSetListViewModelImpl(observeCardSetsUseCase)
     }
 
     @Test
@@ -36,7 +36,7 @@ class LearnCardSetListViewModelTest : BaseMockKTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = LearnCardSetListViewModel(observeCardSetsUseCase)
+        sut = LearnCardSetListViewModelImpl(observeCardSetsUseCase)
 
         //act & assert
         sut.uiState.test {

@@ -12,7 +12,7 @@ class ViewModels {
         Konsist.scopeFromProduction()
             .classes()
             .filter { it.hasParentOf(ViewModel::class) }
-            .assertTrue { it.resideInPackage("..ui.screens..") }
+            .assertTrue { it.resideInPackage("..presentation..") }
     }
 
     @Test

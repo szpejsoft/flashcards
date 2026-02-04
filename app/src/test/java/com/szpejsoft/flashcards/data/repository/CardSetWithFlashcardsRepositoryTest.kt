@@ -2,7 +2,7 @@ package com.szpejsoft.flashcards.data.repository
 
 import androidx.room.withTransaction
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.data.db.FlashcardsDb
 import com.szpejsoft.flashcards.data.db.dao.CardSetDao
 import com.szpejsoft.flashcards.data.db.dao.FlashcardDao
@@ -26,7 +26,7 @@ import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class CardSetWithFlashcardsRepositoryTest : BaseMockKTest() {
+class CardSetWithFlashcardsRepositoryTest : BaseTest() {
     private lateinit var sut: CardSetWithFlashcardsRepositoryImpl
 
     @MockK(relaxed = false)

@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.domain.usecase.cardset
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
@@ -16,7 +16,7 @@ import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class ObserveCardSetUseCaseTest : BaseMockKTest() {
+class ObserveCardSetUseCaseTest : BaseTest() {
     private lateinit var sut: ObserveCardSetUseCase
 
     @MockK(relaxed = true)

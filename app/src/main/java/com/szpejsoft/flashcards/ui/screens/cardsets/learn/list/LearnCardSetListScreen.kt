@@ -10,11 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
 
 @Composable
 fun LearnCardSetListScreen(
-    viewModel: LearnCardSetListViewModel = hiltViewModel(),
+    viewModel: LearnCardSetListViewModel = hiltViewModel<LearnCardSetListViewModelImpl>(),
     onLearnButtonClick: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()

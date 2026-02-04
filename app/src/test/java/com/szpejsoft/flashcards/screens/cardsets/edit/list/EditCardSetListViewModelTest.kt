@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.screens.cardsets.edit.list
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
@@ -17,7 +17,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class EditCardSetListViewModelTest : BaseMockKTest() {
+class EditCardSetListViewModelTest : BaseTest() {
     private lateinit var sut: EditCardSetListViewModelImpl
 
     @MockK(relaxed = true)

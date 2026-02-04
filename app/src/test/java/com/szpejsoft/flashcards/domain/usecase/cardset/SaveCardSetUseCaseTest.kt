@@ -1,6 +1,6 @@
 package com.szpejsoft.flashcards.domain.usecase.cardset
 
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.repository.CardSetWithFlashcardsRepository
 import io.mockk.coVerify
@@ -9,7 +9,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class SaveCardSetUseCaseTest : BaseMockKTest() {
+class SaveCardSetUseCaseTest : BaseTest() {
     private lateinit var sut: SaveCardSetUseCase
 
     @MockK(relaxed = true)

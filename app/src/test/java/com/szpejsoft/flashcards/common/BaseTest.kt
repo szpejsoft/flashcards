@@ -11,7 +11,7 @@ import org.junit.After
 import org.junit.Before
 
 @OptIn(ExperimentalCoroutinesApi::class)
-abstract class BaseMockKTest {
+abstract class BaseTest {
     val testDispatcher = StandardTestDispatcher()
 
     @Before

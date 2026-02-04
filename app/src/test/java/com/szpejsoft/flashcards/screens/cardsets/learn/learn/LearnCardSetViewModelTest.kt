@@ -1,12 +1,13 @@
 package com.szpejsoft.flashcards.screens.cardsets.learn.learn
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetUiState
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
@@ -23,7 +24,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class LearnCardSetViewModelTest : BaseMockKTest() {
+class LearnCardSetViewModelTest : BaseTest() {
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetUseCase: ObserveCardSetUseCase
@@ -67,7 +68,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
         //act & assert
         sut.uiState.test {
             awaitItem() //skip first -empty- emission
-            val state = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            val state = awaitItem() as FlashcardToLearn
             assertEquals("card set name", state.setName)
             assertEquals("obverse 1", state.flashcardToLearn.obverse)
             assertEquals("reverse 1", state.flashcardToLearn.reverse)
@@ -97,11 +98,11 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            val state = awaitItem() as FlashcardToLearn
             assertEquals(2, state.flashcardToLearn.id)
             sut.onCardLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            val state2 = awaitItem() as FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
@@ -129,12 +130,12 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
 
         //act & assert
         sut.uiState.test {
-            val state1 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            val state1 = awaitItem() as FlashcardToLearn
             assertEquals(2, state1.flashcardToLearn.id)
 
             sut.onCardNotLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as LearnCardSetUiState.FlashcardToLearn
+            val state2 = awaitItem() as FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(0, state2.learnedCards)
@@ -158,7 +159,7 @@ class LearnCardSetViewModelTest : BaseMockKTest() {
             sut.onCardLearned()
             val state = awaitItem()
             println("3 $state")
-            assertTrue(state is LearnCardSetUiState.LearningFinished)
+            assertTrue(state is LearningFinished)
         }
     }
 

@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.screens.cardsets.edit.add
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
 import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
 import io.mockk.impl.annotations.MockK
@@ -12,7 +12,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AddCardSetViewModelTest : BaseMockKTest() {
+class AddCardSetViewModelTest : BaseTest() {
 
     private lateinit var sut: AddCardSetViewModelImpl
 
