@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModelImpl
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,14 +16,14 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TestCardSetListViewModelTest : BaseTest() {
-    private lateinit var sut: TestCardSetListViewModel
+    private lateinit var sut: TestCardSetListViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
 
     @Before
     fun setUp() {
-        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+        sut = TestCardSetListViewModelImpl(observeCardSetsUseCase)
     }
 
     @Test
@@ -36,7 +36,7 @@ class TestCardSetListViewModelTest : BaseTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+        sut = TestCardSetListViewModelImpl(observeCardSetsUseCase)
 
         //act & assert
         sut.uiState.test {

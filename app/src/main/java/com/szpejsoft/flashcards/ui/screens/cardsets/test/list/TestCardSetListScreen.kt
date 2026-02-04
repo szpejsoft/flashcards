@@ -11,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
 
 @Composable
 fun TestCardSetListScreen(
-    viewModel: TestCardSetListViewModel = hiltViewModel(),
+    viewModel: TestCardSetListViewModel = hiltViewModel<TestCardSetListViewModelImpl>(),
     onTestButtonClick: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -41,5 +42,5 @@ fun TestCardSetListScreen(
             }
         }
     }
-    
+
 }

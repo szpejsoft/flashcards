@@ -10,9 +10,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.TestFinished
-import com.szpejsoft.flashcards.presentation.test.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,23 +1,14 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.test.test
 
-import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.presentation.test.TestMode
-import io.mockk.every
-import io.mockk.mockk
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 
-class TestCardSetViewModelTestDouble : TestCardSetViewModel(
-    cardSetId = 1L,
-    observeCardSetUseCase = mockk(relaxed = true) {
-        every { this@mockk(any()) } returns flowOf(dummyCardSet)
-    }
-) {
+
+class TestCardSetViewModelTestDouble : TestCardSetViewModel{
 
     var onCardLearnedCalled = false
         private set
@@ -25,7 +16,7 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel(
     var onCardNotLearnedCalled = false
         private set
 
-    override val uiState: MutableStateFlow<TestCardSetUiState> = MutableStateFlow(
+    override val uiState: MutableStateFlow<UiState> = MutableStateFlow(
         FlashcardToTest(
             setName = "",
             cardSetSize = 0,
@@ -57,14 +48,4 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel(
     override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
         TODO()
     }
-
-    companion object {
-        private val dummyCardSet = CardSetWithFlashcards(
-            cardSet = CardSet(1, "name"),
-            flashcards = listOf(Flashcard(1, "q", "a"))
-        )
-
-    }
-
 }
-

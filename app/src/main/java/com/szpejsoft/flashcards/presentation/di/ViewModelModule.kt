@@ -10,6 +10,10 @@ import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModel
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModelImpl
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
+import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModelImpl
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -37,6 +41,12 @@ abstract class ViewModelModule {
     abstract fun bindLearnCardSetListViewModel(
         impl: LearnCardSetListViewModelImpl
     ): LearnCardSetListViewModel
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindTestCardSetListViewModel(
+        impl: TestCardSetListViewModelImpl
+    ): TestCardSetListViewModel
     // endregion viewModels
 
     //region factories
@@ -49,5 +59,10 @@ abstract class ViewModelModule {
     abstract fun bindLearnCardSetViewModelFactory(
         impl: LearnCardSetViewModelImpl.Factory
     ): LearnCardSetViewModel.Factory
+
+    @Binds
+    abstract fun bindTestCardSetViewModelFactory(
+        impl: TestCardSetViewModelImpl.Factory
+    ): TestCardSetViewModel.Factory
     //endregion factories
 }

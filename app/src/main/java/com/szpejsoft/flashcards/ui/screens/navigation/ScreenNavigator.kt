@@ -19,7 +19,7 @@ import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetScreen
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSetList
@@ -78,7 +78,7 @@ class ScreenNavigator {
         }
 
         entry<TestCardSet> { key ->
-            val viewModel = hiltViewModel<TestCardSetViewModel, TestCardSetViewModel.Factory>(
+            val viewModel = hiltViewModel<TestCardSetViewModelImpl, TestCardSetViewModelImpl.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
             TestCardSetScreen(

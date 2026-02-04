@@ -44,14 +44,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.FlashcardToTest
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState.TestFinished
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.presentation.test.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 
 @Composable
 fun TestCardSetScreen(
-    viewModel: TestCardSetViewModel = hiltViewModel(),
+    viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()

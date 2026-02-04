@@ -6,10 +6,10 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.test.TestCardSetUiState
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.presentation.test.TestMode
-import com.szpejsoft.flashcards.presentation.test.TestMode.Click
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,7 +31,7 @@ class TestCardSetViewModelTest : BaseTest() {
     @MockK(relaxed = true)
     private lateinit var observeCardSetUseCase: ObserveCardSetUseCase
 
-    private lateinit var sut: TestCardSetViewModel
+    private lateinit var sut: TestCardSetViewModelImpl
 
     @Suppress("UnusedFlow")
     @Test
@@ -44,7 +44,7 @@ class TestCardSetViewModelTest : BaseTest() {
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
 
         //act
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //assert
@@ -65,19 +65,19 @@ class TestCardSetViewModelTest : BaseTest() {
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1, cardSet2)
 
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as TestCardSetUiState.FlashcardToTest
+            val state = awaitItem() as FlashcardToTest
             assertEquals("card set name", state.setName)
             assertEquals("obverse 1", state.flashcardToTest.obverse)
             assertEquals("reverse 1", state.flashcardToTest.reverse)
             assertEquals(1, state.cardSetSize)
             assertEquals(0, state.learnedCards)
             assertEquals(0, state.failedCards)
-            assertEquals(Click, state.testMode)
+            assertEquals(TestMode.Click, state.testMode)
             assertTrue(state.caseSensitive)
         }
 
@@ -98,16 +98,16 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = cardList
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
 
 
         //act & assert
         sut.uiState.test {
             skipItems(1)
-            val state1 = awaitItem() as TestCardSetUiState.FlashcardToTest
+            val state1 = awaitItem() as FlashcardToTest
             assertEquals(2, state1.flashcardToTest.id)
             sut.onCardLearned()
-            val state2 = awaitItem() as TestCardSetUiState.FlashcardToTest
+            val state2 = awaitItem() as FlashcardToTest
             assertEquals(1, state2.flashcardToTest.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
@@ -132,13 +132,13 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = cardList
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
 
         //act & assert
         sut.uiState.test {
             skipItems(2)
             sut.onCardNotLearned()
-            val state = awaitItem() as TestCardSetUiState.FlashcardToTest
+            val state = awaitItem() as FlashcardToTest
             println("3 $state")
             assertEquals("card id", 1, state.flashcardToTest.id)
             assertEquals("cardset size", 3, state.cardSetSize)
@@ -157,7 +157,7 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = listOf(card1)
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
@@ -169,7 +169,7 @@ class TestCardSetViewModelTest : BaseTest() {
             advanceUntilIdle()
 
             val state = awaitItem()
-            assertTrue(state is TestCardSetUiState.TestFinished)
+            assertTrue(state is TestFinished)
         }
     }
 
@@ -181,7 +181,7 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
@@ -189,8 +189,8 @@ class TestCardSetViewModelTest : BaseTest() {
             awaitItem() //emit first flashcard to learn
             sut.onTestModeChanged(TestMode.Write)
             val state = awaitItem()
-            assertTrue(state is TestCardSetUiState.FlashcardToTest)
-            assertEquals(TestMode.Write, (state as TestCardSetUiState.FlashcardToTest).testMode)
+            assertTrue(state is FlashcardToTest)
+            assertEquals(TestMode.Write, (state as FlashcardToTest).testMode)
         }
     }
 
@@ -202,7 +202,7 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
         advanceUntilIdle()
 
         //act & assert
@@ -210,8 +210,8 @@ class TestCardSetViewModelTest : BaseTest() {
             awaitItem() //emit first flashcard to learn
             sut.onCaseSensitiveChanged(false)
             val state = awaitItem()
-            assertTrue(state is TestCardSetUiState.FlashcardToTest)
-            assertFalse((state as TestCardSetUiState.FlashcardToTest).caseSensitive)
+            assertTrue(state is FlashcardToTest)
+            assertFalse((state as FlashcardToTest).caseSensitive)
         }
     }
 
@@ -223,7 +223,7 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
 
         //act & assert
         sut.uiState.test {
@@ -232,8 +232,8 @@ class TestCardSetViewModelTest : BaseTest() {
             sut.onAnswerProvided("Reverse 1")
             val state = awaitItem()
             println("ptsz 1  $state")
-            assertTrue(state is TestCardSetUiState.TestFinished)
-            assertEquals(0, (state as TestCardSetUiState.TestFinished).learnedCards)
+            assertTrue(state is TestFinished)
+            assertEquals(0, (state as TestFinished).learnedCards)
         }
     }
 
@@ -245,7 +245,7 @@ class TestCardSetViewModelTest : BaseTest() {
             flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
         )
         every { observeCardSetUseCase(1) } returns flowOf(cardSet)
-        sut = TestCardSetViewModel(1, observeCardSetUseCase)
+        sut = TestCardSetViewModelImpl(1, observeCardSetUseCase)
 
         //act & assert
         sut.uiState.test {
@@ -254,8 +254,8 @@ class TestCardSetViewModelTest : BaseTest() {
             skipItems(1)
             sut.onAnswerProvided("Reverse 1")
             val state = awaitItem()
-            assertTrue(state is TestCardSetUiState.TestFinished)
-            assertEquals(1, (state as TestCardSetUiState.TestFinished).learnedCards)
+            assertTrue(state is TestFinished)
+            assertEquals(1, (state as TestFinished).learnedCards)
         }
     }
 
