@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,12 +33,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 
 @Composable
 fun LearnCardSetScreen(
-    viewModel: LearnCardSetViewModel = hiltViewModel(),
+    viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -80,7 +81,7 @@ fun LearnCardSetContent(
 }
 
 @Composable
-private fun ColumnScope.FlashCard(
+private fun FlashCard(
     obverse: String,
     reverse: String,
     modifier: Modifier = Modifier

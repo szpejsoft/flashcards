@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.domain.usecase.cardset
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
 import io.mockk.every
@@ -9,12 +9,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class ObserveCardSetsUseCaseTest : BaseMockKTest() {
+class ObserveCardSetsUseCaseTest : BaseTest() {
     private lateinit var sut: ObserveCardSetsUseCase
 
     @MockK(relaxed = true)
@@ -47,9 +47,9 @@ class ObserveCardSetsUseCaseTest : BaseMockKTest() {
 
         //act & assert
         sut().test {
-            Assert.assertEquals(emptyList<CardSet>(), awaitItem())
-            Assert.assertEquals(initialList, awaitItem())
-            Assert.assertEquals(updatedList, awaitItem())
+            assertEquals(emptyList<CardSet>(), awaitItem())
+            assertEquals(initialList, awaitItem())
+            assertEquals(updatedList, awaitItem())
             awaitComplete()
         }
         verify(exactly = 1) { cardSetRepository.observeAll() }

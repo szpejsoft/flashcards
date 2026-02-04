@@ -1,7 +1,7 @@
 package com.szpejsoft.flashcards.data.repository
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.data.db.dao.CardSetDao
 import com.szpejsoft.flashcards.data.db.entities.DbCardSet
 import com.szpejsoft.flashcards.data.mappers.toDomain
@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 
 @Suppress("UnusedFlow")
-class CardSetRepositoryTest : BaseMockKTest() {
+class CardSetRepositoryTest : BaseTest() {
     private lateinit var sut: CardSetRepositoryImpl
 
     @MockK(relaxed = true)

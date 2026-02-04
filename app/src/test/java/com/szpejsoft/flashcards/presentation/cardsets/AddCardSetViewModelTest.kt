@@ -1,9 +1,8 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit.add
+package com.szpejsoft.flashcards.presentation.cardsets
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetViewModel
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -12,18 +11,17 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AddCardSetViewModelTest : BaseMockKTest() {
+class AddCardSetViewModelTest : BaseTest() {
 
-    private lateinit var sut: AddCardSetViewModel
+    private lateinit var sut: AddCardSetViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var saveCardSetUseCase: SaveCardSetUseCase
 
     @Before
     fun setUp() {
-        sut = AddCardSetViewModel(saveCardSetUseCase)
+        sut = AddCardSetViewModelImpl(saveCardSetUseCase)
     }
-
 
     @Test
     fun `when viewmodel created, it emits empty cardset`() = runTest {

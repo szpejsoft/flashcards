@@ -1,9 +1,10 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
+package com.szpejsoft.flashcards.presentation.cardsets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
+import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,31 +13,31 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-open class AddCardSetViewModel
+class AddCardSetViewModelImpl
 @Inject
 constructor(
     private val saveCardSetUseCase: SaveCardSetUseCase
-) : ViewModel() {
+) : ViewModel(), AddCardSetViewModel {
 
-    open val uiState: StateFlow<AddCardSetUiState>
+    override val uiState: StateFlow<UiState>
         get() = _uiState
 
-    private val _uiState = MutableStateFlow(AddCardSetUiState())
+    private val _uiState = MutableStateFlow(UiState())
 
     private var newFlashcardId = 1L
 
-    open fun resetState() {
-        _uiState.value = AddCardSetUiState()
+    override fun resetState() {
+        _uiState.value = UiState()
         newFlashcardId = 1
     }
 
-    open fun onCardSetNameChanged(name: String) {
+    override fun onCardSetNameChanged(name: String) {
         _uiState.update { state ->
             state.copy(setName = name, saveEnabled = isSaveEnabled(name, state.flashCards))
         }
     }
 
-    open fun onAddFlashcard(obverse: String, reverse: String) {
+    override fun onAddFlashcard(obverse: String, reverse: String) {
         _uiState.update { state ->
             val newCard = Flashcard(newFlashcardId++, obverse, reverse)
             val newFlashcards = state.flashCards + newCard
@@ -47,7 +48,7 @@ constructor(
         }
     }
 
-    open fun onDeleteFlashcard(flashcardId: Long) {
+    override fun onDeleteFlashcard(flashcardId: Long) {
         _uiState.update { state ->
             val newFlashcards = state.flashCards.filterNot { it.id == flashcardId }
             state.copy(
@@ -57,7 +58,7 @@ constructor(
         }
     }
 
-    open fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
+    override fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String) {
         _uiState.update { state ->
             val updatedCard = state.flashCards.first { it.id == flashcardId }.copy(
                 obverse = obverse,
@@ -71,7 +72,7 @@ constructor(
         }
     }
 
-    open fun onSaveClicked() {
+    override fun onSaveClicked() {
         viewModelScope.launch {
             saveCardSetUseCase(
                 cardSetName = _uiState.value.setName,
@@ -80,13 +81,9 @@ constructor(
         }
     }
 
-    protected fun isSaveEnabled(setName: String, flashCards: List<Flashcard>) =
+    private fun isSaveEnabled(setName: String, flashCards: List<Flashcard>) =
         setName.isNotBlank() && flashCards.isNotEmpty()
 
 }
 
-data class AddCardSetUiState(
-    val setName: String = "",
-    val flashCards: List<Flashcard> = emptyList(),
-    val saveEnabled: Boolean = false,
-)
+

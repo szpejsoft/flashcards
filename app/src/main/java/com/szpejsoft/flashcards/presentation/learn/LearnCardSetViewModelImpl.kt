@@ -1,10 +1,11 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
+package com.szpejsoft.flashcards.presentation.learn
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetUiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
@@ -17,23 +18,22 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-//todo what to do when card set is empty?
-@HiltViewModel(assistedFactory = LearnCardSetViewModel.Factory::class)
-open class LearnCardSetViewModel
+@HiltViewModel(assistedFactory = LearnCardSetViewModelImpl.Factory::class)
+class LearnCardSetViewModelImpl
 @AssistedInject
 constructor(
     @Assisted
     private val cardSetId: Long,
     private val observeCardSetUseCase: ObserveCardSetUseCase,
-) : ViewModel() {
+) : ViewModel(), LearnCardSetViewModel {
 
     @AssistedFactory
-    interface Factory {
-        fun create(cardSetId: Long): LearnCardSetViewModel
+    interface Factory : LearnCardSetViewModel.Factory {
+        override fun create(cardSetId: Long): LearnCardSetViewModelImpl
     }
 
-    open val uiState: StateFlow<LearnCardSetUiState> get() = _uiState
-    private val _uiState = MutableStateFlow<LearnCardSetUiState>(
+    override val uiState: StateFlow<UiState> get() = _uiState
+    private val _uiState = MutableStateFlow<UiState>(
         FlashcardToLearn(
             setName = "",
             cardSetSize = 0,
@@ -63,7 +63,7 @@ constructor(
         }
     }
 
-    open fun onCardLearned() {
+    override fun onCardLearned() {
         val state = _uiState.value as FlashcardToLearn
         val learnedCard = state.flashcardToLearn
         flashCardsToLearn.remove(learnedCard)
@@ -75,11 +75,11 @@ constructor(
                 )
             }
         } else {
-            _uiState.value = LearnCardSetUiState.LearningFinished
+            _uiState.value = UiState.LearningFinished
         }
     }
 
-    open fun onCardNotLearned() {
+    override fun onCardNotLearned() {
         _uiState.update {
             FlashcardToLearn(
                 setName = cardSetName,
@@ -90,16 +90,4 @@ constructor(
         }
     }
 
-}
-
-sealed class LearnCardSetUiState {
-
-    data class FlashcardToLearn(
-        val setName: String = "",
-        val cardSetSize: Int,
-        val learnedCards: Int,
-        val flashcardToLearn: Flashcard
-    ) : LearnCardSetUiState()
-
-    data object LearningFinished : LearnCardSetUiState()
 }

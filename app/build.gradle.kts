@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.szpejsoft.flashcards"
-        minSdk = 29
+        minSdk = 27
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -34,14 +34,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlin {
-        jvmToolchain(17)
-    }
-
     buildFeatures {
         compose = true
         buildConfig = true
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 ksp {
@@ -103,4 +103,10 @@ dependencies {
     androidTestImplementation(libs.junit)
     androidTestImplementation(libs.mockk.android)
 
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
 }

@@ -1,12 +1,9 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit.list
+package com.szpejsoft.flashcards.presentation.learn
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
-import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListViewModel
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,18 +14,15 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class EditCardSetListViewModelTest : BaseMockKTest() {
-    private lateinit var sut: EditCardSetListViewModel
+class LearnCardSetListViewModelTest : BaseTest() {
+    private lateinit var sut: LearnCardSetListViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
 
-    @MockK(relaxed = true)
-    private lateinit var deleteCardSetUseCase: DeleteCardSetUseCase
-
     @Before
     fun setUp() {
-        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
+        sut = LearnCardSetListViewModelImpl(observeCardSetsUseCase)
     }
 
     @Test
@@ -41,11 +35,12 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = EditCardSetListViewModel(observeCardSetsUseCase, deleteCardSetUseCase)
+        sut = LearnCardSetListViewModelImpl(observeCardSetsUseCase)
 
         //act & assert
         sut.uiState.test {
-            val sets = expectMostRecentItem().cardSets
+            skipItems(1)
+            val sets = awaitItem().cardSets
             assertEquals(2, sets.size)
             assertEquals(CardSet(1, "set 1"), sets[0])
             assertEquals(CardSet(2, "set 2"), sets[1])
@@ -53,16 +48,5 @@ class EditCardSetListViewModelTest : BaseMockKTest() {
         }
     }
 
-    @Test
-    fun `when delete clicked, deleteCardSetUseCase called with proper parameters`() = runTest {
-        //arrange
-        val setToDeleteId = 17L
-
-        //act
-        sut.onDeleteCardSetClicked(setToDeleteId)
-
-        //assert
-        coVerify(exactly = 1) { deleteCardSetUseCase(setToDeleteId) }
-    }
 
 }

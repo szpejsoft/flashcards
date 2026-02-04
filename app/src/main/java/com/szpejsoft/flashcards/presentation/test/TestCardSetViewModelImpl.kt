@@ -1,11 +1,13 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.test.test
+package com.szpejsoft.flashcards.presentation.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.FlashcardToTest
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetUiState.TestFinished
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
@@ -18,29 +20,30 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-//todo what to do when card set is empty?
-@HiltViewModel(assistedFactory = TestCardSetViewModel.Factory::class)
-open class TestCardSetViewModel
+@HiltViewModel(assistedFactory = TestCardSetViewModelImpl.Factory::class)
+class TestCardSetViewModelImpl
 @AssistedInject
 constructor(
     @Assisted
     private val cardSetId: Long,
     private val observeCardSetUseCase: ObserveCardSetUseCase,
-) : ViewModel() {
+) : ViewModel(), TestCardSetViewModel {
 
     @AssistedFactory
-    interface Factory {
-        fun create(cardSetId: Long): TestCardSetViewModel
+    interface Factory : TestCardSetViewModel.Factory {
+        override fun create(cardSetId: Long): TestCardSetViewModelImpl
     }
 
-    open val uiState: StateFlow<TestCardSetUiState> get() = _uiState
-    private val _uiState = MutableStateFlow<TestCardSetUiState>(
+    override val uiState: StateFlow<UiState> get() = _uiState
+    private val _uiState = MutableStateFlow<UiState>(
         FlashcardToTest(
             setName = "",
             cardSetSize = 0,
             learnedCards = 0,
             failedCards = 0,
-            flashcardToTest = Flashcard()
+            flashcardToTest = Flashcard(),
+            testMode = TestMode.Click,
+            caseSensitive = true
         )
     )
 
@@ -62,13 +65,15 @@ constructor(
                     cardSetSize = setSize,
                     learnedCards = 0,
                     failedCards = 0,
-                    flashcardToTest = flashCardsToLearn.getRandom()
+                    flashcardToTest = flashCardsToLearn.getRandom(),
+                    testMode = TestMode.Click,
+                    caseSensitive = true
                 )
             }
         }
     }
 
-    open fun onCardLearned() {
+    override fun onCardLearned() {
         val state = _uiState.value as FlashcardToTest
         val testedCard = state.flashcardToTest
         learned++
@@ -85,7 +90,7 @@ constructor(
         }
     }
 
-    open fun onCardNotLearned() {
+    override fun onCardNotLearned() {
         val state = _uiState.value as FlashcardToTest
         val testedCard = state.flashcardToTest
         failed++
@@ -102,20 +107,25 @@ constructor(
         }
     }
 
-}
+    override fun onAnswerProvided(answer: String) {
+        val state = _uiState.value as FlashcardToTest
+        val expectedAnswer = state.flashcardToTest.reverse
+        if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
+            onCardLearned()
+        } else {
+            onCardNotLearned()
+        }
+    }
 
-sealed class TestCardSetUiState {
+    override fun onTestModeChanged(newMode: TestMode) {
+        _uiState.update { (it as FlashcardToTest).copy(testMode = newMode) }
+    }
 
-    data class FlashcardToTest(
-        val setName: String = "",
-        val cardSetSize: Int,
-        val learnedCards: Int,
-        val failedCards: Int,
-        val flashcardToTest: Flashcard
-    ) : TestCardSetUiState()
+    override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
+        _uiState.update { (it as FlashcardToTest).copy(caseSensitive = caseSensitive) }
+    }
 
-    data class TestFinished(
-        val learnedCards: Int,
-        val cardSetSize: Int
-    ) : TestCardSetUiState()
+    private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
+        expectedAnswer.equals(answer, !caseSensitive)
+
 }

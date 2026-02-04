@@ -12,14 +12,14 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.add.AddCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.edit.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.cardsets.edit.list.EditCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn.LearnCardSetViewModel
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.list.LearnCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.test.TestCardSetViewModel
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSetList
@@ -49,7 +49,7 @@ class ScreenNavigator {
         }
 
         entry<EditCardSet> { key ->
-            val viewModel = hiltViewModel<EditCardSetViewModel, EditCardSetViewModel.Factory>(
+            val viewModel = hiltViewModel<EditCardSetViewModelImpl, EditCardSetViewModelImpl.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
             EditCardSetScreen(
@@ -62,7 +62,7 @@ class ScreenNavigator {
         }
 
         entry<LearnCardSet> { key ->
-            val viewModel = hiltViewModel<LearnCardSetViewModel, LearnCardSetViewModel.Factory>(
+            val viewModel = hiltViewModel<LearnCardSetViewModelImpl, LearnCardSetViewModelImpl.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
             LearnCardSetScreen(
@@ -78,7 +78,7 @@ class ScreenNavigator {
         }
 
         entry<TestCardSet> { key ->
-            val viewModel = hiltViewModel<TestCardSetViewModel, TestCardSetViewModel.Factory>(
+            val viewModel = hiltViewModel<TestCardSetViewModelImpl, TestCardSetViewModelImpl.Factory>(
                 creationCallback = { factory -> factory.create(key.id) }
             )
             TestCardSetScreen(

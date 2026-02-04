@@ -48,7 +48,6 @@ class TestCardSetListScreenTest {
         composeTestRule.onNodeWithText("my second cardset", ignoreCase = true).assertIsDisplayed()
     }
 
-
     @Test
     fun whenUserClicksTest_callProperLambda() {
         //arrange

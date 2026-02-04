@@ -25,11 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
 import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
@@ -37,7 +40,7 @@ import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
 fun AddCardSetScreen(
-    viewModel: AddCardSetViewModel = hiltViewModel(),
+    viewModel: AddCardSetViewModel = hiltViewModel<AddCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -47,6 +50,7 @@ fun AddCardSetScreen(
     var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
     var isActionInProgress by remember { mutableStateOf(false) }
     var setName by remember(state.setName) { mutableStateOf(state.setName) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(state.flashCards) {
         isActionInProgress = false
@@ -96,7 +100,10 @@ fun AddCardSetScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         viewModel.onCardSetNameChanged(setName)
-                        //todo clear focus and hide keyboard
+                        keyboardController?.hide()
+                        if (state.flashCards.isEmpty()) {
+                            showAddFlashCardDialog = true
+                        }
                     }
                 )
             )

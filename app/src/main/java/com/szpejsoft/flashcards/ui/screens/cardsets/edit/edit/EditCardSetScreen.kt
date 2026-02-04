@@ -25,11 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
 import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
@@ -37,7 +40,7 @@ import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
 fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel(),
+    viewModel: EditCardSetViewModel = hiltViewModel<EditCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -85,7 +88,8 @@ fun EditCardSetScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(12.dp)
+                    .testTag("set title"),
                 value = setName,
                 onValueChange = { setName = it },
                 label = { Text(stringResource(R.string.add_card_set_screen_card_set_title_hint)) },

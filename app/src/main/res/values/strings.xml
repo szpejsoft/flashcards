@@ -19,8 +19,12 @@
     <string name="learn_card_set_screen_learning_finished_title">Congratulations!!!</string>>
     <string name="learn_card_set_screen_learning_go_to_card_set_list">Go to card set list</string>>
     <string name="progress">%1$d/%2$d"</string>
+
     <string name="test_card_set_screen_test_finished_title">Congratulations!!!</string>>
     <string name="test_card_set_screen_test_finished_score">You have learned %1$d/%2$d cards</string>
+    <string name="test_card_set_screen_settings_test_mode_click">Know / don\'t know</string>
+    <string name="test_card_set_screen_settings_test_mode_write">Write</string>
+    <string name="test_card_set_screen_settings_case_sensitive">Case sensitive</string>
 
     <!-- generic messages -->
     <string name="database_save_error_message">Error while saving your set</string>
@@ -37,4 +41,6 @@
     <string name="wcag_action_save">save</string>
     <string name="wcag_button_not_learned_description">not learned</string>
     <string name="wcag_button_learned_description">learned</string>
+    <string name="wcag_button_settings_description">Settings</string>
+
 </resources>

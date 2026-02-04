@@ -86,6 +86,4 @@ class EditCardSetListScreenTest {
         assertEquals(listOf(2L), editCardSetCalls)
     }
 
-
-
 }

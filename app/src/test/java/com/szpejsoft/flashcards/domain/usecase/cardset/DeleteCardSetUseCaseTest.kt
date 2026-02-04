@@ -1,6 +1,6 @@
 package com.szpejsoft.flashcards.domain.usecase.cardset
 
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.repository.CardSetRepository
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class DeleteCardSetUseCaseTest: BaseMockKTest() {
+class DeleteCardSetUseCaseTest: BaseTest() {
     private lateinit var sut: DeleteCardSetUseCase
 
     @MockK(relaxed = true)

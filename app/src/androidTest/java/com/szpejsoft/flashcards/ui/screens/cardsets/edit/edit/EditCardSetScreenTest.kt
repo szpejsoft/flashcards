@@ -9,10 +9,12 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel.UiState
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -50,7 +52,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenViewModelEmitsCardSet_screenShowsCardSet() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -72,7 +74,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenDeleteFlashCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -94,7 +96,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenFABIsClicked_addFlashcardDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
 
         //act
@@ -107,7 +109,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenAddCardIsClicked_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -125,7 +127,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileCardIsClicked_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState("set name")
+        val uiState = UiState("set name")
         viewModel.setUiState(uiState)
         composeTestRule.onNodeWithContentDescription(addContentDescription).performClick()
         composeTestRule.waitForIdle()
@@ -143,7 +145,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenEditCardIsClicked_properDialogIsShown() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -166,7 +168,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenUpdateClickedWhileEditingCard_properViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -192,7 +194,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenCancelClickedWhileEditingCard_noViewModelMethodIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -217,7 +219,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSetModified_saveButtonIsEnabled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -236,7 +238,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSetNotModified_saveButtonIsDisabled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -255,7 +257,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSaveButtonClicked_properMethodOnViewModelIsCalled() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -263,9 +265,9 @@ class EditCardSetScreenTest {
             ),
             saveEnabled = true,
         )
+        viewModel.setUiState(uiState)
 
         //act
-        viewModel.setUiState(uiState)
         composeTestRule.onNodeWithText(actionSave).performClick()
 
         //assert
@@ -276,7 +278,7 @@ class EditCardSetScreenTest {
     @Test
     fun whenSaveButtonClicked_returnToPreviousScreen() {
         //arrange
-        val uiState = EditCardSetUiState(
+        val uiState = UiState(
             "set name",
             listOf(
                 Flashcard(1L, "obverse_1", "reverse_1"),
@@ -284,13 +286,41 @@ class EditCardSetScreenTest {
             ),
             saveEnabled = true,
         )
+        viewModel.setUiState(uiState)
 
         //act
-        viewModel.setUiState(uiState)
         composeTestRule.onNodeWithText(actionSave).performClick()
 
         //assert
         assertEquals(1, onNavigateBackCalls)
+    }
+
+    @Test
+    fun whenUserUpdatesCardSetName_properViewModelMethodIsCalled() {
+        //arrange
+        val uiState = UiState(
+            "set name",
+            listOf(
+                Flashcard(1L, "obverse_1", "reverse_1"),
+                Flashcard(2L, "obverse_2", "reverse_2")
+            ),
+            saveEnabled = true,
+        )
+        viewModel.setUiState(uiState)
+        composeTestRule.waitForIdle()
+
+        //act
+        composeTestRule.onNodeWithTag("set title")
+            .performTextClearance()
+        composeTestRule.onNodeWithTag("set title")
+            .performTextInput("new name")
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("set title")
+            .performImeAction()
+
+        //assert
+        viewModel.updateCardSetNameCalls.size == 1
+        assertEquals("new name", viewModel.updateCardSetNameCalls[0])
     }
 
 }

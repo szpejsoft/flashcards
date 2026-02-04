@@ -1,10 +1,9 @@
-package com.szpejsoft.flashcards.screens.cardsets.test.list
+package com.szpejsoft.flashcards.presentation.test
 
 import app.cash.turbine.test
-import com.szpejsoft.flashcards.common.BaseMockKTest
+import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.ui.screens.cardsets.test.list.TestCardSetListViewModel
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,15 +14,15 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestCardSetListViewModelTest : BaseMockKTest() {
-    private lateinit var sut: TestCardSetListViewModel
+class TestCardSetListViewModelTest : BaseTest() {
+    private lateinit var sut: TestCardSetListViewModelImpl
 
     @MockK(relaxed = true)
     private lateinit var observeCardSetsUseCase: ObserveCardSetsUseCase
 
     @Before
     fun setUp() {
-        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+        sut = TestCardSetListViewModelImpl(observeCardSetsUseCase)
     }
 
     @Test
@@ -36,11 +35,12 @@ class TestCardSetListViewModelTest : BaseMockKTest() {
         val useCaseFlow = flowOf(sets)
         every { observeCardSetsUseCase() } returns useCaseFlow
 
-        sut = TestCardSetListViewModel(observeCardSetsUseCase)
+        sut = TestCardSetListViewModelImpl(observeCardSetsUseCase)
 
         //act & assert
         sut.uiState.test {
-            val sets = expectMostRecentItem().cardSets
+            skipItems(1)
+            val sets = awaitItem().cardSets
             assertEquals(2, sets.size)
             assertEquals(CardSet(1, "set 1"), sets[0])
             assertEquals(CardSet(2, "set 2"), sets[1])
