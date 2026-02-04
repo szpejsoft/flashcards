@@ -225,7 +225,6 @@ private fun SettingsButtonWithMenu(
                         }
                     }
                 )
-
             }
         }
     }
@@ -323,7 +322,6 @@ private fun LearningFinished(
                     text = stringResource(R.string.test_card_set_screen_test_finished_title),
                     style = MaterialTheme.typography.headlineLarge
                 )
-
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,

@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit.edit
+package com.szpejsoft.flashcards.presentation.cardsets
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
@@ -7,7 +7,6 @@ import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -136,7 +135,5 @@ class EditCardSetViewModelTest : BaseTest() {
             assertEquals("obverse 3", newFlashcard.obverse)
             assertEquals("reverse 3", newFlashcard.reverse)
         }
-
     }
-
 }

@@ -1,11 +1,10 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit.list
+package com.szpejsoft.flashcards.presentation.cardsets
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.DeleteCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModelImpl
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

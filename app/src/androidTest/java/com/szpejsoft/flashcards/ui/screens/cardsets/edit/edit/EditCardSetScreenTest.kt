@@ -318,7 +318,6 @@ class EditCardSetScreenTest {
         composeTestRule.onNodeWithTag("set title")
             .performImeAction()
 
-
         //assert
         viewModel.updateCardSetNameCalls.size == 1
         assertEquals("new name", viewModel.updateCardSetNameCalls[0])

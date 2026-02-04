@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.screens.cardsets.learn.learn
+package com.szpejsoft.flashcards.presentation.learn
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
@@ -6,9 +6,6 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every
@@ -68,7 +65,7 @@ class LearnCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             awaitItem() //skip first -empty- emission
-            val state = awaitItem() as FlashcardToLearn
+            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
             assertEquals("card set name", state.setName)
             assertEquals("obverse 1", state.flashcardToLearn.obverse)
             assertEquals("reverse 1", state.flashcardToLearn.reverse)
@@ -98,11 +95,11 @@ class LearnCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as FlashcardToLearn
+            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
             assertEquals(2, state.flashcardToLearn.id)
             sut.onCardLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as FlashcardToLearn
+            val state2 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
@@ -130,12 +127,12 @@ class LearnCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state1 = awaitItem() as FlashcardToLearn
+            val state1 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
             assertEquals(2, state1.flashcardToLearn.id)
 
             sut.onCardNotLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as FlashcardToLearn
+            val state2 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(0, state2.learnedCards)
@@ -159,7 +156,7 @@ class LearnCardSetViewModelTest : BaseTest() {
             sut.onCardLearned()
             val state = awaitItem()
             println("3 $state")
-            assertTrue(state is LearningFinished)
+            assertTrue(state is LearnCardSetViewModel.UiState.LearningFinished)
         }
     }
 

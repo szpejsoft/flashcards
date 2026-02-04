@@ -19,7 +19,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
 class LearnCardSetScreenTest {
 
     @get:Rule
@@ -30,7 +29,6 @@ class LearnCardSetScreenTest {
     private var navigateBackCalls = 0
 
     private lateinit var viewModel: LearnCardSetViewModelTestDouble
-
 
     @Before
     fun setUp() {

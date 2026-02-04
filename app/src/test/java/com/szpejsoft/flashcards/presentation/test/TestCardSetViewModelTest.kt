@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.screens.cardsets.test.test
+package com.szpejsoft.flashcards.presentation.test
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
@@ -6,10 +6,6 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every
@@ -70,14 +66,14 @@ class TestCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as FlashcardToTest
+            val state = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
             assertEquals("card set name", state.setName)
             assertEquals("obverse 1", state.flashcardToTest.obverse)
             assertEquals("reverse 1", state.flashcardToTest.reverse)
             assertEquals(1, state.cardSetSize)
             assertEquals(0, state.learnedCards)
             assertEquals(0, state.failedCards)
-            assertEquals(TestMode.Click, state.testMode)
+            assertEquals(TestCardSetViewModel.TestMode.Click, state.testMode)
             assertTrue(state.caseSensitive)
         }
 
@@ -104,10 +100,10 @@ class TestCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             skipItems(1)
-            val state1 = awaitItem() as FlashcardToTest
+            val state1 = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
             assertEquals(2, state1.flashcardToTest.id)
             sut.onCardLearned()
-            val state2 = awaitItem() as FlashcardToTest
+            val state2 = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
             assertEquals(1, state2.flashcardToTest.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
@@ -138,7 +134,7 @@ class TestCardSetViewModelTest : BaseTest() {
         sut.uiState.test {
             skipItems(2)
             sut.onCardNotLearned()
-            val state = awaitItem() as FlashcardToTest
+            val state = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
             println("3 $state")
             assertEquals("card id", 1, state.flashcardToTest.id)
             assertEquals("cardset size", 3, state.cardSetSize)
@@ -169,7 +165,7 @@ class TestCardSetViewModelTest : BaseTest() {
             advanceUntilIdle()
 
             val state = awaitItem()
-            assertTrue(state is TestFinished)
+            assertTrue(state is TestCardSetViewModel.UiState.TestFinished)
         }
     }
 
@@ -187,10 +183,13 @@ class TestCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             awaitItem() //emit first flashcard to learn
-            sut.onTestModeChanged(TestMode.Write)
+            sut.onTestModeChanged(TestCardSetViewModel.TestMode.Write)
             val state = awaitItem()
-            assertTrue(state is FlashcardToTest)
-            assertEquals(TestMode.Write, (state as FlashcardToTest).testMode)
+            assertTrue(state is TestCardSetViewModel.UiState.FlashcardToTest)
+            assertEquals(
+                TestCardSetViewModel.TestMode.Write,
+                (state as TestCardSetViewModel.UiState.FlashcardToTest).testMode
+            )
         }
     }
 
@@ -210,8 +209,8 @@ class TestCardSetViewModelTest : BaseTest() {
             awaitItem() //emit first flashcard to learn
             sut.onCaseSensitiveChanged(false)
             val state = awaitItem()
-            assertTrue(state is FlashcardToTest)
-            assertFalse((state as FlashcardToTest).caseSensitive)
+            assertTrue(state is TestCardSetViewModel.UiState.FlashcardToTest)
+            assertFalse((state as TestCardSetViewModel.UiState.FlashcardToTest).caseSensitive)
         }
     }
 
@@ -232,8 +231,8 @@ class TestCardSetViewModelTest : BaseTest() {
             sut.onAnswerProvided("Reverse 1")
             val state = awaitItem()
             println("ptsz 1  $state")
-            assertTrue(state is TestFinished)
-            assertEquals(0, (state as TestFinished).learnedCards)
+            assertTrue(state is TestCardSetViewModel.UiState.TestFinished)
+            assertEquals(0, (state as TestCardSetViewModel.UiState.TestFinished).learnedCards)
         }
     }
 
@@ -254,8 +253,8 @@ class TestCardSetViewModelTest : BaseTest() {
             skipItems(1)
             sut.onAnswerProvided("Reverse 1")
             val state = awaitItem()
-            assertTrue(state is TestFinished)
-            assertEquals(1, (state as TestFinished).learnedCards)
+            assertTrue(state is TestCardSetViewModel.UiState.TestFinished)
+            assertEquals(1, (state as TestCardSetViewModel.UiState.TestFinished).learnedCards)
         }
     }
 

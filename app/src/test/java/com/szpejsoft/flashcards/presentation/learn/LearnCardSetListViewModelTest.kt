@@ -1,10 +1,9 @@
-package com.szpejsoft.flashcards.screens.cardsets.learn.list
+package com.szpejsoft.flashcards.presentation.learn
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetsUseCase
-import com.szpejsoft.flashcards.presentation.learn.LearnCardSetListViewModelImpl
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi

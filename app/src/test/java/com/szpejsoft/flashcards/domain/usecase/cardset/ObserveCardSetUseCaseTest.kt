@@ -12,6 +12,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -43,8 +44,8 @@ class ObserveCardSetUseCaseTest : BaseTest() {
 
         //act & assert
         sut(1).test {
-            Assert.assertEquals(initialSet, awaitItem())
-            Assert.assertEquals(updatedSet, awaitItem())
+            assertEquals(initialSet, awaitItem())
+            assertEquals(updatedSet, awaitItem())
             awaitComplete()
         }
         verify(exactly = 1) { cardSetWithFlashcardsRepository.observe(1) }

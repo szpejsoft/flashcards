@@ -85,7 +85,6 @@ class TestCardSetScreenTest {
         assertEquals(1, navigateBackCalls)
     }
 
-
     @Test
     fun whenViewModelEmitsFlashcardToTestState_screenShowsFlashcardToLearn() {
         //arrange
@@ -163,6 +162,7 @@ class TestCardSetScreenTest {
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
         composeTestRule.waitForIdle()
+
         //assert
         composeTestRule.onNodeWithTag(testModeClickName).assertIsDisplayed()
         composeTestRule.onNodeWithTag(testModeClickName).assertIsSelected()
@@ -198,7 +198,6 @@ class TestCardSetScreenTest {
         //assert
         assertEquals(listOf(TestMode.Click), viewModel.onTestModeChangedCalls)
     }
-
 
     @Test
     fun whenTestModeClickAndCaseInsensitiveSettings_properSettingsAreDisplayed() {
@@ -252,7 +251,6 @@ class TestCardSetScreenTest {
         //assert
         assertEquals(listOf(false), viewModel.onCaseSensitiveChangedCalls)
     }
-
 
     companion object {
         private val TEST_FLASHCARD_TO_TEST = FlashcardToTest(

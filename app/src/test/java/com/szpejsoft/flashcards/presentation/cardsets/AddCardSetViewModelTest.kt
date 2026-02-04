@@ -1,9 +1,8 @@
-package com.szpejsoft.flashcards.screens.cardsets.edit.add
+package com.szpejsoft.flashcards.presentation.cardsets
 
 import app.cash.turbine.test
 import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.usecase.cardset.SaveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
