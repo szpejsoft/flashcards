@@ -87,18 +87,23 @@ constructor(
     override fun onCardNotLearned() {
         val state = _uiState.value as FlashcardToLearn
         _uiState.update {
+            println("ptsz SUT updating ${state.flashcardToLearn}")
             state.copy(
                 flashcardToLearn = flashCardsToLearn.getRandom(),
             )
         }
+
     }
 
     override fun onAnswerProvided(answer: String) {
+        println("ptsz SUT onAnswerProvided $answer")
         val state = _uiState.value as FlashcardToLearn
         val expectedAnswer = state.flashcardToLearn.reverse
         if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
+            println("ptsz SUT answer accepted")
             onCardLearned()
         } else {
+            println("ptsz SUT answer rejected")
             onCardNotLearned()
         }
     }
@@ -111,7 +116,8 @@ constructor(
         _uiState.update { (it as FlashcardToLearn).copy(caseSensitive = caseSensitive) }
     }
 
-    //todo duplication in TestCardSetViewModelImpl
     private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
-        expectedAnswer.equals(answer, !caseSensitive)
+        expectedAnswer.equals(answer, !caseSensitive).also {
+            println("ptsz SUT checkAnswer $it")
+        }
 }

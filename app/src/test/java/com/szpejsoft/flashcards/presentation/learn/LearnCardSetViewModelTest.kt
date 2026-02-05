@@ -6,6 +6,7 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
 import io.mockk.every
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -65,7 +67,7 @@ class LearnCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             awaitItem() //skip first -empty- emission
-            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            val state = awaitItem() as UiState.FlashcardToLearn
             assertEquals("card set name", state.setName)
             assertEquals("obverse 1", state.flashcardToLearn.obverse)
             assertEquals("reverse 1", state.flashcardToLearn.reverse)
@@ -95,11 +97,11 @@ class LearnCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            val state = awaitItem() as UiState.FlashcardToLearn
             assertEquals(2, state.flashcardToLearn.id)
             sut.onCardLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            val state2 = awaitItem() as UiState.FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
@@ -127,12 +129,12 @@ class LearnCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            val state = awaitItem() as UiState.FlashcardToLearn
             assertEquals(2, state.flashcardToLearn.id)
 
             sut.onCardNotLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            val state2 = awaitItem() as UiState.FlashcardToLearn
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(0, state2.learnedCards)
@@ -156,7 +158,76 @@ class LearnCardSetViewModelTest : BaseTest() {
             sut.onCardLearned()
             val state = awaitItem()
             println("3 $state")
-            assertTrue(state is LearnCardSetViewModel.UiState.LearningFinished)
+            assertTrue(state is UiState.LearningFinished)
+        }
+    }
+
+    @Test
+    fun `when case sensitive changed emit proper state`() = runTest {
+        //arrange
+        val cardSet = CardSetWithFlashcards(
+            cardSet = CardSet(1, "card set name"),
+            flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
+        )
+        every { observeCardSetUseCase(1) } returns flowOf(cardSet)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
+        advanceUntilIdle()
+
+        //act & assert
+        sut.uiState.test {
+            awaitItem() //emit first flashcard to learn
+            sut.onCaseSensitiveChanged(false)
+            val state = awaitItem()
+            assertTrue(state is UiState.FlashcardToLearn)
+            assertFalse((state as UiState.FlashcardToLearn).caseSensitive)
+        }
+    }
+
+    @Test
+    fun `when in case sensitive mode dont accept answer in wrong case`() = runTest {
+        //arrange
+        mockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
+        val card1 =Flashcard(1, "obverse 1", "reverse 1")
+        val card2 =Flashcard(2, "obverse 2", "reverse 2")
+        val cardList = listOf(card1, card2)
+        every { any<List<Flashcard>>().getRandom() } returns card1 andThen card2
+        val cardSet = CardSetWithFlashcards(
+            cardSet = CardSet(1, "card set name"),
+            flashcards = cardList
+        )
+        every { observeCardSetUseCase(1) } returns flowOf(cardSet)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
+        advanceUntilIdle()
+        //act & assert
+        sut.uiState.test {
+            println("ptsz 0 ${awaitItem()}") //emit first flashcard to learn
+            sut.onAnswerProvided("Reverse 1")
+            val state = awaitItem()
+            println("ptsz 1  $state")
+            assertTrue(state is UiState.FlashcardToLearn)
+            assertEquals(0, (state as UiState.FlashcardToLearn).learnedCards)
+        }
+        unmockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
+    }
+
+    @Test
+    fun `when in case insensitive mode accept answer in wrong case`() = runTest {
+        //arrange
+        val cardSet = CardSetWithFlashcards(
+            cardSet = CardSet(1, "card set name"),
+            flashcards = listOf(Flashcard(1, "obverse 1", "reverse 1"))
+        )
+        every { observeCardSetUseCase(1) } returns flowOf(cardSet)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
+
+        //act & assert
+        sut.uiState.test {
+            skipItems(2)
+            sut.onCaseSensitiveChanged(false)
+            skipItems(1)
+            sut.onAnswerProvided("Reverse 1")
+            val state = awaitItem()
+            assertTrue(state is UiState.LearningFinished)
         }
     }
 
