@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -27,10 +28,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
+import com.szpejsoft.flashcards.ui.screens.common.AnswerProvider
+import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
 
 @Composable
 fun LearnCardSetScreen(
@@ -43,7 +47,10 @@ fun LearnCardSetScreen(
         is FlashcardToLearn -> LearnCardSetContent(
             state as FlashcardToLearn,
             viewModel::onCardLearned,
-            viewModel::onCardNotLearned
+            viewModel::onCardNotLearned,
+            viewModel::onAnswerProvided,
+            viewModel::onTestModeChanged,
+            viewModel::onCaseSensitiveChanged
         )
 
         LearningFinished -> LearningFinished(onNavigateBack)
@@ -55,25 +62,45 @@ fun LearnCardSetScreen(
 fun LearnCardSetContent(
     state: FlashcardToLearn,
     onCardLearned: () -> Unit,
-    onCardNotLearned: () -> Unit
+    onCardNotLearned: () -> Unit,
+    onAnswerProvided: (String) -> Unit,
+    onLearnModeChanged: (PracticeMode) -> Unit,
+    onCaseSensitiveChanged: (Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineLarge,
-            text = state.setName,
-        )
+        Row {
+            Text(
+                modifier = Modifier.weight(1.0f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineLarge,
+                text = state.setName,
+            )
+            PracticeModeSettings(
+                currentMode = state.practiceMode,
+                caseSensitive = state.caseSensitive,
+                onTestModeChanged = onLearnModeChanged,
+                onCaseSensitiveChanged = onCaseSensitiveChanged
+            )
+        }
         LearningProgress(state.learnedCards, state.cardSetSize)
         Spacer(modifier = Modifier.weight(0.19f))
-        TwoSideFlashCard(state.flashcardToLearn.obverse, state.flashcardToLearn.reverse, Modifier.weight(0.62f))
+        FlippableFlashCard(
+            obverse = state.flashcardToLearn.obverse,
+            reverse = state.flashcardToLearn.reverse,
+            isFlippable = state.practiceMode == PracticeMode.Click,
+            modifier = Modifier.weight(0.62f)
+        )
         Spacer(modifier = Modifier.weight(0.19f))
-        Buttons(onCardNotLearned, onCardLearned)
+        if (state.practiceMode == PracticeMode.Click) {
+            Buttons(onCardNotLearned, onCardLearned)
+        } else {
+            AnswerProvider(onCardNotLearned, onAnswerProvided)
+        }
+        Spacer(modifier = Modifier.height(2.dp))
     }
 }
-
 
 @Composable
 private fun Buttons(
@@ -81,7 +108,9 @@ private fun Buttons(
     onCardLearned: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Button(
@@ -117,7 +146,7 @@ fun LearningFinished(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1.0f),
             contentAlignment = Alignment.Center
         ) {
             Text(

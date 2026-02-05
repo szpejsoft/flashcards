@@ -108,7 +108,7 @@ fun AddCardSetScreen(
                 )
             )
             LazyColumn(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1.0f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(

@@ -20,15 +20,17 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-internal fun TwoSideFlashCard(
+internal fun FlippableFlashCard(
     obverse: String,
     reverse: String,
+    isFlippable: Boolean,
     modifier: Modifier = Modifier
 ) {
     var showObverse by remember("$obverse $reverse") { mutableStateOf(true) }
+
     Card(
         modifier = Modifier
-            .clickable(onClick = { showObverse = !showObverse })
+            .apply { if (isFlippable) clickable { showObverse = !showObverse } }
             .then(modifier),
         shape = RoundedCornerShape(16.dp)
     )

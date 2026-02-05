@@ -127,8 +127,8 @@ class LearnCardSetViewModelTest : BaseTest() {
 
         //act & assert
         sut.uiState.test {
-            val state1 = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
-            assertEquals(2, state1.flashcardToLearn.id)
+            val state = awaitItem() as LearnCardSetViewModel.UiState.FlashcardToLearn
+            assertEquals(2, state.flashcardToLearn.id)
 
             sut.onCardNotLearned()
             advanceUntilIdle()

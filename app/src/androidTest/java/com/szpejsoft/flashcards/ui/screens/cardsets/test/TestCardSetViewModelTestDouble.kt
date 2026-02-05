@@ -2,7 +2,7 @@ package com.szpejsoft.flashcards.ui.screens.cardsets.test
 
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.PracticeMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class TestCardSetViewModelTestDouble : TestCardSetViewModel {
     val onAnswerProvidedCalls: List<String> get() = _onAnswerProvidedCalls
-    val onTestModeChangedCalls: List<TestMode> get() = _onTestModeChangedCalls
+    val onPracticeModeChangedCalls: List<PracticeMode> get() = _onPracticeModeChangedCalls
     val onCaseSensitiveChangedCalls: List<Boolean> get() = _onCaseSensitiveChangedCalls
 
     var onCardLearnedCalled = false
@@ -20,7 +20,7 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel {
         private set
 
     private val _onAnswerProvidedCalls = mutableListOf<String>()
-    private val _onTestModeChangedCalls = mutableListOf<TestMode>()
+    private val _onPracticeModeChangedCalls = mutableListOf<PracticeMode>()
     private val _onCaseSensitiveChangedCalls = mutableListOf<Boolean>()
 
     override val uiState: MutableStateFlow<UiState> = MutableStateFlow(
@@ -30,7 +30,7 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel {
             learnedCards = 0,
             failedCards = 0,
             flashcardToTest = Flashcard(),
-            testMode = TestMode.Click,
+            practiceMode = PracticeMode.Click,
             caseSensitive = true
         )
     )
@@ -47,8 +47,8 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel {
         _onAnswerProvidedCalls.add(answer)
     }
 
-    override fun onTestModeChanged(newMode: TestMode) {
-        _onTestModeChangedCalls.add(newMode)
+    override fun onTestModeChanged(newMode: PracticeMode) {
+        _onPracticeModeChangedCalls.add(newMode)
     }
 
     override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
