@@ -3,6 +3,7 @@ package com.szpejsoft.flashcards.presentation.learn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
@@ -38,7 +39,9 @@ constructor(
             setName = "",
             cardSetSize = 0,
             learnedCards = 0,
-            flashcardToLearn = Flashcard()
+            flashcardToLearn = Flashcard(),
+            learnMode = PracticeMode.Click,
+            caseSensitive = true
         )
     )
 
@@ -57,7 +60,9 @@ constructor(
                     setName = cardSetName,
                     cardSetSize = setSize,
                     learnedCards = setSize - flashCardsToLearn.size,
-                    flashcardToLearn = flashCardsToLearn.getRandom()
+                    flashcardToLearn = flashCardsToLearn.getRandom(),
+                    learnMode = PracticeMode.Click,
+                    caseSensitive = true
                 )
             }
         }
@@ -80,14 +85,39 @@ constructor(
     }
 
     override fun onCardNotLearned() {
+        val state = _uiState.value as FlashcardToLearn
         _uiState.update {
-            FlashcardToLearn(
-                setName = cardSetName,
-                cardSetSize = setSize,
+            println("ptsz SUT updating ${state.flashcardToLearn}")
+            state.copy(
                 flashcardToLearn = flashCardsToLearn.getRandom(),
-                learnedCards = setSize - flashCardsToLearn.size
             )
+        }
+
+    }
+
+    override fun onAnswerProvided(answer: String) {
+        println("ptsz SUT onAnswerProvided $answer")
+        val state = _uiState.value as FlashcardToLearn
+        val expectedAnswer = state.flashcardToLearn.reverse
+        if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
+            println("ptsz SUT answer accepted")
+            onCardLearned()
+        } else {
+            println("ptsz SUT answer rejected")
+            onCardNotLearned()
         }
     }
 
+    override fun onTestModeChanged(newMode: PracticeMode) {
+        _uiState.update { (it as FlashcardToLearn).copy(learnMode = newMode) }
+    }
+
+    override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
+        _uiState.update { (it as FlashcardToLearn).copy(caseSensitive = caseSensitive) }
+    }
+
+    private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
+        expectedAnswer.equals(answer, !caseSensitive).also {
+            println("ptsz SUT checkAnswer $it")
+        }
 }

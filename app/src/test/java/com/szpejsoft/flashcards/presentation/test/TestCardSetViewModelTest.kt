@@ -5,6 +5,7 @@ import com.szpejsoft.flashcards.common.BaseTest
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.domain.model.CardSetWithFlashcards
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import io.mockk.coVerify
@@ -73,7 +74,7 @@ class TestCardSetViewModelTest : BaseTest() {
             assertEquals(1, state.cardSetSize)
             assertEquals(0, state.learnedCards)
             assertEquals(0, state.failedCards)
-            assertEquals(TestCardSetViewModel.TestMode.Click, state.testMode)
+            assertEquals(PracticeMode.Click, state.testMode)
             assertTrue(state.caseSensitive)
         }
 
@@ -100,8 +101,8 @@ class TestCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             skipItems(1)
-            val state1 = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
-            assertEquals(2, state1.flashcardToTest.id)
+            val state = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
+            assertEquals(2, state.flashcardToTest.id)
             sut.onCardLearned()
             val state2 = awaitItem() as TestCardSetViewModel.UiState.FlashcardToTest
             assertEquals(1, state2.flashcardToTest.id)
@@ -183,11 +184,11 @@ class TestCardSetViewModelTest : BaseTest() {
         //act & assert
         sut.uiState.test {
             awaitItem() //emit first flashcard to learn
-            sut.onTestModeChanged(TestCardSetViewModel.TestMode.Write)
+            sut.onTestModeChanged(PracticeMode.Write)
             val state = awaitItem()
             assertTrue(state is TestCardSetViewModel.UiState.FlashcardToTest)
             assertEquals(
-                TestCardSetViewModel.TestMode.Write,
+                PracticeMode.Write,
                 (state as TestCardSetViewModel.UiState.FlashcardToTest).testMode
             )
         }

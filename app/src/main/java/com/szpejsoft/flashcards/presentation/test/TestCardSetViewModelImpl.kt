@@ -3,8 +3,8 @@ package com.szpejsoft.flashcards.presentation.test
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.TestMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
@@ -42,7 +42,7 @@ constructor(
             learnedCards = 0,
             failedCards = 0,
             flashcardToTest = Flashcard(),
-            testMode = TestMode.Click,
+            testMode = PracticeMode.Click,
             caseSensitive = true
         )
     )
@@ -66,7 +66,7 @@ constructor(
                     learnedCards = 0,
                     failedCards = 0,
                     flashcardToTest = flashCardsToLearn.getRandom(),
-                    testMode = TestMode.Click,
+                    testMode = PracticeMode.Click,
                     caseSensitive = true
                 )
             }
@@ -117,7 +117,7 @@ constructor(
         }
     }
 
-    override fun onTestModeChanged(newMode: TestMode) {
+    override fun onTestModeChanged(newMode: PracticeMode) {
         _uiState.update { (it as FlashcardToTest).copy(testMode = newMode) }
     }
 
