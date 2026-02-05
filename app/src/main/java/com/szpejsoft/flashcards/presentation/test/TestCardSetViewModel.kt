@@ -17,7 +17,7 @@ interface TestCardSetViewModel {
             val learnedCards: Int,
             val failedCards: Int,
             val flashcardToTest: Flashcard,
-            val practiceMode: PracticeMode,
+            val testMode: PracticeMode,
             val caseSensitive: Boolean
         ) : UiState()
 

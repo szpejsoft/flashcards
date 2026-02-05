@@ -22,9 +22,10 @@
 
     <string name="test_card_set_screen_test_finished_title">Congratulations!!!</string>>
     <string name="test_card_set_screen_test_finished_score">You have learned %1$d/%2$d cards</string>
-    <string name="test_card_set_screen_settings_test_mode_click">Know / don\'t know</string>
-    <string name="test_card_set_screen_settings_test_mode_write">Write</string>
-    <string name="test_card_set_screen_settings_case_sensitive">Case sensitive</string>
+
+    <string name="practice_settings_menu_practice_mode_click">Know / don\'t know</string>
+    <string name="practice_settings_menu_practice_mode_write">Write</string>
+    <string name="practice_settings_menu_case_sensitive">Case sensitive</string>
 
     <!-- generic messages -->
     <string name="database_save_error_message">Error while saving your set</string>

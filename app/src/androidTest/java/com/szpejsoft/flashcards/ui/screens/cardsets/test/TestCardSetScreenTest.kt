@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.Flashcard
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.PracticeMode
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.TestFinished
 import org.junit.Assert.assertEquals
@@ -35,16 +35,10 @@ class TestCardSetScreenTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     val successText by lazy { composeTestRule.activity.getString(R.string.learn_card_set_screen_learning_finished_title) }
     val goToListButton by lazy { composeTestRule.activity.getString(R.string.learn_card_set_screen_learning_go_to_card_set_list) }
-    val caseSensitiveText by lazy { composeTestRule.activity.getString(R.string.test_card_set_screen_settings_case_sensitive) }
-    val settingsButtonContentDescription by lazy {
-        composeTestRule.activity.getString(R.string.wcag_button_settings_description)
-    }
-    val testModeClickName by lazy {
-        composeTestRule.activity.getString(R.string.test_card_set_screen_settings_test_mode_click)
-    }
-    val testModeWriteName by lazy {
-        composeTestRule.activity.getString(R.string.test_card_set_screen_settings_test_mode_write)
-    }
+    val caseSensitiveText by lazy { composeTestRule.activity.getString(R.string.practice_settings_menu_case_sensitive) }
+    val settingsButtonContentDescription by lazy { composeTestRule.activity.getString(R.string.wcag_button_settings_description) }
+    val testModeClickName by lazy { composeTestRule.activity.getString(R.string.practice_settings_menu_practice_mode_click) }
+    val testModeWriteName by lazy { composeTestRule.activity.getString(R.string.practice_settings_menu_practice_mode_write) }
 
     private var navigateBackCalls = 0
 
@@ -90,7 +84,7 @@ class TestCardSetScreenTest {
         //arrange
 
         //act
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST
+        viewModel.uiState.value = FLASHCARD_TO_TEST
 
         //assert
         composeTestRule.onNodeWithText("setname").assertIsDisplayed()
@@ -102,7 +96,7 @@ class TestCardSetScreenTest {
     @Test
     fun flashcardToTestState_whenUserClicksOnCardNotLearned_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST
+        viewModel.uiState.value = FLASHCARD_TO_TEST
 
         //act
         composeTestRule.onNodeWithTag("cardNotLearnedButton").performClick()
@@ -115,7 +109,7 @@ class TestCardSetScreenTest {
     @Test
     fun flashcardToTestState_whenUserClicksOnCardLearned_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST
+        viewModel.uiState.value = FLASHCARD_TO_TEST
 
         //act
         composeTestRule.onNodeWithTag("cardLearnedButton").performClick()
@@ -128,7 +122,7 @@ class TestCardSetScreenTest {
     @Test
     fun flashcardToTestStateWriteMode_whenUserProvidesAnswer_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write)
         composeTestRule.waitForIdle()
 
         //act
@@ -145,7 +139,7 @@ class TestCardSetScreenTest {
     @Test
     fun flashcardToTestStateWriteMode_whenClicksOnCardNotLearned_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write)
 
         //act
         composeTestRule.onNodeWithTag("cardNotLearnedButton").performClick()
@@ -157,7 +151,7 @@ class TestCardSetScreenTest {
     @Test
     fun whenTestModeClickAndUserClicksSettings_properSettingsAreDisplayed() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Click)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Click)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -176,7 +170,7 @@ class TestCardSetScreenTest {
     @Test
     fun whenTestModeClickAndUserClicksChangesMode_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Click)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Click)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -189,7 +183,7 @@ class TestCardSetScreenTest {
     @Test
     fun whenTestModeWriteAndUserClicksChangesMode_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -202,7 +196,7 @@ class TestCardSetScreenTest {
     @Test
     fun whenTestModeClickAndCaseInsensitiveSettings_properSettingsAreDisplayed() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write, caseSensitive = false)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write, caseSensitive = false)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -221,7 +215,7 @@ class TestCardSetScreenTest {
     @Test
     fun whenTestModeClickAndUserWriteCaseSensitiveSettings_properSettingsAreDisplayed() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write, caseSensitive = true)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write, caseSensitive = true)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -238,10 +232,11 @@ class TestCardSetScreenTest {
         composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOn()
     }
 
+
     @Test
     fun whenTestModeClickAndUserWriteCaseSensitiveSettingsAndUserChangesCaseSensitive_properMethodIsCalled() {
         //arrange
-        viewModel.uiState.value = TEST_FLASHCARD_TO_TEST.copy(practiceMode = PracticeMode.Write, caseSensitive = true)
+        viewModel.uiState.value = FLASHCARD_TO_TEST.copy(testMode = PracticeMode.Write, caseSensitive = true)
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
@@ -253,7 +248,7 @@ class TestCardSetScreenTest {
     }
 
     companion object {
-        private val TEST_FLASHCARD_TO_TEST = FlashcardToTest(
+        private val FLASHCARD_TO_TEST = FlashcardToTest(
             setName = "setname",
             cardSetSize = 17,
             learnedCards = 6,
@@ -262,7 +257,7 @@ class TestCardSetScreenTest {
                 obverse = "question",
                 reverse = "answer"
             ),
-            practiceMode = PracticeMode.Click,
+            testMode = PracticeMode.Click,
             caseSensitive = true
         )
     }

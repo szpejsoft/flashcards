@@ -15,7 +15,7 @@ interface LearnCardSetViewModel {
             val cardSetSize: Int,
             val learnedCards: Int,
             val flashcardToLearn: Flashcard,
-            val practiceMode: PracticeMode,
+            val learnMode: PracticeMode,
             val caseSensitive: Boolean
         ) : UiState()
 

@@ -80,7 +80,7 @@ fun TestCardSetContent(
                 text = state.setName,
             )
             PracticeModeSettings(
-                currentMode = state.practiceMode,
+                currentMode = state.testMode,
                 caseSensitive = state.caseSensitive,
                 onTestModeChanged = onTestModeChanged,
                 onCaseSensitiveChanged = onCaseSensitiveChanged
@@ -98,7 +98,7 @@ fun TestCardSetContent(
         Spacer(modifier = Modifier.weight(0.19f))
         Flashcard(state.flashcardToTest.obverse, Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
-        if (state.practiceMode == PracticeMode.Click) {
+        if (state.testMode == PracticeMode.Click) {
             Buttons(onCardNotLearned, onCardLearned)
         } else {
             AnswerProvider(onCardNotLearned, onAnswerProvided)

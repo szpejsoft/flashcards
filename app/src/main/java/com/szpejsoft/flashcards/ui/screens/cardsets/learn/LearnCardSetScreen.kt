@@ -78,7 +78,7 @@ fun LearnCardSetContent(
                 text = state.setName,
             )
             PracticeModeSettings(
-                currentMode = state.practiceMode,
+                currentMode = state.learnMode,
                 caseSensitive = state.caseSensitive,
                 onTestModeChanged = onLearnModeChanged,
                 onCaseSensitiveChanged = onCaseSensitiveChanged
@@ -89,11 +89,11 @@ fun LearnCardSetContent(
         FlippableFlashCard(
             obverse = state.flashcardToLearn.obverse,
             reverse = state.flashcardToLearn.reverse,
-            isFlippable = state.practiceMode == PracticeMode.Click,
+            isFlippable = state.learnMode == PracticeMode.Click,
             modifier = Modifier.weight(0.62f)
         )
         Spacer(modifier = Modifier.weight(0.19f))
-        if (state.practiceMode == PracticeMode.Click) {
+        if (state.learnMode == PracticeMode.Click) {
             Buttons(onCardNotLearned, onCardLearned)
         } else {
             AnswerProvider(onCardNotLearned, onAnswerProvided)

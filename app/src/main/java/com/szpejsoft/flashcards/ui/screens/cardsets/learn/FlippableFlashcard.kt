@@ -1,6 +1,5 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,11 +26,14 @@ internal fun FlippableFlashCard(
     modifier: Modifier = Modifier
 ) {
     var showObverse by remember("$obverse $reverse") { mutableStateOf(true) }
-
     Card(
         modifier = Modifier
-            .apply { if (isFlippable) clickable { showObverse = !showObverse } }
             .then(modifier),
+        onClick = {
+            if (isFlippable) {
+                showObverse = !showObverse
+            }
+        },
         shape = RoundedCornerShape(16.dp)
     )
     {

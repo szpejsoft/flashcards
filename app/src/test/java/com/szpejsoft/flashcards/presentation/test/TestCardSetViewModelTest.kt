@@ -74,7 +74,7 @@ class TestCardSetViewModelTest : BaseTest() {
             assertEquals(1, state.cardSetSize)
             assertEquals(0, state.learnedCards)
             assertEquals(0, state.failedCards)
-            assertEquals(PracticeMode.Click, state.practiceMode)
+            assertEquals(PracticeMode.Click, state.testMode)
             assertTrue(state.caseSensitive)
         }
 
@@ -189,7 +189,7 @@ class TestCardSetViewModelTest : BaseTest() {
             assertTrue(state is TestCardSetViewModel.UiState.FlashcardToTest)
             assertEquals(
                 PracticeMode.Write,
-                (state as TestCardSetViewModel.UiState.FlashcardToTest).practiceMode
+                (state as TestCardSetViewModel.UiState.FlashcardToTest).testMode
             )
         }
     }

@@ -1,8 +1,8 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.test
 
 import com.szpejsoft.flashcards.domain.model.Flashcard
+import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.PracticeMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,7 @@ class TestCardSetViewModelTestDouble : TestCardSetViewModel {
             learnedCards = 0,
             failedCards = 0,
             flashcardToTest = Flashcard(),
-            practiceMode = PracticeMode.Click,
+            testMode = PracticeMode.Click,
             caseSensitive = true
         )
     )

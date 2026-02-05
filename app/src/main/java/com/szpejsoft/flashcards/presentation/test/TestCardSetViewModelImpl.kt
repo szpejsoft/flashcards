@@ -42,7 +42,7 @@ constructor(
             learnedCards = 0,
             failedCards = 0,
             flashcardToTest = Flashcard(),
-            practiceMode = PracticeMode.Click,
+            testMode = PracticeMode.Click,
             caseSensitive = true
         )
     )
@@ -66,7 +66,7 @@ constructor(
                     learnedCards = 0,
                     failedCards = 0,
                     flashcardToTest = flashCardsToLearn.getRandom(),
-                    practiceMode = PracticeMode.Click,
+                    testMode = PracticeMode.Click,
                     caseSensitive = true
                 )
             }
@@ -118,7 +118,7 @@ constructor(
     }
 
     override fun onTestModeChanged(newMode: PracticeMode) {
-        _uiState.update { (it as FlashcardToTest).copy(practiceMode = newMode) }
+        _uiState.update { (it as FlashcardToTest).copy(testMode = newMode) }
     }
 
     override fun onCaseSensitiveChanged(caseSensitive: Boolean) {

@@ -87,7 +87,7 @@ fun PracticeModeSettings(
                                     .weight(1.0f)
                                     .padding(end = 4.dp),
                                 style = MaterialTheme.typography.labelLarge,
-                                text = stringResource(R.string.test_card_set_screen_settings_case_sensitive),
+                                text = stringResource(R.string.practice_settings_menu_case_sensitive),
                                 textAlign = TextAlign.Start,
                             )
                             Switch(
@@ -142,6 +142,6 @@ private fun ColumnScope.PracticeModeMenuItem(
 
 @Composable
 private fun PracticeMode.getName(): String = when (this) {
-    PracticeMode.Click -> stringResource(R.string.test_card_set_screen_settings_test_mode_click)
-    PracticeMode.Write -> stringResource(R.string.test_card_set_screen_settings_test_mode_write)
+    PracticeMode.Click -> stringResource(R.string.practice_settings_menu_practice_mode_click)
+    PracticeMode.Write -> stringResource(R.string.practice_settings_menu_practice_mode_write)
 }
