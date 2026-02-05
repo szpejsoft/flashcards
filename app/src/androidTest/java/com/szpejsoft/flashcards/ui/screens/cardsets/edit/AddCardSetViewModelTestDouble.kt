@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit
 
 
 import com.szpejsoft.flashcards.domain.model.Flashcard

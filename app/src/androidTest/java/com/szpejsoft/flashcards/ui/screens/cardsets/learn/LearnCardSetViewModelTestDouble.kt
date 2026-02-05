@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel

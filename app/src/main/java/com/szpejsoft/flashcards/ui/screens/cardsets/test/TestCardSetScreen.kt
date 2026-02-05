@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.test.test
+package com.szpejsoft.flashcards.ui.screens.cardsets.test
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.list
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit
 
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModel

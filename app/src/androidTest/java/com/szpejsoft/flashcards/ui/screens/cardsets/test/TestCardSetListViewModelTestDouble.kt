@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.test.list
+package com.szpejsoft.flashcards.ui.screens.cardsets.test
 
 import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel

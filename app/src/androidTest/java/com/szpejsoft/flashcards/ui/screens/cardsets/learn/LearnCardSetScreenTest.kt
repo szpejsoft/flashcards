@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.learn.learn
+package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed

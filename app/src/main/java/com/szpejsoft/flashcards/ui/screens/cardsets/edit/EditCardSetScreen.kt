@@ -1,4 +1,4 @@
-package com.szpejsoft.flashcards.ui.screens.cardsets.edit.add
+package com.szpejsoft.flashcards.ui.screens.cardsets.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,22 +25,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
-import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModel
-import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
+import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
 import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
-fun AddCardSetScreen(
-    viewModel: AddCardSetViewModel = hiltViewModel<AddCardSetViewModelImpl>(),
+fun EditCardSetScreen(
+    viewModel: EditCardSetViewModel = hiltViewModel<EditCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -50,7 +50,6 @@ fun AddCardSetScreen(
     var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
     var isActionInProgress by remember { mutableStateOf(false) }
     var setName by remember(state.setName) { mutableStateOf(state.setName) }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(state.flashCards) {
         isActionInProgress = false
@@ -89,7 +88,8 @@ fun AddCardSetScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(12.dp)
+                    .testTag("set title"),
                 value = setName,
                 onValueChange = { setName = it },
                 label = { Text(stringResource(R.string.add_card_set_screen_card_set_title_hint)) },
@@ -99,11 +99,8 @@ fun AddCardSetScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        viewModel.onCardSetNameChanged(setName)
-                        keyboardController?.hide()
-                        if (state.flashCards.isEmpty()) {
-                            showAddFlashCardDialog = true
-                        }
+                        viewModel.onUpdateCardSetName(setName)
+                        //todo clear focus and hide keyboard
                     }
                 )
             )
@@ -113,7 +110,8 @@ fun AddCardSetScreen(
             ) {
                 items(
                     count = state.flashCards.size,
-                    key = { index -> state.flashCards[index].id }
+                    //todo what to do when user puts 2 cards with the same content
+                    key = { index -> state.flashCards[index].hashCode() }
                 ) { index ->
                     Box {
                         val flashcardId = state.flashCards[index].id
@@ -165,4 +163,5 @@ fun AddCardSetScreen(
             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
         }
     }
+
 }
