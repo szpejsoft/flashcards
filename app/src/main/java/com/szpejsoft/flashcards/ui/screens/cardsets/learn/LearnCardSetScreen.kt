@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +38,7 @@ import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.WrongAnswer
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AnswerProvider
 import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
@@ -58,6 +62,14 @@ fun LearnCardSetScreen(
         )
 
         LearningFinished -> LearningFinished(onNavigateBack)
+
+        is WrongAnswer -> WrongAnswerContent(
+            state as WrongAnswer,
+            viewModel::onCardLearned,
+            viewModel::onCardNotLearned,
+            viewModel::onTestModeChanged,
+            viewModel::onCaseSensitiveChanged
+        )
     }
 
 }
@@ -79,6 +91,7 @@ fun LearnCardSetContent(
             onToastShown()
         }
     }
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -106,7 +119,11 @@ fun LearnCardSetContent(
         )
         Spacer(modifier = Modifier.weight(0.19f))
         if (state.learnMode == PracticeMode.Click) {
-            Buttons(onCardNotLearned, onCardLearned)
+            Buttons(
+                showCardLearnedButton = true,
+                onCardNotLearned = onCardNotLearned,
+                onCardLearned = onCardLearned
+            )
         } else {
             AnswerProvider(onCardNotLearned, onAnswerProvided)
         }
@@ -115,7 +132,110 @@ fun LearnCardSetContent(
 }
 
 @Composable
+fun WrongAnswerContent(
+    state: WrongAnswer,
+    onCardLearned: () -> Unit,
+    onCardNotLearned: () -> Unit,
+    onLearnModeChanged: (PracticeMode) -> Unit,
+    onCaseSensitiveChanged: (Boolean) -> Unit
+) {
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Row {
+            Text(
+                modifier = Modifier.weight(1.0f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineLarge,
+                text = state.setName,
+            )
+            PracticeModeSettings(
+                currentMode = state.learnMode,
+                caseSensitive = state.caseSensitive,
+                onTestModeChanged = onLearnModeChanged,
+                onCaseSensitiveChanged = onCaseSensitiveChanged
+            )
+        }
+        LearningProgress(state.learnedCards, state.cardSetSize)
+        Spacer(modifier = Modifier.weight(0.19f))
+        Extracted(state, modifier = Modifier.weight(0.62f))
+        Spacer(modifier = Modifier.weight(0.19f))
+        Buttons(
+            showCardLearnedButton = state.learnMode == PracticeMode.Write,
+            onCardNotLearned = onCardNotLearned,
+            onCardLearned = onCardLearned
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+    }
+}
+
+
+@Composable
+private fun Extracted(
+    state: WrongAnswer,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f),
+            ) {
+                Text(text = stringResource(R.string.learn_card_set_screen_proper_answer))
+                Box(
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = state.flashcardToLearn.reverse,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                }
+            }
+            HorizontalDivider()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f),
+            ) {
+                Text(
+                    text = stringResource(R.string.learn_card_set_screen_your_answer),
+                    color = MaterialTheme.colorScheme.error
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = state.providedAnswer,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
 private fun Buttons(
+    showCardLearnedButton: Boolean = true,
     onCardNotLearned: () -> Unit,
     onCardLearned: () -> Unit
 ) {
@@ -136,17 +256,19 @@ private fun Buttons(
                 contentDescription = stringResource(R.string.wcag_button_not_learned_description)
             )
         }
-        Spacer(modifier = Modifier.width(12.dp))
-        Button(
-            modifier = Modifier
-                .weight(0.5f)
-                .testTag("cardLearnedButton"),
-            onClick = onCardLearned
-        ) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = stringResource(R.string.wcag_button_learned_description)
-            )
+        if (showCardLearnedButton) {
+            Spacer(modifier = Modifier.width(12.dp))
+            Button(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .testTag("cardLearnedButton"),
+                onClick = onCardLearned
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = stringResource(R.string.wcag_button_learned_description)
+                )
+            }
         }
     }
 }

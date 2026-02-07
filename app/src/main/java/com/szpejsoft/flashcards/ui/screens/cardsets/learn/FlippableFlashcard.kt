@@ -27,8 +27,7 @@ internal fun FlippableFlashCard(
 ) {
     var showObverse by remember("$obverse $reverse") { mutableStateOf(true) }
     Card(
-        modifier = Modifier
-            .then(modifier),
+        modifier = modifier,
         onClick = {
             if (isFlippable) {
                 showObverse = !showObverse

@@ -8,6 +8,7 @@ import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.WrongAnswer
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
@@ -48,7 +49,7 @@ constructor(
     )
 
     private lateinit var cardSetName: String
-    private val flashCardsToLearn = mutableListOf<Flashcard>()
+    private val flashcardsToLearn = mutableListOf<Flashcard>()
     private var setSize: Int = 0
 
     init {
@@ -56,13 +57,13 @@ constructor(
             val cardSet = observeCardSetUseCase(cardSetId).first()
             cardSetName = cardSet.cardSet.name
             setSize = cardSet.flashcards.size
-            flashCardsToLearn.replaceWith(cardSet.flashcards)
+            flashcardsToLearn.replaceWith(cardSet.flashcards)
             _uiState.update {
                 FlashcardToLearn(
                     setName = cardSetName,
                     cardSetSize = setSize,
-                    learnedCards = setSize - flashCardsToLearn.size,
-                    flashcardToLearn = flashCardsToLearn.getRandom(),
+                    learnedCards = setSize - flashcardsToLearn.size,
+                    flashcardToLearn = flashcardsToLearn.getRandom(),
                     learnMode = PracticeMode.Click,
                     caseSensitive = true,
                     showSuccessToast = false
@@ -72,14 +73,14 @@ constructor(
     }
 
     override fun onCardLearned() {
-        val state = _uiState.value as FlashcardToLearn
+        val state = _uiState.value as UiState.LearningInProgress
         val learnedCard = state.flashcardToLearn
-        flashCardsToLearn.remove(learnedCard)
-        if (flashCardsToLearn.isNotEmpty()) {
+        flashcardsToLearn.remove(learnedCard)
+        if (flashcardsToLearn.isNotEmpty()) {
             _uiState.update {
                 state.copy(
-                    learnedCards = setSize - flashCardsToLearn.size,
-                    flashcardToLearn = flashCardsToLearn.getRandom(),
+                    learnedCards = setSize - flashcardsToLearn.size,
+                    flashcardToLearn = flashcardsToLearn.getRandom(),
                     showSuccessToast = true
                 )
             }
@@ -89,12 +90,30 @@ constructor(
     }
 
     override fun onCardNotLearned() {
-        val state = _uiState.value as FlashcardToLearn
-        _uiState.update {
-            state.copy(
-                flashcardToLearn = flashCardsToLearn.getRandom(),
-                showSuccessToast = false
-            )
+        when (val state = _uiState.value as UiState.LearningInProgress) {
+            is FlashcardToLearn -> _uiState.update {
+                WrongAnswer(
+                    setName = state.setName,
+                    cardSetSize = state.cardSetSize,
+                    learnedCards = state.learnedCards,
+                    flashcardToLearn = state.flashcardToLearn,
+                    learnMode = state.learnMode,
+                    caseSensitive = state.caseSensitive,
+                    providedAnswer = "-"
+                )
+            }
+
+            is WrongAnswer -> _uiState.update {
+                FlashcardToLearn(
+                    setName = state.setName,
+                    cardSetSize = state.cardSetSize,
+                    learnedCards = state.learnedCards,
+                    flashcardToLearn = flashcardsToLearn.getRandom(),
+                    learnMode = state.learnMode,
+                    caseSensitive = state.caseSensitive,
+                    showSuccessToast = false
+                )
+            }
         }
     }
 
@@ -111,7 +130,7 @@ constructor(
         if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
             onCardLearned()
         } else {
-            onCardNotLearned()
+            showWrongAnswer(answer)
         }
     }
 
@@ -123,7 +142,41 @@ constructor(
         _uiState.update { (it as FlashcardToLearn).copy(caseSensitive = caseSensitive) }
     }
 
+    private fun showWrongAnswer(answer: String) {
+        val state = _uiState.value as FlashcardToLearn
+        _uiState.update {
+            state.run {
+                WrongAnswer(
+                    setName = setName,
+                    providedAnswer = answer,
+                    flashcardToLearn = flashcardToLearn,
+                    cardSetSize = setSize,
+                    learnedCards = learnedCards,
+                    learnMode = learnMode,
+                    caseSensitive = caseSensitive,
+                )
+            }
+        }
+    }
+
     private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
         expectedAnswer.equals(answer, !caseSensitive)
+
+    private fun UiState.LearningInProgress.copy(
+        showSuccessToast: Boolean? = null,
+        flashcardToLearn: Flashcard? = null,
+        learnedCards: Int? = null,
+    ): UiState.LearningInProgress = when (this) {
+        is FlashcardToLearn -> copy(
+            showSuccessToast = showSuccessToast ?: this.showSuccessToast,
+            flashcardToLearn = flashcardToLearn ?: this.flashcardToLearn,
+            learnedCards = learnedCards ?: this.learnedCards,
+        )
+
+        is WrongAnswer -> copy(
+            flashcardToLearn = flashcardToLearn ?: this.flashcardToLearn,
+            learnedCards = learnedCards ?: this.learnedCards,
+        )
+    }
 
 }
