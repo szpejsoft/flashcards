@@ -16,10 +16,12 @@ interface LearnCardSetViewModel {
             val learnedCards: Int,
             val flashcardToLearn: Flashcard,
             val learnMode: PracticeMode,
-            val caseSensitive: Boolean
+            val caseSensitive: Boolean,
+            val showSuccessToast: Boolean
         ) : UiState()
 
         data object LearningFinished : UiState()
+
     }
 
     val uiState: StateFlow<UiState>
@@ -29,4 +31,5 @@ interface LearnCardSetViewModel {
     fun onAnswerProvided(answer: String)
     fun onTestModeChanged(newMode: PracticeMode)
     fun onCaseSensitiveChanged(caseSensitive: Boolean)
+    fun onToastShown()
 }

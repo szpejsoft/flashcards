@@ -1,5 +1,6 @@
 package com.szpejsoft.flashcards.ui.screens.cardsets.learn
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +53,8 @@ fun LearnCardSetScreen(
             viewModel::onCardNotLearned,
             viewModel::onAnswerProvided,
             viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged
+            viewModel::onCaseSensitiveChanged,
+            viewModel::onToastShown
         )
 
         LearningFinished -> LearningFinished(onNavigateBack)
@@ -65,8 +69,16 @@ fun LearnCardSetContent(
     onCardNotLearned: () -> Unit,
     onAnswerProvided: (String) -> Unit,
     onLearnModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    onToastShown: () -> Unit
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(state.flashcardToLearn, state.showSuccessToast) {
+        if (state.showSuccessToast && state.learnMode == PracticeMode.Write) {
+            Toast.makeText(context, R.string.learn_card_set_screen_success_toast, Toast.LENGTH_SHORT).show()
+            onToastShown()
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {

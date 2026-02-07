@@ -7,6 +7,7 @@ import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
 import com.szpejsoft.flashcards.ui.screens.getRandom
 import com.szpejsoft.flashcards.ui.screens.replaceWith
 import dagger.assisted.Assisted
@@ -41,7 +42,8 @@ constructor(
             learnedCards = 0,
             flashcardToLearn = Flashcard(),
             learnMode = PracticeMode.Click,
-            caseSensitive = true
+            caseSensitive = true,
+            showSuccessToast = false
         )
     )
 
@@ -62,7 +64,8 @@ constructor(
                     learnedCards = setSize - flashCardsToLearn.size,
                     flashcardToLearn = flashCardsToLearn.getRandom(),
                     learnMode = PracticeMode.Click,
-                    caseSensitive = true
+                    caseSensitive = true,
+                    showSuccessToast = false
                 )
             }
         }
@@ -76,34 +79,38 @@ constructor(
             _uiState.update {
                 state.copy(
                     learnedCards = setSize - flashCardsToLearn.size,
-                    flashcardToLearn = flashCardsToLearn.getRandom()
+                    flashcardToLearn = flashCardsToLearn.getRandom(),
+                    showSuccessToast = true
                 )
             }
         } else {
-            _uiState.value = UiState.LearningFinished
+            _uiState.value = LearningFinished
         }
     }
 
     override fun onCardNotLearned() {
         val state = _uiState.value as FlashcardToLearn
         _uiState.update {
-            println("ptsz SUT updating ${state.flashcardToLearn}")
             state.copy(
                 flashcardToLearn = flashCardsToLearn.getRandom(),
+                showSuccessToast = false
             )
         }
+    }
 
+    override fun onToastShown() {
+        val state = _uiState.value as FlashcardToLearn
+        _uiState.update {
+            state.copy(showSuccessToast = false)
+        }
     }
 
     override fun onAnswerProvided(answer: String) {
-        println("ptsz SUT onAnswerProvided $answer")
         val state = _uiState.value as FlashcardToLearn
         val expectedAnswer = state.flashcardToLearn.reverse
         if (checkAnswer(answer, expectedAnswer, state.caseSensitive)) {
-            println("ptsz SUT answer accepted")
             onCardLearned()
         } else {
-            println("ptsz SUT answer rejected")
             onCardNotLearned()
         }
     }
@@ -117,7 +124,6 @@ constructor(
     }
 
     private fun checkAnswer(answer: String, expectedAnswer: String, caseSensitive: Boolean) =
-        expectedAnswer.equals(answer, !caseSensitive).also {
-            println("ptsz SUT checkAnswer $it")
-        }
+        expectedAnswer.equals(answer, !caseSensitive)
+
 }

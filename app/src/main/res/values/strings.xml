@@ -43,5 +43,6 @@
     <string name="wcag_button_not_learned_description">not learned</string>
     <string name="wcag_button_learned_description">learned</string>
     <string name="wcag_button_settings_description">Settings</string>
+    <string name="learn_card_set_screen_success_toast">Yaay!!</string>
 
 </resources>
