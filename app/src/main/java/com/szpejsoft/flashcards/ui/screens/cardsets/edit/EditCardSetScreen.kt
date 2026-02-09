@@ -104,42 +104,54 @@ fun EditCardSetScreen(
                     }
                 )
             )
-            LazyColumn(
-                modifier = Modifier.weight(1.0f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            Box(
+                modifier = Modifier.weight(1f)
             ) {
-                items(
-                    count = state.flashCards.size,
-                    //todo what to do when user puts 2 cards with the same content
-                    key = { index -> state.flashCards[index].hashCode() }
-                ) { index ->
-                    Box {
-                        val flashcardId = state.flashCards[index].id
-                        FlashcardCard(
-                            flashCard = state.flashCards[index],
-                            onClick = {
-                                expandedCardId = flashcardId
-                                editedFlashcardId = null
-                                showAddFlashCardDialog = false
-                            }
-                        )
-                        Box(modifier = Modifier.align(Alignment.TopEnd)) {
-                            Toolbox(
-                                enabled = !isActionInProgress,
-                                expanded = expandedCardId == flashcardId,
-                                onDismissRequest = { expandedCardId = null },
-                                onDeleteClicked = {
-                                    isActionInProgress = true
-                                    viewModel.onDeleteFlashcard(flashcardId)
-                                },
-                                onEditClicked = {
-                                    editedFlashcardId = flashcardId
-                                    expandedCardId = null
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(
+                        count = state.flashCards.size,
+                        //todo what to do when user puts 2 cards with the same content
+                        key = { index -> state.flashCards[index].hashCode() }
+                    ) { index ->
+                        Box {
+                            val flashcardId = state.flashCards[index].id
+                            FlashcardCard(
+                                flashCard = state.flashCards[index],
+                                onClick = {
+                                    expandedCardId = flashcardId
+                                    editedFlashcardId = null
                                     showAddFlashCardDialog = false
                                 }
                             )
+                            Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                                Toolbox(
+                                    enabled = !isActionInProgress,
+                                    expanded = expandedCardId == flashcardId,
+                                    onDismissRequest = { expandedCardId = null },
+                                    onDeleteClicked = {
+                                        isActionInProgress = true
+                                        viewModel.onDeleteFlashcard(flashcardId)
+                                    },
+                                    onEditClicked = {
+                                        editedFlashcardId = flashcardId
+                                        expandedCardId = null
+                                        showAddFlashCardDialog = false
+                                    }
+                                )
+                            }
                         }
                     }
+                }
+                FloatingActionButton(
+                    onClick = { if (!isActionInProgress) showAddFlashCardDialog = true },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 12.dp),
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
                 }
             }
             Button(
@@ -154,14 +166,7 @@ fun EditCardSetScreen(
             }
         }
 
-        FloatingActionButton(
-            onClick = { if (!isActionInProgress) showAddFlashCardDialog = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-        ) {
-            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
-        }
+
     }
 
 }
