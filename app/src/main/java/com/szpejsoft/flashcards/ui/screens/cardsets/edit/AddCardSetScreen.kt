@@ -107,41 +107,51 @@ fun AddCardSetScreen(
                     }
                 )
             )
-            LazyColumn(
-                modifier = Modifier.weight(1.0f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(
-                    count = state.flashCards.size,
-                    key = { index -> state.flashCards[index].id }
-                ) { index ->
-                    Box {
-                        val flashcardId = state.flashCards[index].id
-                        FlashcardCard(
-                            flashCard = state.flashCards[index],
-                            onClick = {
-                                expandedCardId = flashcardId
-                                editedFlashcardId = null
-                                showAddFlashCardDialog = false
-                            }
-                        )
-                        Box(modifier = Modifier.align(Alignment.TopEnd)) {
-                            Toolbox(
-                                enabled = !isActionInProgress,
-                                expanded = expandedCardId == flashcardId,
-                                onDismissRequest = { expandedCardId = null },
-                                onDeleteClicked = {
-                                    isActionInProgress = true
-                                    viewModel.onDeleteFlashcard(flashcardId)
-                                },
-                                onEditClicked = {
-                                    editedFlashcardId = flashcardId
-                                    expandedCardId = null
+            Box(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(
+                        count = state.flashCards.size,
+                        key = { index -> state.flashCards[index].id }
+                    ) { index ->
+                        Box {
+                            val flashcardId = state.flashCards[index].id
+                            FlashcardCard(
+                                flashCard = state.flashCards[index],
+                                onClick = {
+                                    expandedCardId = flashcardId
+                                    editedFlashcardId = null
                                     showAddFlashCardDialog = false
                                 }
                             )
+                            Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                                Toolbox(
+                                    enabled = !isActionInProgress,
+                                    expanded = expandedCardId == flashcardId,
+                                    onDismissRequest = { expandedCardId = null },
+                                    onDeleteClicked = {
+                                        isActionInProgress = true
+                                        viewModel.onDeleteFlashcard(flashcardId)
+                                    },
+                                    onEditClicked = {
+                                        editedFlashcardId = flashcardId
+                                        expandedCardId = null
+                                        showAddFlashCardDialog = false
+                                    }
+                                )
+                            }
                         }
                     }
+                }
+                FloatingActionButton(
+                    onClick = { if (!isActionInProgress) showAddFlashCardDialog = true },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 12.dp),
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
                 }
             }
             Button(
@@ -154,15 +164,6 @@ fun AddCardSetScreen(
             ) {
                 Text(stringResource(R.string.action_save))
             }
-        }
-
-        FloatingActionButton(
-            onClick = { if (!isActionInProgress) showAddFlashCardDialog = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-        ) {
-            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.wcag_action_add))
         }
     }
 }

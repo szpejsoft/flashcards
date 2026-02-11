@@ -73,12 +73,13 @@ class LearnCardSetViewModelTest : BaseTest() {
             assertEquals("reverse 1", state.flashcardToLearn.reverse)
             assertEquals(1, state.cardSetSize)
             assertEquals(0, state.learnedCards)
+            assertFalse(state.showSuccessToast)
         }
 
     }
 
     @Test
-    fun `when on card learned is called next flashcard is emitted`() = runTest {
+    fun `when onCardLearned is called next flashcard with toast is emitted`() = runTest {
         //arrange
         mockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
 
@@ -105,12 +106,46 @@ class LearnCardSetViewModelTest : BaseTest() {
             assertEquals(1, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(1, state2.learnedCards)
+            assertTrue(state2.showSuccessToast)
         }
         unmockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
     }
 
     @Test
-    fun `when on card not learned is called next flashcard is emitted`() = runTest {
+    fun `when onToastShown is called the same flashcard without toast is emitted `() = runTest {
+        //arrange
+        mockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
+
+        val card1 = Flashcard(1, "obverse 1", "reverse 1")
+        val card2 = Flashcard(2, "obverse 2", "reverse 2")
+        val cardList = listOf(card1, card2)
+        every { cardList.getRandom() } returns card2 andThen card1
+
+        val cardSet1 = CardSetWithFlashcards(
+            cardSet = CardSet(1, "card set name"),
+            flashcards = cardList
+        )
+        every { observeCardSetUseCase(1) } returns flowOf(cardSet1)
+        sut = LearnCardSetViewModelImpl(1, observeCardSetUseCase)
+        advanceUntilIdle()
+
+        //act & assert
+        sut.uiState.test {
+            skipItems(1)
+            sut.onCardLearned()
+            advanceUntilIdle()
+            skipItems(1)
+            sut.onToastShown()
+            val state = awaitItem() as UiState.FlashcardToLearn
+            assertEquals(1, state.flashcardToLearn.id)
+            assertFalse(state.showSuccessToast)
+        }
+        unmockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
+    }
+
+
+    @Test
+    fun `when onCardNotLearned is called next flashcard is emitted`() = runTest {
         //arrange
         mockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
 
@@ -134,10 +169,11 @@ class LearnCardSetViewModelTest : BaseTest() {
 
             sut.onCardNotLearned()
             advanceUntilIdle()
-            val state2 = awaitItem() as UiState.FlashcardToLearn
-            assertEquals(1, state2.flashcardToLearn.id)
+            val state2 = awaitItem() as UiState.WrongAnswer
+            assertEquals(2, state2.flashcardToLearn.id)
             assertEquals(2, state2.cardSetSize)
             assertEquals(0, state2.learnedCards)
+            assertEquals("-", state2.providedAnswer)
         }
         unmockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
     }
@@ -187,8 +223,8 @@ class LearnCardSetViewModelTest : BaseTest() {
     fun `when in case sensitive mode dont accept answer in wrong case`() = runTest {
         //arrange
         mockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
-        val card1 =Flashcard(1, "obverse 1", "reverse 1")
-        val card2 =Flashcard(2, "obverse 2", "reverse 2")
+        val card1 = Flashcard(1, "obverse 1", "reverse 1")
+        val card2 = Flashcard(2, "obverse 2", "reverse 2")
         val cardList = listOf(card1, card2)
         every { any<List<Flashcard>>().getRandom() } returns card1 andThen card2
         val cardSet = CardSetWithFlashcards(
@@ -200,12 +236,12 @@ class LearnCardSetViewModelTest : BaseTest() {
         advanceUntilIdle()
         //act & assert
         sut.uiState.test {
-            println("ptsz 0 ${awaitItem()}") //emit first flashcard to learn
+            skipItems(1)
             sut.onAnswerProvided("Reverse 1")
-            val state = awaitItem()
-            println("ptsz 1  $state")
-            assertTrue(state is UiState.FlashcardToLearn)
-            assertEquals(0, (state as UiState.FlashcardToLearn).learnedCards)
+            val state = awaitItem() as UiState.WrongAnswer
+            assertEquals(1, state.flashcardToLearn.id)
+            assertEquals(0, state.learnedCards)
+            assertEquals("Reverse 1", state.providedAnswer)
         }
         unmockkStatic("com.szpejsoft.flashcards.ui.screens.UtilsKt")
     }

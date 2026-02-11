@@ -52,24 +52,23 @@ fun TestProgress(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .height(24.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .height(12.dp)
                 .background(MaterialTheme.colorScheme.primaryFixed)
-
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(failedRatio)
-                    .clip(RoundedCornerShape(12.dp))
-                    .height(24.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .height(12.dp)
                     .background(Color.Red)
                     .align(Alignment.CenterStart)
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth(learnedRatio)
-                    .clip(RoundedCornerShape(12.dp))
-                    .height(24.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .height(12.dp)
                     .background(MaterialTheme.colorScheme.onPrimaryFixed)
                     .align(Alignment.CenterStart)
             )

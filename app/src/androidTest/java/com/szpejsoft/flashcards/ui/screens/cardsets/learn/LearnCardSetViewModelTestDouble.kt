@@ -16,11 +16,12 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel {
         private set
     var onCardNotLearnedCalled = false
         private set
+    var onToastShownCalled = false
+        private set
 
     private val _onAnswerProvidedCalls = mutableListOf<String>()
     private val _onPracticeModeChangedCalls = mutableListOf<PracticeMode>()
     private val _onCaseSensitiveChangedCalls = mutableListOf<Boolean>()
-
 
     override val uiState: MutableStateFlow<UiState> = MutableStateFlow(
         FlashcardToLearn(
@@ -29,7 +30,8 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel {
             learnedCards = 0,
             flashcardToLearn = Flashcard(),
             learnMode = PracticeMode.Click,
-            caseSensitive = true
+            caseSensitive = true,
+            showSuccessToast = false
         )
     )
 
@@ -51,5 +53,9 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel {
 
     override fun onCaseSensitiveChanged(caseSensitive: Boolean) {
         _onCaseSensitiveChangedCalls.add(caseSensitive)
+    }
+
+    override fun onToastShown() {
+        onToastShownCalled = true
     }
 }

@@ -9,17 +9,38 @@ interface LearnCardSetViewModel {
         fun create(cardSetId: Long): LearnCardSetViewModel
     }
 
-    sealed class UiState {
-        data class FlashcardToLearn(
-            val setName: String,
-            val cardSetSize: Int,
-            val learnedCards: Int,
-            val flashcardToLearn: Flashcard,
-            val learnMode: PracticeMode,
+    sealed interface UiState {
+        sealed interface LearningInProgress : UiState {
+            val setName: String
+            val cardSetSize: Int
+            val learnedCards: Int
+            val flashcardToLearn: Flashcard
+            val learnMode: PracticeMode
             val caseSensitive: Boolean
-        ) : UiState()
+        }
 
-        data object LearningFinished : UiState()
+        data class FlashcardToLearn(
+            override val setName: String,
+            override val cardSetSize: Int,
+            override val learnedCards: Int,
+            override val flashcardToLearn: Flashcard,
+            override val learnMode: PracticeMode,
+            override val caseSensitive: Boolean,
+            val showSuccessToast: Boolean
+        ) : LearningInProgress
+
+        data class WrongAnswer(
+            override val setName: String,
+            override val cardSetSize: Int,
+            override val learnedCards: Int,
+            override val flashcardToLearn: Flashcard,
+            override val learnMode: PracticeMode,
+            override val caseSensitive: Boolean,
+            val providedAnswer: String,
+        ) : LearningInProgress
+
+        data object LearningFinished : UiState
+
     }
 
     val uiState: StateFlow<UiState>
@@ -29,4 +50,5 @@ interface LearnCardSetViewModel {
     fun onAnswerProvided(answer: String)
     fun onTestModeChanged(newMode: PracticeMode)
     fun onCaseSensitiveChanged(caseSensitive: Boolean)
+    fun onToastShown()
 }
