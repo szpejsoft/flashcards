@@ -22,6 +22,7 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.LearningFinished
+import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.WrongAnswer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -97,12 +98,10 @@ class LearnCardSetScreenTest {
         //arrange
         viewModel.uiState.value = FLASHCARD_TO_LEARN
         composeTestRule.waitForIdle()
-        Thread.sleep(5000)
 
         //act
         composeTestRule.onNodeWithText("question").performClick()
         composeTestRule.waitForIdle()
-        Thread.sleep(5000)
 
         //assert
         composeTestRule.onNodeWithText("question").assertIsNotDisplayed()
@@ -247,8 +246,7 @@ class LearnCardSetScreenTest {
         composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsEnabled()
         composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOn()
     }
-
-
+    
     @Test
     fun whenTestModeClickAndUserWriteCaseSensitiveSettingsAndUserChangesCaseSensitive_properMethodIsCalled() {
         //arrange
@@ -263,6 +261,47 @@ class LearnCardSetScreenTest {
         assertEquals(listOf(false), viewModel.onCaseSensitiveChangedCalls)
     }
 
+    @Test
+    fun whenViewModelEmitsWrongAnswerState_screenShowsWrongAnswerContent() {
+        //arrange
+        val wrongAnswer = WrongAnswer(
+            setName = "setname",
+            cardSetSize = 10,
+            learnedCards = 5,
+            flashcardToLearn = Flashcard(obverse = "question", reverse = "correct answer"),
+            learnMode = PracticeMode.Write,
+            caseSensitive = true,
+            providedAnswer = "wrong answer"
+        )
+
+        //act
+        viewModel.uiState.value = wrongAnswer
+
+        //assert
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.learn_card_set_screen_proper_answer)).assertIsDisplayed()
+        composeTestRule.onNodeWithText("correct answer").assertIsDisplayed()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.learn_card_set_screen_your_answer)).assertIsDisplayed()
+        composeTestRule.onNodeWithText("wrong answer").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("cardLearnedButton").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("cardNotLearnedButton").assertIsDisplayed()
+    }
+
+    @Test
+    fun whenFlashcardToLearnStateWithShowSuccessToast_onToastShownIsCalled() {
+        //arrange
+        val state = FLASHCARD_TO_LEARN.copy(
+            learnMode = PracticeMode.Write,
+            showSuccessToast = true
+        )
+
+        //act
+        viewModel.uiState.value = state
+        composeTestRule.waitForIdle()
+
+        //assert
+        assertTrue(viewModel.onToastShownCalled)
+    }
+
     companion object {
         private val FLASHCARD_TO_LEARN = FlashcardToLearn(
             setName = "setname",
@@ -273,7 +312,8 @@ class LearnCardSetScreenTest {
                 reverse = "answer"
             ),
             learnMode = PracticeMode.Click,
-            caseSensitive = true
+            caseSensitive = true,
+            showSuccessToast = false
         )
     }
 

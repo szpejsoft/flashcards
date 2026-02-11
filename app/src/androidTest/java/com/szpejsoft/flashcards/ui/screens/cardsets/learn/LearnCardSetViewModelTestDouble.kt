@@ -16,6 +16,8 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel {
         private set
     var onCardNotLearnedCalled = false
         private set
+    var onToastShownCalled = false
+        private set
 
     private val _onAnswerProvidedCalls = mutableListOf<String>()
     private val _onPracticeModeChangedCalls = mutableListOf<PracticeMode>()
@@ -54,6 +56,6 @@ class LearnCardSetViewModelTestDouble : LearnCardSetViewModel {
     }
 
     override fun onToastShown() {
-        TODO("Not yet implemented")
+        onToastShownCalled = true
     }
 }

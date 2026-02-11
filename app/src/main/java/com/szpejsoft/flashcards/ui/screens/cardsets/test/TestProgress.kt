@@ -55,7 +55,6 @@ fun TestProgress(
                 .clip(RoundedCornerShape(6.dp))
                 .height(12.dp)
                 .background(MaterialTheme.colorScheme.primaryFixed)
-
         ) {
             Box(
                 modifier = Modifier

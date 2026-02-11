@@ -159,7 +159,7 @@ fun WrongAnswerContent(
         }
         LearningProgress(state.learnedCards, state.cardSetSize)
         Spacer(modifier = Modifier.weight(0.19f))
-        Extracted(state, modifier = Modifier.weight(0.62f))
+        WrongAnswerCard(state, modifier = Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
         Buttons(
             showCardLearnedButton = state.learnMode == PracticeMode.Write,
@@ -170,9 +170,8 @@ fun WrongAnswerContent(
     }
 }
 
-
 @Composable
-private fun Extracted(
+private fun WrongAnswerCard(
     state: WrongAnswer,
     modifier: Modifier = Modifier
 ) {
