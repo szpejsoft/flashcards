@@ -40,8 +40,9 @@ import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
 fun EditCardSetScreen(
-    viewModel: EditCardSetViewModel = hiltViewModel<EditCardSetViewModelImpl>(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: EditCardSetViewModel = hiltViewModel<EditCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -81,7 +82,9 @@ fun EditCardSetScreen(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -165,8 +168,6 @@ fun EditCardSetScreen(
                 Text(stringResource(R.string.action_save))
             }
         }
-
-
     }
 
 }

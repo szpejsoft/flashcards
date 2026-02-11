@@ -8,6 +8,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.szpejsoft.flashcards.R
 
@@ -16,10 +17,12 @@ fun Toolbox(
     enabled: Boolean,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
     onDeleteClicked: (() -> Unit)? = null,
     onEditClicked: (() -> Unit)? = null
 ) {
     DropdownMenu(
+        modifier = modifier,
         expanded = expanded,
         onDismissRequest = onDismissRequest
     ) {

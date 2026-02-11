@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.szpejsoft.flashcards.R
 
@@ -19,12 +20,14 @@ import com.szpejsoft.flashcards.R
 @Composable
 fun AddFlashcardDialog(
     onDismiss: () -> Unit,
-    onConfirm: (obverse: String, reverse: String) -> Unit
+    onConfirm: (obverse: String, reverse: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var obverse by remember { mutableStateOf("") }
     var reverse by remember { mutableStateOf("") }
 
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         title = { Text(text = stringResource(R.string.edit_card_set_screen_add_flashcard_dialog_title)) },
         text = {

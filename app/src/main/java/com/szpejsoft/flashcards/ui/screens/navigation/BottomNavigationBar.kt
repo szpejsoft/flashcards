@@ -1,5 +1,6 @@
 package com.szpejsoft.flashcards.ui.screens.navigation
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Edit
@@ -11,6 +12,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.szpejsoft.flashcards.R
@@ -18,9 +20,12 @@ import com.szpejsoft.flashcards.R
 @Composable
 fun BottomNavigationBar(
     selectedTab: BottomTab,
-    onTabSelected: (BottomTab) -> Unit
+    onTabSelected: (BottomTab) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    NavigationBar {
+    NavigationBar(
+        modifier = modifier.fillMaxWidth()
+    ) {
         bottomNavigationItems.forEach { (tab, item) ->
             NavigationBarItem(
                 alwaysShowLabel = true,

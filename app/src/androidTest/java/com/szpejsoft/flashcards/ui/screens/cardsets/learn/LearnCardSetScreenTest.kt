@@ -49,7 +49,7 @@ class LearnCardSetScreenTest {
     fun setUp() {
         viewModel = LearnCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            LearnCardSetScreen(viewModel = viewModel, onNavigateBack = { navigateBackCalls++ })
+            LearnCardSetScreen(onNavigateBack = { navigateBackCalls++ }, viewModel = viewModel)
         }
         navigateBackCalls = 0
     }

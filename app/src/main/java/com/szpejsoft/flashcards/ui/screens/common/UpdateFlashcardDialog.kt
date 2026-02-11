@@ -24,12 +24,14 @@ fun UpdateFlashcardDialog(
     obverse: String,
     reverse: String,
     onDismiss: () -> Unit,
-    onConfirm: (flashcardId: Long, obverse: String, reverse: String) -> Unit
+    onConfirm: (flashcardId: Long, obverse: String, reverse: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var obverse by remember { mutableStateOf(obverse) }
     var reverse by remember { mutableStateOf(reverse) }
 
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         title = { Text(text = stringResource(R.string.edit_card_set_screen_update_flashcard_dialog_title)) },
         text = {

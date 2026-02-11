@@ -19,25 +19,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.R
 
-@Preview
 @Composable
 fun TestProgress(
-    modifier: Modifier = Modifier,
-    learned: Int = 1,
-    failed: Int = 1,
-    setSize: Int = 3
+    learned: Int,
+    failed: Int,
+    setSize: Int,
+    modifier: Modifier = Modifier
 ) {
     val learnedRatio = if (setSize == 0) 0f else learned.toFloat() / setSize.toFloat()
     val failedRatio = if (setSize == 0) 0f else (learned + failed).toFloat() / setSize.toFloat()
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(modifier),
+        modifier = modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

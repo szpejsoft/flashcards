@@ -13,12 +13,14 @@ import com.szpejsoft.flashcards.ui.screens.navigation.ScreenNavigator
 import com.szpejsoft.flashcards.ui.theme.FlashcardsTheme
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    modifier: Modifier = Modifier
+) {
     val screenNavigator = rememberSaveable(saver = ScreenNavigator.saver) { ScreenNavigator() }
 
     FlashcardsTheme {
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             content = { innerPadding -> MainScreenContent(innerPadding, screenNavigator) },
             bottomBar = { screenNavigator.BottomNavBar() }
         )
@@ -28,11 +30,11 @@ fun MainScreen() {
 @Composable
 fun MainScreenContent(
     padding: PaddingValues,
-    screenNavigator: ScreenNavigator
+    screenNavigator: ScreenNavigator,
+    modifier: Modifier = Modifier
 ) {
-
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(padding)
             .padding(top = 12.dp)

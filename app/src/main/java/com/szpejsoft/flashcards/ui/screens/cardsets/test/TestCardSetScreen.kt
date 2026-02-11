@@ -38,8 +38,9 @@ import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
 
 @Composable
 fun TestCardSetScreen(
-    viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -50,12 +51,14 @@ fun TestCardSetScreen(
             viewModel::onCardNotLearned,
             viewModel::onAnswerProvided,
             viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged
+            viewModel::onCaseSensitiveChanged,
+            modifier
         )
 
         is TestFinished -> TestingFinished(
             state as TestFinished,
-            onNavigateBack
+            onNavigateBack,
+            modifier
         )
     }
 }
@@ -67,10 +70,11 @@ fun TestCardSetContent(
     onCardNotLearned: () -> Unit,
     onAnswerProvided: (String) -> Unit,
     onTestModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -87,21 +91,33 @@ fun TestCardSetContent(
             )
         }
         TestProgress(
+            learned = state.learnedCards,
+            failed = state.failedCards,
+            setSize = state.cardSetSize,
             modifier = Modifier.padding(
                 top = 12.dp,
                 bottom = 12.dp
-            ),
-            learned = state.learnedCards,
-            failed = state.failedCards,
-            setSize = state.cardSetSize
+            )
         )
         Spacer(modifier = Modifier.weight(0.19f))
-        Flashcard(state.flashcardToTest.obverse, Modifier.weight(0.62f))
+        OneSideFlashcard(state.flashcardToTest.obverse, Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
         if (state.testMode == PracticeMode.Click) {
-            Buttons(onCardNotLearned, onCardLearned)
+            Buttons(
+                onCardNotLearned = onCardNotLearned,
+                onCardLearned = onCardLearned,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         } else {
-            AnswerProvider(onCardNotLearned, onAnswerProvided)
+            AnswerProvider(
+                onSkipAnswer = onCardNotLearned,
+                onAnswerProvided = onAnswerProvided,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         }
         Spacer(modifier = Modifier.height(2.dp))
     }
@@ -110,12 +126,11 @@ fun TestCardSetContent(
 @Composable
 private fun Buttons(
     onCardNotLearned: () -> Unit,
-    onCardLearned: () -> Unit
+    onCardLearned: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
@@ -147,9 +162,12 @@ private fun Buttons(
 @Composable
 private fun TestingFinished(
     state: TestFinished,
-    onBackButtonClicked: () -> Unit = {}
+    onBackButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         Box(
             modifier = Modifier.weight(1.0f),
             contentAlignment = Alignment.Center

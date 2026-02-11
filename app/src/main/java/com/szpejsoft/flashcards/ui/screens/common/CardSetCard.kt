@@ -16,10 +16,11 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 @Composable
 fun CardSetCard(
     cardSet: CardSet,
-    onClick: (Long) -> Unit = {}
+    onClick: (Long) -> Unit ,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = { onClick(cardSet.id) }),
         shape = RoundedCornerShape(16.dp)

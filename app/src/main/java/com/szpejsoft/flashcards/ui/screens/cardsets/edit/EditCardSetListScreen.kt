@@ -28,15 +28,18 @@ import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
 fun EditCardSetListScreen(
-    viewModel: EditCardSetListViewModel = hiltViewModel<EditCardSetListViewModelImpl>(),
     onAddButtonClick: () -> Unit,
     onEditButtonClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: EditCardSetListViewModel = hiltViewModel<EditCardSetListViewModelImpl>(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var expandedCardId by rememberSaveable { mutableStateOf<Long?>(null) }
     val cardSets = uiState.cardSets
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)

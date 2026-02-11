@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
@@ -45,8 +44,9 @@ import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
 
 @Composable
 fun LearnCardSetScreen(
-    viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -58,7 +58,8 @@ fun LearnCardSetScreen(
             viewModel::onAnswerProvided,
             viewModel::onTestModeChanged,
             viewModel::onCaseSensitiveChanged,
-            viewModel::onToastShown
+            viewModel::onToastShown,
+            modifier
         )
 
         LearningFinished -> LearningFinished(onNavigateBack)
@@ -68,10 +69,10 @@ fun LearnCardSetScreen(
             viewModel::onCardLearned,
             viewModel::onCardNotLearned,
             viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged
+            viewModel::onCaseSensitiveChanged,
+            modifier
         )
     }
-
 }
 
 @Composable
@@ -82,7 +83,8 @@ fun LearnCardSetContent(
     onAnswerProvided: (String) -> Unit,
     onLearnModeChanged: (PracticeMode) -> Unit,
     onCaseSensitiveChanged: (Boolean) -> Unit,
-    onToastShown: () -> Unit
+    onToastShown: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     LaunchedEffect(state.flashcardToLearn, state.showSuccessToast) {
@@ -93,7 +95,7 @@ fun LearnCardSetContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -106,10 +108,14 @@ fun LearnCardSetContent(
                 currentMode = state.learnMode,
                 caseSensitive = state.caseSensitive,
                 onTestModeChanged = onLearnModeChanged,
-                onCaseSensitiveChanged = onCaseSensitiveChanged
+                onCaseSensitiveChanged = onCaseSensitiveChanged,
             )
         }
-        LearningProgress(state.learnedCards, state.cardSetSize)
+        LearningProgress(
+            learned = state.learnedCards,
+            setSize = state.cardSetSize,
+            modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+        )
         Spacer(modifier = Modifier.weight(0.19f))
         FlippableFlashCard(
             obverse = state.flashcardToLearn.obverse,
@@ -122,10 +128,17 @@ fun LearnCardSetContent(
             Buttons(
                 showCardLearnedButton = true,
                 onCardNotLearned = onCardNotLearned,
-                onCardLearned = onCardLearned
-            )
+                onCardLearned = onCardLearned,
+
+                )
         } else {
-            AnswerProvider(onCardNotLearned, onAnswerProvided)
+            AnswerProvider(
+                onSkipAnswer = onCardNotLearned,
+                onAnswerProvided = onAnswerProvided,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         }
         Spacer(modifier = Modifier.height(2.dp))
     }
@@ -137,11 +150,11 @@ fun WrongAnswerContent(
     onCardLearned: () -> Unit,
     onCardNotLearned: () -> Unit,
     onLearnModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -157,7 +170,13 @@ fun WrongAnswerContent(
                 onCaseSensitiveChanged = onCaseSensitiveChanged
             )
         }
-        LearningProgress(state.learnedCards, state.cardSetSize)
+        LearningProgress(
+            learned = state.learnedCards,
+            setSize = state.cardSetSize,
+            modifier = Modifier.padding(
+                top = 12.dp, bottom = 12.dp
+            )
+        )
         Spacer(modifier = Modifier.weight(0.19f))
         WrongAnswerCard(state, modifier = Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
@@ -176,8 +195,7 @@ private fun WrongAnswerCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -231,15 +249,15 @@ private fun WrongAnswerCard(
     }
 }
 
-
 @Composable
 private fun Buttons(
-    showCardLearnedButton: Boolean = true,
+    showCardLearnedButton: Boolean,
     onCardNotLearned: () -> Unit,
-    onCardLearned: () -> Unit
+    onCardLearned: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -272,12 +290,14 @@ private fun Buttons(
     }
 }
 
-@Preview
 @Composable
 fun LearningFinished(
-    onBackButtonClicked: () -> Unit = {}
+    onBackButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         Box(
             modifier = Modifier.weight(1.0f),
             contentAlignment = Alignment.Center

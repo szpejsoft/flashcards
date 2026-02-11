@@ -48,7 +48,7 @@ class TestCardSetScreenTest {
     fun setUp() {
         viewModel = TestCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            TestCardSetScreen(viewModel = viewModel, onNavigateBack = { navigateBackCalls++ })
+            TestCardSetScreen(onNavigateBack = { navigateBackCalls++ }, viewModel = viewModel)
         }
         navigateBackCalls = 0
     }

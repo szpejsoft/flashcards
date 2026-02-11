@@ -16,10 +16,11 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 @Composable
 fun FlashcardCard(
     flashCard: Flashcard,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(12.dp)
             .clickable(onClick = onClick)

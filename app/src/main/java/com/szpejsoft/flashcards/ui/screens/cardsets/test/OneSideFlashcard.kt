@@ -14,13 +14,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Flashcard(
+internal fun OneSideFlashcard(
     obverse: String,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .then(modifier),
+        modifier = modifier,
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(

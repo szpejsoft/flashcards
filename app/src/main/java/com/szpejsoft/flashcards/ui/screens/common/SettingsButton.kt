@@ -38,11 +38,14 @@ fun PracticeModeSettings(
     currentMode: PracticeMode,
     caseSensitive: Boolean,
     onTestModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isSettingsMenuVisible by remember { mutableStateOf(false) }
 
-    Box {
+    Box(
+        modifier = modifier
+    ) {
         IconButton(
             onClick = { isSettingsMenuVisible = !isSettingsMenuVisible }
         ) {
@@ -63,13 +66,15 @@ fun PracticeModeSettings(
                 PracticeModeMenuItem(
                     practiceMode = PracticeMode.Click,
                     isSelected = PracticeMode.Click == currentMode,
-                    onTestModeChanged = { onTestModeChanged(PracticeMode.Click) }
+                    onTestModeChanged = { onTestModeChanged(PracticeMode.Click) },
+                    modifier = Modifier.height(56.dp)
                 )
                 HorizontalDivider()
                 PracticeModeMenuItem(
                     practiceMode = PracticeMode.Write,
                     isSelected = PracticeMode.Write == currentMode,
-                    onTestModeChanged = { onTestModeChanged(PracticeMode.Write) }
+                    onTestModeChanged = { onTestModeChanged(PracticeMode.Write) },
+                    modifier = Modifier.height(56.dp)
                 )
                 DropdownMenuItem(
                     modifier = Modifier
@@ -108,11 +113,11 @@ fun PracticeModeSettings(
 private fun ColumnScope.PracticeModeMenuItem(
     practiceMode: PracticeMode,
     isSelected: Boolean,
-    onTestModeChanged: (PracticeMode) -> Unit
+    onTestModeChanged: (PracticeMode) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     DropdownMenuItem(
-        modifier = Modifier
-            .height(56.dp)
+        modifier = modifier
             .align(Alignment.Start),
         onClick = { },
         text = {

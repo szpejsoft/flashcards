@@ -28,9 +28,9 @@ class EditCardSetListScreenTest {
         viewModel = EditCardSetListViewModelTestDouble()
         composeTestRule.setContent {
             EditCardSetListScreen(
-                viewModel = viewModel,
                 onAddButtonClick = {},
                 onEditButtonClick = { id -> editCardSetCalls.add(id) },
+                viewModel = viewModel,
             )
         }
         editCardSetCalls.clear()

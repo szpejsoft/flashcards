@@ -34,8 +34,7 @@ internal fun FlippableFlashCard(
             }
         },
         shape = RoundedCornerShape(16.dp)
-    )
-    {
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

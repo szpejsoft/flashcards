@@ -16,13 +16,16 @@ import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
 
 @Composable
 fun TestCardSetListScreen(
-    viewModel: TestCardSetListViewModel = hiltViewModel<TestCardSetListViewModelImpl>(),
-    onTestButtonClick: (Long) -> Unit
+    onTestButtonClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: TestCardSetListViewModel = hiltViewModel<TestCardSetListViewModelImpl>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val cardSets = uiState.cardSets
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)

@@ -40,6 +40,7 @@ import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
 @Composable
 fun AddCardSetScreen(
+    modifier: Modifier = Modifier,
     viewModel: AddCardSetViewModel = hiltViewModel<AddCardSetViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
@@ -82,7 +83,9 @@ fun AddCardSetScreen(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {

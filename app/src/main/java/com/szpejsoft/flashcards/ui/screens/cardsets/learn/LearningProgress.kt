@@ -18,22 +18,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.R
 
-@Preview
 @Composable
 fun LearningProgress(
-    learned: Int = 1,
-    setSize: Int = 2
+    learned: Int,
+    setSize: Int,
+    modifier: Modifier = Modifier
 ) {
     val ratio = if (setSize == 0) 0f else learned.toFloat() / setSize.toFloat()
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp, bottom = 12.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
