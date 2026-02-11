@@ -64,13 +64,14 @@ This design mirrors real-world mobile constraints where reliability matters more
   - Use cases
   - ViewModels
   - Repository logic
-  - Flow emissions verified using Turbine library
+  - Flow emissions verified using the Turbine library
 
 - Konsist tests for
   - Keeping app architecture
   - Ensuring new components have tests
    
-UI tests are intentionally as the primary focus is correctness of state and business logic.
+User interface tests are deliberately limited to checking that the correct state is displayed
+and that the appropriate ViewModel methods are called, as the main focus is on state correctness and business logic.
 
 ## Trade-offs & Decisions
 
