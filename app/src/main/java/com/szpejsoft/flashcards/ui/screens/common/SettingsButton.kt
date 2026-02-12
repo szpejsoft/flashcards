@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.domain.model.PracticeMode
@@ -43,12 +44,31 @@ fun PracticeModeSettings(
 ) {
     var isSettingsMenuVisible by remember { mutableStateOf(false) }
 
-    Box(
+    PracticeModeSettingsContent(
+        isSettingsMenuVisible = isSettingsMenuVisible,
+        onToggleMenu = { isSettingsMenuVisible = !isSettingsMenuVisible },
+        onDismissMenu = { isSettingsMenuVisible = false },
+        currentMode = currentMode,
+        onTestModeChanged = onTestModeChanged,
+        caseSensitive = caseSensitive,
+        onCaseSensitiveChanged = onCaseSensitiveChanged,
         modifier = modifier
-    ) {
-        IconButton(
-            onClick = { isSettingsMenuVisible = !isSettingsMenuVisible }
-        ) {
+    )
+}
+
+@Composable
+private fun PracticeModeSettingsContent(
+    isSettingsMenuVisible: Boolean,
+    onToggleMenu: () -> Unit,
+    onDismissMenu: () -> Unit,
+    currentMode: PracticeMode,
+    onTestModeChanged: (PracticeMode) -> Unit,
+    caseSensitive: Boolean,
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        IconButton(onClick = onToggleMenu) {
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = stringResource(R.string.wcag_button_settings_description)
@@ -61,19 +81,19 @@ fun PracticeModeSettings(
         ) {
             DropdownMenu(
                 expanded = isSettingsMenuVisible,
-                onDismissRequest = { isSettingsMenuVisible = false }
+                onDismissRequest = onDismissMenu
             ) {
                 PracticeModeMenuItem(
                     practiceMode = PracticeMode.Click,
                     isSelected = PracticeMode.Click == currentMode,
-                    onTestModeChanged = { onTestModeChanged(PracticeMode.Click) },
+                    onClick = { onTestModeChanged(PracticeMode.Click) },
                     modifier = Modifier.height(56.dp)
                 )
                 HorizontalDivider()
                 PracticeModeMenuItem(
                     practiceMode = PracticeMode.Write,
                     isSelected = PracticeMode.Write == currentMode,
-                    onTestModeChanged = { onTestModeChanged(PracticeMode.Write) },
+                    onClick = { onTestModeChanged(PracticeMode.Write) },
                     modifier = Modifier.height(56.dp)
                 )
                 DropdownMenuItem(
@@ -81,7 +101,7 @@ fun PracticeModeSettings(
                         .height(56.dp)
                         .align(Alignment.Start),
                     enabled = currentMode == PracticeMode.Write,
-                    onClick = { },
+                    onClick = { onCaseSensitiveChanged(!caseSensitive) },
                     text = {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -99,7 +119,7 @@ fun PracticeModeSettings(
                                 modifier = Modifier.testTag("caseSensitiveSwitch"),
                                 enabled = currentMode == PracticeMode.Write,
                                 checked = caseSensitive,
-                                onCheckedChange = { onCaseSensitiveChanged(it) }
+                                onCheckedChange = null // Click handled by DropdownMenuItem
                             )
                         }
                     }
@@ -113,13 +133,12 @@ fun PracticeModeSettings(
 private fun ColumnScope.PracticeModeMenuItem(
     practiceMode: PracticeMode,
     isSelected: Boolean,
-    onTestModeChanged: (PracticeMode) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     DropdownMenuItem(
-        modifier = modifier
-            .align(Alignment.Start),
-        onClick = { },
+        modifier = modifier.align(Alignment.Start),
+        onClick = onClick,
         text = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -136,9 +155,7 @@ private fun ColumnScope.PracticeModeMenuItem(
                 RadioButton(
                     modifier = Modifier.testTag(practiceMode.getName()),
                     selected = isSelected,
-                    onClick = {
-                        onTestModeChanged(practiceMode)
-                    }
+                    onClick = null // Click handled by DropdownMenuItem
                 )
             }
         }
@@ -149,4 +166,18 @@ private fun ColumnScope.PracticeModeMenuItem(
 private fun PracticeMode.getName(): String = when (this) {
     PracticeMode.Click -> stringResource(R.string.practice_settings_menu_practice_mode_click)
     PracticeMode.Write -> stringResource(R.string.practice_settings_menu_practice_mode_write)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PracticeModeSettingsContentPreview() {
+    PracticeModeSettingsContent(
+        isSettingsMenuVisible = true,
+        onToggleMenu = {},
+        onDismissMenu = {},
+        currentMode = PracticeMode.Click,
+        onTestModeChanged = { },
+        caseSensitive = false,
+        onCaseSensitiveChanged = { _ -> }
+    )
 }

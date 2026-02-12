@@ -25,16 +25,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
-import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
+import com.szpejsoft.flashcards.ui.screens.common.ClickableFlashcard
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
@@ -46,11 +49,35 @@ fun EditCardSetScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
+    EditCardSetScreenContent(
+        state = state,
+        onNavigateBack = onNavigateBack,
+        onAddFlashcard = viewModel::onAddFlashcard,
+        onDeleteFlashcard = viewModel::onDeleteFlashcard,
+        onSaveChanges = viewModel::onSaveChanges,
+        onUpdateCardSetName = viewModel::onUpdateCardSetName,
+        onUpdateFlashcard = viewModel::onUpdateFlashcard,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun EditCardSetScreenContent(
+    state: EditCardSetViewModel.UiState,
+    onNavigateBack: () -> Unit,
+    onAddFlashcard: (String, String) -> Unit,
+    onDeleteFlashcard: (Long) -> Unit,
+    onSaveChanges: () -> Unit,
+    onUpdateCardSetName: (String) -> Unit,
+    onUpdateFlashcard: (Long, String, String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var showAddFlashCardDialog by remember { mutableStateOf(false) }
     var expandedCardId by remember { mutableStateOf<Long?>(null) }
     var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
     var isActionInProgress by remember { mutableStateOf(false) }
     var setName by remember(state.setName) { mutableStateOf(state.setName) }
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(state.flashCards) {
         isActionInProgress = false
@@ -61,7 +88,7 @@ fun EditCardSetScreen(
             onDismiss = { showAddFlashCardDialog = false },
             onConfirm = { obverse, reverse ->
                 showAddFlashCardDialog = false
-                viewModel.onAddFlashcard(obverse, reverse)
+                onAddFlashcard(obverse, reverse)
             }
         )
     }
@@ -75,7 +102,7 @@ fun EditCardSetScreen(
             obverse = flashcard.obverse,
             reverse = flashcard.reverse,
             onConfirm = { id, obverse, reverse ->
-                viewModel.onUpdateFlashcard(id, obverse, reverse)
+                onUpdateFlashcard(id, obverse, reverse)
                 editedFlashcardId = null
             },
             onDismiss = { editedFlashcardId = null },
@@ -102,8 +129,8 @@ fun EditCardSetScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        viewModel.onUpdateCardSetName(setName)
-                        //todo clear focus and hide keyboard
+                        onUpdateCardSetName(setName)
+                        focusManager.clearFocus()
                     }
                 )
             )
@@ -116,12 +143,11 @@ fun EditCardSetScreen(
                 ) {
                     items(
                         count = state.flashCards.size,
-                        //todo what to do when user puts 2 cards with the same content
-                        key = { index -> state.flashCards[index].hashCode() }
+                        key = { index -> state.flashCards[index].id }
                     ) { index ->
                         Box {
                             val flashcardId = state.flashCards[index].id
-                            FlashcardCard(
+                            ClickableFlashcard(
                                 flashCard = state.flashCards[index],
                                 onClick = {
                                     expandedCardId = flashcardId
@@ -136,7 +162,7 @@ fun EditCardSetScreen(
                                     onDismissRequest = { expandedCardId = null },
                                     onDeleteClicked = {
                                         isActionInProgress = true
-                                        viewModel.onDeleteFlashcard(flashcardId)
+                                        onDeleteFlashcard(flashcardId)
                                     },
                                     onEditClicked = {
                                         editedFlashcardId = flashcardId
@@ -161,7 +187,7 @@ fun EditCardSetScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.saveEnabled,
                 onClick = {
-                    viewModel.onSaveClicked()
+                    onSaveChanges()
                     onNavigateBack()
                 }
             ) {
@@ -169,5 +195,25 @@ fun EditCardSetScreen(
             }
         }
     }
+}
 
+@Preview(showBackground = true)
+@Composable
+private fun EditCardSetScreenContentPreview() {
+    EditCardSetScreenContent(
+        state = EditCardSetViewModel.UiState(
+            setName = "Preview Card Set",
+            flashCards = listOf(
+                Flashcard(1, "Apple", "Jabłko"),
+                Flashcard(2, "Banana", "Banan")
+            ),
+            saveEnabled = true
+        ),
+        onNavigateBack = { },
+        onAddFlashcard = { _, _ -> },
+        onDeleteFlashcard = { _ -> },
+        onSaveChanges = { },
+        onUpdateCardSetName = { },
+        onUpdateFlashcard = { _, _, _ -> }
+    )
 }

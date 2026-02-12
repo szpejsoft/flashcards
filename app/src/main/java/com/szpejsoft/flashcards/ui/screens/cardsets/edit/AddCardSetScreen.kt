@@ -28,13 +28,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModel
 import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
-import com.szpejsoft.flashcards.ui.screens.common.FlashcardCard
+import com.szpejsoft.flashcards.ui.screens.common.ClickableFlashcard
+
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
@@ -46,6 +49,29 @@ fun AddCardSetScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
+    AddCardSetScreenContent(
+        state = state,
+        onNavigateBack = onNavigateBack,
+        onAddFlashcard = viewModel::onAddFlashcard,
+        onCardSetNameChanged = viewModel::onCardSetNameChanged,
+        onDeleteFlashcard = viewModel::onDeleteFlashcard,
+        onSaveChanges = viewModel::onSaveChanges,
+        onUpdateFlashcard = viewModel::onUpdateFlashcard,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun AddCardSetScreenContent(
+    state: AddCardSetViewModel.UiState,
+    onNavigateBack: () -> Unit,
+    onAddFlashcard: (String, String) -> Unit,
+    onCardSetNameChanged: (String) -> Unit,
+    onDeleteFlashcard: (Long) -> Unit,
+    onSaveChanges: () -> Unit,
+    onUpdateFlashcard: (Long, String, String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var showAddFlashCardDialog by remember { mutableStateOf(false) }
     var expandedCardId by remember { mutableStateOf<Long?>(null) }
     var editedFlashcardId by remember { mutableStateOf<Long?>(null) }
@@ -62,7 +88,7 @@ fun AddCardSetScreen(
             onDismiss = { showAddFlashCardDialog = false },
             onConfirm = { obverse, reverse ->
                 showAddFlashCardDialog = false
-                viewModel.onAddFlashcard(obverse, reverse)
+                onAddFlashcard(obverse, reverse)
             }
         )
     }
@@ -76,7 +102,7 @@ fun AddCardSetScreen(
             obverse = flashcard.obverse,
             reverse = flashcard.reverse,
             onConfirm = { id, obverse, reverse ->
-                viewModel.onUpdateFlashcard(id, obverse, reverse)
+                onUpdateFlashcard(id, obverse, reverse)
                 editedFlashcardId = null
             },
             onDismiss = { editedFlashcardId = null },
@@ -102,7 +128,7 @@ fun AddCardSetScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        viewModel.onCardSetNameChanged(setName)
+                        onCardSetNameChanged(setName)
                         keyboardController?.hide()
                         if (state.flashCards.isEmpty()) {
                             showAddFlashCardDialog = true
@@ -121,7 +147,7 @@ fun AddCardSetScreen(
                     ) { index ->
                         Box {
                             val flashcardId = state.flashCards[index].id
-                            FlashcardCard(
+                            ClickableFlashcard(
                                 flashCard = state.flashCards[index],
                                 onClick = {
                                     expandedCardId = flashcardId
@@ -136,7 +162,7 @@ fun AddCardSetScreen(
                                     onDismissRequest = { expandedCardId = null },
                                     onDeleteClicked = {
                                         isActionInProgress = true
-                                        viewModel.onDeleteFlashcard(flashcardId)
+                                        onDeleteFlashcard(flashcardId)
                                     },
                                     onEditClicked = {
                                         editedFlashcardId = flashcardId
@@ -161,7 +187,7 @@ fun AddCardSetScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.saveEnabled,
                 onClick = {
-                    viewModel.onSaveClicked()
+                    onSaveChanges()
                     onNavigateBack()
                 }
             ) {
@@ -169,4 +195,25 @@ fun AddCardSetScreen(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AddCardSetScreenPreview() {
+    AddCardSetScreenContent(
+        state = AddCardSetViewModel.UiState(
+            setName = "My New Flashcards",
+            flashCards = listOf(
+                Flashcard(1, "Apple", "Jabłko"),
+                Flashcard(2, "Banana", "Banan")
+            ),
+            saveEnabled = true
+        ),
+        onNavigateBack = {},
+        onAddFlashcard = { _, _ -> },
+        onCardSetNameChanged = {},
+        onDeleteFlashcard = {},
+        onSaveChanges = {},
+        onUpdateFlashcard = { _, _, _ -> }
+    )
 }

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.szpejsoft.flashcards.R
 
 @Composable
@@ -17,9 +18,9 @@ fun Toolbox(
     enabled: Boolean,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-    onDeleteClicked: (() -> Unit)? = null,
-    onEditClicked: (() -> Unit)? = null
+    onDeleteClicked: (() -> Unit)?,
+    onEditClicked: (() -> Unit)?,
+    modifier: Modifier = Modifier
 ) {
     DropdownMenu(
         modifier = modifier,
@@ -53,4 +54,17 @@ fun Toolbox(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ToolboxPreview() {
+    Toolbox(
+        enabled = true,
+        expanded = true,
+        onDismissRequest = {},
+        onDeleteClicked = {},
+        onEditClicked = {},
+        modifier = Modifier
+    )
 }

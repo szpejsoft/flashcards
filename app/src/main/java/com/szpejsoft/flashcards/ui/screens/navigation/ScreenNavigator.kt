@@ -60,7 +60,7 @@ class ScreenNavigator {
         }
 
         entry<LearnCardSetList> {
-            LearnCardSetListScreen(onLearnButtonClick = { navigateToLearnCardSet(it) })
+            LearnCardSetListScreen { navigateToLearnCardSet(it) }
         }
 
         entry<LearnCardSet> { key ->

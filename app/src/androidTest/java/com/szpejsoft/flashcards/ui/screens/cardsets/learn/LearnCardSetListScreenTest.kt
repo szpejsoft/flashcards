@@ -24,9 +24,8 @@ class LearnCardSetListScreenTest {
         viewModel = LearnCardSetListViewModelTestDouble()
         composeTestRule.setContent {
             LearnCardSetListScreen(
-                onLearnButtonClick = { id -> learnCardSetCalls.add(id) },
                 viewModel = viewModel
-            )
+            ) { id -> learnCardSetCalls.add(id) }
         }
         learnCardSetCalls.clear()
     }

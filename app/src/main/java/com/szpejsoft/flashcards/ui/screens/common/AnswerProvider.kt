@@ -21,9 +21,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.R
-
 
 @Composable
 fun AnswerProvider(
@@ -66,4 +66,14 @@ fun AnswerProvider(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnswerProviderPreview() {
+    AnswerProvider(
+        onSkipAnswer = {},
+        onAnswerProvided = {},
+        modifier = Modifier
+    )
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.R
 
@@ -32,6 +33,17 @@ fun TestProgress(
     val learnedRatio = if (setSize == 0) 0f else learned.toFloat() / setSize.toFloat()
     val failedRatio = if (setSize == 0) 0f else (learned + failed).toFloat() / setSize.toFloat()
 
+    TestProgressContent(modifier, learned, setSize, failedRatio, learnedRatio)
+}
+
+@Composable
+private fun TestProgressContent(
+    modifier: Modifier,
+    learned: Int,
+    setSize: Int,
+    failedRatio: Float,
+    learnedRatio: Float
+) {
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -71,4 +83,16 @@ fun TestProgress(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TestProgressContentPreview() {
+    TestProgressContent(
+        modifier = Modifier,
+        learned = 7,
+        setSize = 10,
+        failedRatio = 0.33f,
+        learnedRatio = 0.5f
+    )
 }

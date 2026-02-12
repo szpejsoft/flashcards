@@ -18,5 +18,5 @@ interface AddCardSetViewModel {
     fun onAddFlashcard(obverse: String, reverse: String)
     fun onDeleteFlashcard(flashcardId: Long)
     fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String)
-    fun onSaveClicked()
+    fun onSaveChanges()
 }

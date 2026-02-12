@@ -48,7 +48,7 @@ class AddCardSetViewModelTestDouble : AddCardSetViewModel {
         _onAddFlashcardCalls.add(obverse to reverse)
     }
 
-    override fun onSaveClicked() {
+    override fun onSaveChanges() {
         onSaveClickedCounter++
     }
 

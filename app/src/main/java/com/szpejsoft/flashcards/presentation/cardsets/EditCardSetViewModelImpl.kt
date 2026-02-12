@@ -95,7 +95,7 @@ constructor(
         }
     }
 
-    override fun onSaveClicked() {
+    override fun onSaveChanges() {
         viewModelScope.launch {
             updateCardSetUseCase(
                 cardSetId = cardSetId,

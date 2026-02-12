@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
@@ -23,6 +25,20 @@ fun TestCardSetListScreen(
     val uiState by viewModel.uiState.collectAsState()
     val cardSets = uiState.cardSets
 
+    TestCardScreenContent(
+        modifier = modifier,
+        cardSets = cardSets,
+        onTestButtonClick = onTestButtonClick
+    )
+
+}
+
+@Composable
+private fun TestCardScreenContent(
+    modifier: Modifier,
+    cardSets: List<CardSet>,
+    onTestButtonClick: (Long) -> Unit
+) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -45,5 +61,14 @@ fun TestCardSetListScreen(
             }
         }
     }
+}
 
+@Preview(showBackground = true)
+@Composable
+private fun TestCardScreenContentPreview() {
+    TestCardScreenContent(
+        modifier = Modifier,
+        cardSets = listOf(CardSet(1, "name 1"), CardSet(2, "name 2")),
+        onTestButtonClick = {}
+    )
 }

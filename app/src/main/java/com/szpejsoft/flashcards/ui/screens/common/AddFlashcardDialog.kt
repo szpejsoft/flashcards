@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.szpejsoft.flashcards.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,5 +57,14 @@ fun AddFlashcardDialog(
                 Text(text = stringResource(R.string.action_cancel))
             }
         }
+    )
+}
+
+@Preview
+@Composable
+private fun AddFlashcardDialogPreview() {
+    AddFlashcardDialog(
+        onDismiss = {},
+        onConfirm = { _, _ -> }
     )
 }

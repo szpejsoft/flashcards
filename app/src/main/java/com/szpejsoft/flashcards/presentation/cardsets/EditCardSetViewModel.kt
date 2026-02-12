@@ -21,6 +21,6 @@ interface EditCardSetViewModel {
     fun onDeleteFlashcard(flashcardId: Long)
     fun onUpdateFlashcard(flashcardId: Long, obverse: String, reverse: String)
     fun onUpdateCardSetName(cardSetName: String)
-    fun onSaveClicked()
+    fun onSaveChanges()
 
 }
