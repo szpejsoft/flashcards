@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
@@ -28,15 +29,36 @@ import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
 fun EditCardSetListScreen(
-    viewModel: EditCardSetListViewModel = hiltViewModel<EditCardSetListViewModelImpl>(),
     onAddButtonClick: () -> Unit,
     onEditButtonClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: EditCardSetListViewModel = hiltViewModel<EditCardSetListViewModelImpl>(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    
+    EditCardSetListScreenContent(
+        uiState = uiState,
+        onAddButtonClick = onAddButtonClick,
+        onEditButtonClick = onEditButtonClick,
+        onDeleteCardSetClicked = viewModel::onDeleteCardSetClicked,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun EditCardSetListScreenContent(
+    uiState: EditCardSetListViewModel.UiState,
+    onAddButtonClick: () -> Unit,
+    onEditButtonClick: (Long) -> Unit,
+    onDeleteCardSetClicked: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var expandedCardId by rememberSaveable { mutableStateOf<Long?>(null) }
     val cardSets = uiState.cardSets
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -59,7 +81,7 @@ fun EditCardSetListScreen(
                             expanded = expandedCardId == cardSetId,
                             onDismissRequest = { expandedCardId = null },
                             onDeleteClicked = {
-                                viewModel.onDeleteCardSetClicked(cardSetId)
+                                onDeleteCardSetClicked(cardSetId)
                                 expandedCardId = null
                             },
                             onEditClicked = {
@@ -81,4 +103,15 @@ fun EditCardSetListScreen(
             Icon(Icons.Default.Add, stringResource(R.string.wcag_action_add))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EditCardSetListScreenPreview() {
+    EditCardSetListScreenContent(
+        uiState = EditCardSetListViewModel.UiState(emptyList()),
+        onAddButtonClick = {},
+        onEditButtonClick = {},
+        onDeleteCardSetClicked = {}
+    )
 }

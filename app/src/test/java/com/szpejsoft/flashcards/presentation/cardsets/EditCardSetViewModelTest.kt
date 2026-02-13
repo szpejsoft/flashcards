@@ -109,7 +109,7 @@ class EditCardSetViewModelTest : BaseTest() {
             advanceUntilIdle()
             sut.onAddFlashcard("obverse 3", "reverse 3")
             advanceUntilIdle()
-            sut.onSaveClicked()
+            sut.onSaveChanges()
             advanceUntilIdle()
             val flashcardsSlot = slot<List<Flashcard>>()
             val cardSetIdSlot = slot<Long>()

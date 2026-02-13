@@ -72,7 +72,7 @@ constructor(
         }
     }
 
-    override fun onSaveClicked() {
+    override fun onSaveChanges() {
         viewModelScope.launch {
             saveCardSetUseCase(
                 cardSetName = _uiState.value.setName,

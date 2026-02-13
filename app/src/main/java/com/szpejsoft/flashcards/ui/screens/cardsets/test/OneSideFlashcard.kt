@@ -11,16 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Flashcard(
+internal fun OneSideFlashcard(
     obverse: String,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .then(modifier),
+        modifier = modifier,
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(
@@ -35,4 +35,13 @@ internal fun Flashcard(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun OneSideFlashcardPreview() {
+    OneSideFlashcard(
+        obverse = "question",
+        modifier = Modifier
+    )
 }

@@ -49,7 +49,7 @@ class LearnCardSetScreenTest {
     fun setUp() {
         viewModel = LearnCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            LearnCardSetScreen(viewModel = viewModel, onNavigateBack = { navigateBackCalls++ })
+            LearnCardSetScreen(onNavigateBack = { navigateBackCalls++ }, viewModel = viewModel)
         }
         navigateBackCalls = 0
     }
@@ -173,13 +173,13 @@ class LearnCardSetScreenTest {
         composeTestRule.waitForIdle()
 
         //assert
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsSelected()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsSelected()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsNotSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsNotEnabled()
     }
 
     @Test
@@ -189,7 +189,7 @@ class LearnCardSetScreenTest {
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
-        composeTestRule.onNodeWithTag(learnModeWriteName).performClick()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(PracticeMode.Write), viewModel.onPracticeModeChangedCalls)
@@ -202,7 +202,7 @@ class LearnCardSetScreenTest {
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
-        composeTestRule.onNodeWithTag(learnModeClickName).performClick()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(PracticeMode.Click), viewModel.onPracticeModeChangedCalls)
@@ -217,14 +217,14 @@ class LearnCardSetScreenTest {
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
 
         //assert
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsNotSelected()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsSelected()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsEnabled()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOff()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsOff()
     }
 
     @Test
@@ -237,14 +237,14 @@ class LearnCardSetScreenTest {
         composeTestRule.waitForIdle()
 
         //assert
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeClickName).assertIsNotSelected()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(learnModeWriteName).assertIsSelected()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeClickName, useUnmergedTree = true).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(learnModeWriteName, useUnmergedTree = true).assertIsSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsEnabled()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOn()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsOn()
     }
     
     @Test
@@ -255,7 +255,7 @@ class LearnCardSetScreenTest {
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").performClick()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(false), viewModel.onCaseSensitiveChangedCalls)

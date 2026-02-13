@@ -48,7 +48,7 @@ class TestCardSetScreenTest {
     fun setUp() {
         viewModel = TestCardSetViewModelTestDouble()
         composeTestRule.setContent {
-            TestCardSetScreen(viewModel = viewModel, onNavigateBack = { navigateBackCalls++ })
+            TestCardSetScreen(onNavigateBack = { navigateBackCalls++ }, viewModel = viewModel)
         }
         navigateBackCalls = 0
     }
@@ -158,13 +158,13 @@ class TestCardSetScreenTest {
         composeTestRule.waitForIdle()
 
         //assert
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsSelected()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsSelected()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsNotSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsNotEnabled()
     }
 
     @Test
@@ -174,7 +174,7 @@ class TestCardSetScreenTest {
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
-        composeTestRule.onNodeWithTag(testModeWriteName).performClick()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(PracticeMode.Write), viewModel.onPracticeModeChangedCalls)
@@ -187,7 +187,7 @@ class TestCardSetScreenTest {
 
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
-        composeTestRule.onNodeWithTag(testModeClickName).performClick()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(PracticeMode.Click), viewModel.onPracticeModeChangedCalls)
@@ -202,14 +202,14 @@ class TestCardSetScreenTest {
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
 
         //assert
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsNotSelected()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsSelected()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsEnabled()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOff()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsOff()
     }
 
     @Test
@@ -222,14 +222,14 @@ class TestCardSetScreenTest {
         composeTestRule.waitForIdle()
 
         //assert
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeClickName).assertIsNotSelected()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testModeWriteName).assertIsSelected()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeClickName, useUnmergedTree = true).assertIsNotSelected()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(testModeWriteName, useUnmergedTree = true).assertIsSelected()
         composeTestRule.onNodeWithText(caseSensitiveText).assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsEnabled()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").assertIsOn()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsEnabled()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).assertIsOn()
     }
 
 
@@ -241,7 +241,7 @@ class TestCardSetScreenTest {
         //act
         composeTestRule.onNodeWithContentDescription(settingsButtonContentDescription).performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("caseSensitiveSwitch").performClick()
+        composeTestRule.onNodeWithTag("caseSensitiveSwitch", useUnmergedTree = true).performClick()
 
         //assert
         assertEquals(listOf(false), viewModel.onCaseSensitiveChangedCalls)

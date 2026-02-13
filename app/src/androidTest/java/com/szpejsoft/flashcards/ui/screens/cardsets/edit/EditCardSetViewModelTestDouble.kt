@@ -36,7 +36,7 @@ class EditCardSetViewModelTestDouble : EditCardSetViewModel {
         _updateFlashcardsCalls.add(Triple(flashcardId, obverse, reverse))
     }
 
-    override fun onSaveClicked() {
+    override fun onSaveChanges() {
         saveClickedCallsNumber++
     }
 

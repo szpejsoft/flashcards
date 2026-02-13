@@ -4,22 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.AddCardSetScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetScreen
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModelImpl
-import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetListScreen
-import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetScreen
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
+import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.AddCardSetScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetListScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.edit.EditCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetListScreen
+import com.szpejsoft.flashcards.ui.screens.cardsets.learn.LearnCardSetScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.TestCardSetListScreen
 import com.szpejsoft.flashcards.ui.screens.cardsets.test.TestCardSetScreen
-import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.AddCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSet
 import com.szpejsoft.flashcards.ui.screens.navigation.Screen.EditCardSetList
@@ -53,12 +54,13 @@ class ScreenNavigator {
                 creationCallback = { factory -> factory.create(key.id) }
             )
             EditCardSetScreen(
-                viewModel = viewModel,
-                onNavigateBack = { navigateBack() })
+                onNavigateBack = { navigateBack() },
+                viewModel = viewModel
+            )
         }
 
         entry<LearnCardSetList> {
-            LearnCardSetListScreen(onLearnButtonClick = { navigateToLearnCardSet(it) })
+            LearnCardSetListScreen { navigateToLearnCardSet(it) }
         }
 
         entry<LearnCardSet> { key ->
@@ -66,8 +68,8 @@ class ScreenNavigator {
                 creationCallback = { factory -> factory.create(key.id) }
             )
             LearnCardSetScreen(
-                viewModel = viewModel,
-                onNavigateBack = { navigateBack() }
+                onNavigateBack = { navigateBack() },
+                viewModel = viewModel
             )
         }
 
@@ -82,15 +84,18 @@ class ScreenNavigator {
                 creationCallback = { factory -> factory.create(key.id) }
             )
             TestCardSetScreen(
-                viewModel = viewModel,
-                onNavigateBack = { navigateBack() }
+                onNavigateBack = { navigateBack() },
+                viewModel = viewModel
             )
         }
     }
 
     @Composable
-    fun NavDisplay() {
+    fun NavDisplay(
+        modifier: Modifier = Modifier
+    ) {
         NavDisplay(
+            modifier = modifier,
             backStack = backStack,
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
@@ -102,8 +107,9 @@ class ScreenNavigator {
     }
 
     @Composable
-    fun BottomNavBar() {
+    fun BottomNavBar(modifier: Modifier = Modifier) {
         BottomNavigationBar(
+            modifier = modifier,
             selectedTab = currentTab.collectAsState().value,
             onTabSelected = { tab ->
                 onTabSelected(tab)

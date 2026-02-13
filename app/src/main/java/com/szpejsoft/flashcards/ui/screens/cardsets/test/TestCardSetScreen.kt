@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.FlashcardToTest
@@ -38,39 +40,43 @@ import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
 
 @Composable
 fun TestCardSetScreen(
-    viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    when (state) {
+    when (val s = state) {
         is FlashcardToTest -> TestCardSetContent(
-            state as FlashcardToTest,
-            viewModel::onCardLearned,
-            viewModel::onCardNotLearned,
-            viewModel::onAnswerProvided,
-            viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged
+            state = s,
+            onCardLearned = viewModel::onCardLearned,
+            onCardNotLearned = viewModel::onCardNotLearned,
+            onAnswerProvided = viewModel::onAnswerProvided,
+            onTestModeChanged = viewModel::onTestModeChanged,
+            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+            modifier = modifier
         )
 
-        is TestFinished -> TestingFinished(
-            state as TestFinished,
-            onNavigateBack
+        is TestFinished -> TestingFinishedContent(
+            state = s,
+            onBackButtonClicked = onNavigateBack,
+            modifier = modifier
         )
     }
 }
 
 @Composable
-fun TestCardSetContent(
+private fun TestCardSetContent(
     state: FlashcardToTest,
     onCardLearned: () -> Unit,
     onCardNotLearned: () -> Unit,
     onAnswerProvided: (String) -> Unit,
     onTestModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -87,21 +93,33 @@ fun TestCardSetContent(
             )
         }
         TestProgress(
+            learned = state.learnedCards,
+            failed = state.failedCards,
+            setSize = state.cardSetSize,
             modifier = Modifier.padding(
                 top = 12.dp,
                 bottom = 12.dp
-            ),
-            learned = state.learnedCards,
-            failed = state.failedCards,
-            setSize = state.cardSetSize
+            )
         )
         Spacer(modifier = Modifier.weight(0.19f))
-        Flashcard(state.flashcardToTest.obverse, Modifier.weight(0.62f))
+        OneSideFlashcard(state.flashcardToTest.obverse, Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
         if (state.testMode == PracticeMode.Click) {
-            Buttons(onCardNotLearned, onCardLearned)
+            Buttons(
+                onCardNotLearned = onCardNotLearned,
+                onCardLearned = onCardLearned,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         } else {
-            AnswerProvider(onCardNotLearned, onAnswerProvided)
+            AnswerProvider(
+                onSkipAnswer = onCardNotLearned,
+                onAnswerProvided = onAnswerProvided,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         }
         Spacer(modifier = Modifier.height(2.dp))
     }
@@ -110,12 +128,11 @@ fun TestCardSetContent(
 @Composable
 private fun Buttons(
     onCardNotLearned: () -> Unit,
-    onCardLearned: () -> Unit
+    onCardLearned: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
@@ -145,11 +162,14 @@ private fun Buttons(
 }
 
 @Composable
-private fun TestingFinished(
+private fun TestingFinishedContent(
     state: TestFinished,
-    onBackButtonClicked: () -> Unit = {}
+    onBackButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         Box(
             modifier = Modifier.weight(1.0f),
             contentAlignment = Alignment.Center
@@ -180,4 +200,37 @@ private fun TestingFinished(
             Text(stringResource(R.string.learn_card_set_screen_learning_go_to_card_set_list))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TestCardSetContentPreview() {
+    TestCardSetContent(
+        state = FlashcardToTest(
+            setName = "Preview Set",
+            cardSetSize = 10,
+            learnedCards = 5,
+            failedCards = 2,
+            flashcardToTest = Flashcard(1, "Question", "Answer"),
+            testMode = PracticeMode.Click,
+            caseSensitive = false
+        ),
+        onCardLearned = {},
+        onCardNotLearned = {},
+        onAnswerProvided = {},
+        onTestModeChanged = {},
+        onCaseSensitiveChanged = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TestingFinishedContentPreview() {
+    TestingFinishedContent(
+        state = TestFinished(
+            learnedCards = 8,
+            cardSetSize = 10
+        ),
+        onBackButtonClicked = {}
+    )
 }

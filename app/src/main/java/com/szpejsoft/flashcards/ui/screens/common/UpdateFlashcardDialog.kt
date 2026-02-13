@@ -14,8 +14,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.szpejsoft.flashcards.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,34 +24,36 @@ fun UpdateFlashcardDialog(
     obverse: String,
     reverse: String,
     onDismiss: () -> Unit,
-    onConfirm: (flashcardId: Long, obverse: String, reverse: String) -> Unit
+    onConfirm: (flashcardId: Long, obverse: String, reverse: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var obverse by remember { mutableStateOf(obverse) }
-    var reverse by remember { mutableStateOf(reverse) }
+    var obverseState by remember { mutableStateOf(obverse) }
+    var reverseState by remember { mutableStateOf(reverse) }
 
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         title = { Text(text = stringResource(R.string.edit_card_set_screen_update_flashcard_dialog_title)) },
         text = {
             Column {
                 TextField(
                     modifier = Modifier.testTag("update_dialog_obverse_field"),
-                    value = obverse,
-                    onValueChange = { obverse = it },
+                    value = obverseState,
+                    onValueChange = { obverseState = it },
                     label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_obverse_label)) }
                 )
                 TextField(
                     modifier = Modifier.testTag("update_dialog_reverse_field"),
-                    value = reverse,
-                    onValueChange = { reverse = it },
+                    value = reverseState,
+                    onValueChange = { reverseState = it },
                     label = { Text(stringResource(R.string.edit_card_set_screen_edit_flashcard_dialog_reverse_label)) }
                 )
             }
         },
         confirmButton = {
             Button(
-                enabled = obverse.isNotBlank() && reverse.isNotBlank(),
-                onClick = { onConfirm(flashcardId, obverse, reverse) }
+                enabled = obverseState.isNotBlank() && reverseState.isNotBlank(),
+                onClick = { onConfirm(flashcardId, obverseState, reverseState) }
             ) {
                 Text(text = stringResource(R.string.action_update))
             }
@@ -61,5 +63,17 @@ fun UpdateFlashcardDialog(
                 Text(text = stringResource(R.string.action_cancel))
             }
         }
+    )
+}
+
+@Preview
+@Composable
+private fun UpdateFlashcardDialogPreview() {
+    UpdateFlashcardDialog(
+        flashcardId = 1L,
+        obverse = "Apple",
+        reverse = "Jabłko",
+        onDismiss = {},
+        onConfirm = { _, _, _ -> }
     )
 }

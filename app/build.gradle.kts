@@ -67,6 +67,7 @@ dependencies {
     //database
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.ui)
     ksp(libs.room.compiler)
 
     //coroutines

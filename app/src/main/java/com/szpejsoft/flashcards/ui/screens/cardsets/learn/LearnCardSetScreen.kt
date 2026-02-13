@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.szpejsoft.flashcards.R
+import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.model.PracticeMode
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState.FlashcardToLearn
@@ -45,44 +46,50 @@ import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
 
 @Composable
 fun LearnCardSetScreen(
-    viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    when (state) {
+    when (val s = state) {
         is FlashcardToLearn -> LearnCardSetContent(
-            state as FlashcardToLearn,
-            viewModel::onCardLearned,
-            viewModel::onCardNotLearned,
-            viewModel::onAnswerProvided,
-            viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged,
-            viewModel::onToastShown
+            state = s,
+            modifier = modifier,
+            onCardLearned = viewModel::onCardLearned,
+            onCardNotLearned = viewModel::onCardNotLearned,
+            onAnswerProvided = viewModel::onAnswerProvided,
+            onLearnModeChanged = viewModel::onTestModeChanged,
+            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+            onToastShown = viewModel::onToastShown
         )
 
-        LearningFinished -> LearningFinished(onNavigateBack)
+        LearningFinished -> LearningFinishedContent(
+            onBackButtonClicked = onNavigateBack,
+            modifier = modifier
+        )
 
         is WrongAnswer -> WrongAnswerContent(
-            state as WrongAnswer,
-            viewModel::onCardLearned,
-            viewModel::onCardNotLearned,
-            viewModel::onTestModeChanged,
-            viewModel::onCaseSensitiveChanged
+            state = s,
+            onCardLearned = viewModel::onCardLearned,
+            onCardNotLearned = viewModel::onCardNotLearned,
+            onLearnModeChanged = viewModel::onTestModeChanged,
+            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+            modifier = modifier
         )
     }
-
 }
 
 @Composable
-fun LearnCardSetContent(
+private fun LearnCardSetContent(
     state: FlashcardToLearn,
+    modifier: Modifier = Modifier,
     onCardLearned: () -> Unit,
     onCardNotLearned: () -> Unit,
     onAnswerProvided: (String) -> Unit,
     onLearnModeChanged: (PracticeMode) -> Unit,
     onCaseSensitiveChanged: (Boolean) -> Unit,
-    onToastShown: () -> Unit
+    onToastShown: () -> Unit,
 ) {
     val context = LocalContext.current
     LaunchedEffect(state.flashcardToLearn, state.showSuccessToast) {
@@ -93,7 +100,7 @@ fun LearnCardSetContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -106,10 +113,14 @@ fun LearnCardSetContent(
                 currentMode = state.learnMode,
                 caseSensitive = state.caseSensitive,
                 onTestModeChanged = onLearnModeChanged,
-                onCaseSensitiveChanged = onCaseSensitiveChanged
+                onCaseSensitiveChanged = onCaseSensitiveChanged,
             )
         }
-        LearningProgress(state.learnedCards, state.cardSetSize)
+        LearningProgress(
+            learned = state.learnedCards,
+            setSize = state.cardSetSize,
+            modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+        )
         Spacer(modifier = Modifier.weight(0.19f))
         FlippableFlashCard(
             obverse = state.flashcardToLearn.obverse,
@@ -122,26 +133,33 @@ fun LearnCardSetContent(
             Buttons(
                 showCardLearnedButton = true,
                 onCardNotLearned = onCardNotLearned,
-                onCardLearned = onCardLearned
-            )
+                onCardLearned = onCardLearned,
+
+                )
         } else {
-            AnswerProvider(onCardNotLearned, onAnswerProvided)
+            AnswerProvider(
+                onSkipAnswer = onCardNotLearned,
+                onAnswerProvided = onAnswerProvided,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
         }
         Spacer(modifier = Modifier.height(2.dp))
     }
 }
 
 @Composable
-fun WrongAnswerContent(
+private fun WrongAnswerContent(
     state: WrongAnswer,
     onCardLearned: () -> Unit,
     onCardNotLearned: () -> Unit,
     onLearnModeChanged: (PracticeMode) -> Unit,
-    onCaseSensitiveChanged: (Boolean) -> Unit
+    onCaseSensitiveChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Row {
             Text(
@@ -157,7 +175,13 @@ fun WrongAnswerContent(
                 onCaseSensitiveChanged = onCaseSensitiveChanged
             )
         }
-        LearningProgress(state.learnedCards, state.cardSetSize)
+        LearningProgress(
+            learned = state.learnedCards,
+            setSize = state.cardSetSize,
+            modifier = Modifier.padding(
+                top = 12.dp, bottom = 12.dp
+            )
+        )
         Spacer(modifier = Modifier.weight(0.19f))
         WrongAnswerCard(state, modifier = Modifier.weight(0.62f))
         Spacer(modifier = Modifier.weight(0.19f))
@@ -176,8 +200,7 @@ private fun WrongAnswerCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -231,15 +254,15 @@ private fun WrongAnswerCard(
     }
 }
 
-
 @Composable
 private fun Buttons(
-    showCardLearnedButton: Boolean = true,
+    showCardLearnedButton: Boolean,
     onCardNotLearned: () -> Unit,
-    onCardLearned: () -> Unit
+    onCardLearned: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -272,12 +295,14 @@ private fun Buttons(
     }
 }
 
-@Preview
 @Composable
-fun LearningFinished(
-    onBackButtonClicked: () -> Unit = {}
+private fun LearningFinishedContent(
+    onBackButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         Box(
             modifier = Modifier.weight(1.0f),
             contentAlignment = Alignment.Center
@@ -298,3 +323,53 @@ fun LearningFinished(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun LearnCardSetContentPreview() {
+    LearnCardSetContent(
+        state = PreviewFlashcard,
+        onCardLearned = {},
+        onCardNotLearned = {},
+        onAnswerProvided = {},
+        onLearnModeChanged = {},
+        onCaseSensitiveChanged = {},
+        onToastShown = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Wrong Answer")
+@Composable
+private fun WrongAnswerContentPreview() {
+    WrongAnswerContent(
+        state = WrongAnswer(
+            setName = "Preview Set",
+            cardSetSize = 10,
+            learnedCards = 5,
+            flashcardToLearn = Flashcard(1, "Question", "Correct Answer"),
+            learnMode = PracticeMode.Write,
+            caseSensitive = false,
+            providedAnswer = "Wrong Answer"
+        ),
+        onCardLearned = {},
+        onCardNotLearned = {},
+        onLearnModeChanged = {},
+        onCaseSensitiveChanged = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Finished")
+@Composable
+private fun LearningFinishedPreview() {
+    LearningFinishedContent(onBackButtonClicked = {})
+}
+
+private val PreviewFlashcard = FlashcardToLearn(
+    setName = "set",
+    cardSetSize = 7,
+    learnedCards = 3,
+    flashcardToLearn = Flashcard(1, "question", "answer"),
+    learnMode = PracticeMode.Click,
+    caseSensitive = false,
+    showSuccessToast = false
+)

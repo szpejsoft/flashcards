@@ -10,16 +10,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.szpejsoft.flashcards.domain.model.Flashcard
 
 @Composable
-fun FlashcardCard(
+fun ClickableFlashcard(
     flashCard: Flashcard,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(12.dp)
             .clickable(onClick = onClick)
@@ -40,4 +42,15 @@ fun FlashcardCard(
             )
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun ClickableFlashcardPreview() {
+    ClickableFlashcard(
+        flashCard = Flashcard(1, "question", "answer"),
+        onClick = {},
+        modifier = Modifier
+    )
 }

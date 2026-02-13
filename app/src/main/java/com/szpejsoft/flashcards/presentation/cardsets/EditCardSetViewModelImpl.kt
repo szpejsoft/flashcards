@@ -38,6 +38,8 @@ constructor(
     private val _uiState = MutableStateFlow(UiState())
     private val deletedFlashcardIds = mutableSetOf<Long>()
 
+    private var tempFlashcardId = -1L
+
     init {
         viewModelScope.launch {
             observeCardSetUseCase(cardSetId)
@@ -55,7 +57,7 @@ constructor(
 
     override fun onAddFlashcard(obverse: String, reverse: String) {
         _uiState.update { state ->
-            val newCard = Flashcard(0, obverse, reverse)
+            val newCard = Flashcard(tempFlashcardId--, obverse, reverse)
             val newFlashcards = state.flashCards + newCard
             state.copy(
                 flashCards = newFlashcards,
@@ -95,7 +97,7 @@ constructor(
         }
     }
 
-    override fun onSaveClicked() {
+    override fun onSaveChanges() {
         viewModelScope.launch {
             updateCardSetUseCase(
                 cardSetId = cardSetId,
