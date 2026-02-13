@@ -29,7 +29,7 @@ fun LearnCardSetListScreen(
 
 }
 
-@Preview(showBAckground = true)
+@Preview(showBackground = true)
 @Composable
 private fun LearnCardSetListScreenContent(
     modifier: Modifier = Modifier,

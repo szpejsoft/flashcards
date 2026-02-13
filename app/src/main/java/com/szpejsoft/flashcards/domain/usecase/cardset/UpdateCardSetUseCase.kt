@@ -18,7 +18,7 @@ constructor(private val cardSetRepository: CardSetWithFlashcardsRepository) {
         cardSetRepository.update(
             cardSetId,
             cardSetName,
-            flashcardsToSave,
+            flashcardsToSave.map { it.copy(id = 0L) },
             flashcardIdsToDelete
         )
     }

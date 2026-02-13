@@ -27,6 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,12 +52,12 @@ fun PracticeModeSettings(
 
     PracticeModeSettingsContent(
         isSettingsMenuVisible = isSettingsMenuVisible,
-        onToggleMenu = { isSettingsMenuVisible = !isSettingsMenuVisible },
-        onDismissMenu = { isSettingsMenuVisible = false },
         currentMode = currentMode,
-        onTestModeChanged = onTestModeChanged,
         caseSensitive = caseSensitive,
         onCaseSensitiveChanged = onCaseSensitiveChanged,
+        onDismissMenu = { isSettingsMenuVisible = false },
+        onTestModeChanged = onTestModeChanged,
+        onToggleMenu = { isSettingsMenuVisible = !isSettingsMenuVisible },
         modifier = modifier
     )
 }
@@ -59,12 +65,12 @@ fun PracticeModeSettings(
 @Composable
 private fun PracticeModeSettingsContent(
     isSettingsMenuVisible: Boolean,
-    onToggleMenu: () -> Unit,
-    onDismissMenu: () -> Unit,
     currentMode: PracticeMode,
-    onTestModeChanged: (PracticeMode) -> Unit,
     caseSensitive: Boolean,
     onCaseSensitiveChanged: (Boolean) -> Unit,
+    onDismissMenu: () -> Unit,
+    onTestModeChanged: (PracticeMode) -> Unit,
+    onToggleMenu: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -99,7 +105,12 @@ private fun PracticeModeSettingsContent(
                 DropdownMenuItem(
                     modifier = Modifier
                         .height(56.dp)
-                        .align(Alignment.Start),
+                        .align(Alignment.Start)
+                        .testTag("caseSensitiveSwitch")
+                        .semantics {
+                            toggleableState = if (caseSensitive) ToggleableState.On else ToggleableState.Off
+                            role = Role.Switch
+                        },
                     enabled = currentMode == PracticeMode.Write,
                     onClick = { onCaseSensitiveChanged(!caseSensitive) },
                     text = {
@@ -116,10 +127,10 @@ private fun PracticeModeSettingsContent(
                                 textAlign = TextAlign.Start,
                             )
                             Switch(
-                                modifier = Modifier.testTag("caseSensitiveSwitch"),
-                                enabled = currentMode == PracticeMode.Write,
+                                modifier = Modifier.padding(4.dp),
                                 checked = caseSensitive,
-                                onCheckedChange = null // Click handled by DropdownMenuItem
+                                onCheckedChange = null,
+                                enabled = currentMode == PracticeMode.Write
                             )
                         }
                     }
@@ -137,7 +148,13 @@ private fun ColumnScope.PracticeModeMenuItem(
     modifier: Modifier = Modifier
 ) {
     DropdownMenuItem(
-        modifier = modifier.align(Alignment.Start),
+        modifier = modifier
+            .align(Alignment.Start)
+            .testTag(practiceMode.getName())
+            .semantics {
+                selected = isSelected
+                role = Role.RadioButton
+            },
         onClick = onClick,
         text = {
             Row(
@@ -153,9 +170,8 @@ private fun ColumnScope.PracticeModeMenuItem(
                     textAlign = TextAlign.Start
                 )
                 RadioButton(
-                    modifier = Modifier.testTag(practiceMode.getName()),
                     selected = isSelected,
-                    onClick = null // Click handled by DropdownMenuItem
+                    onClick = null
                 )
             }
         }
@@ -173,11 +189,11 @@ private fun PracticeMode.getName(): String = when (this) {
 private fun PracticeModeSettingsContentPreview() {
     PracticeModeSettingsContent(
         isSettingsMenuVisible = true,
-        onToggleMenu = {},
-        onDismissMenu = {},
         currentMode = PracticeMode.Click,
-        onTestModeChanged = { },
         caseSensitive = false,
-        onCaseSensitiveChanged = { _ -> }
+        onCaseSensitiveChanged = { _ -> },
+        onDismissMenu = {},
+        onTestModeChanged = { },
+        onToggleMenu = {}
     )
 }
