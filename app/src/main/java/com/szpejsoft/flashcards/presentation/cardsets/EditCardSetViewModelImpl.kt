@@ -7,6 +7,7 @@ import com.szpejsoft.flashcards.domain.usecase.cardset.ObserveCardSetUseCase
 import com.szpejsoft.flashcards.domain.usecase.cardset.UpdateCardSetUseCase
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.common.stateInUi
+import com.szpejsoft.flashcards.ui.log
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -14,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -43,6 +45,9 @@ constructor(
     init {
         viewModelScope.launch {
             observeCardSetUseCase(cardSetId)
+                .onEach {
+                    log("vm uistate ${it.flashcards}")
+                }
                 .map {
                     UiState(
                         setName = it.cardSet.name,
@@ -68,6 +73,7 @@ constructor(
 
     override fun onDeleteFlashcard(flashcardId: Long) {
         deletedFlashcardIds.add(flashcardId)
+        log("vm onDelete $deletedFlashcardIds")
         _uiState.update { state ->
             val newFlashcards = state.flashCards.filterNot { it.id == flashcardId }
             state.copy(
@@ -83,7 +89,9 @@ constructor(
                 obverse = obverse,
                 reverse = reverse
             )
+            log("vm updatedCard $updatedCard")
             val newFlashcards = state.flashCards.filterNot { it.id == flashcardId } + updatedCard
+            log("vm newCards ${newFlashcards.joinToString(prefix = "\n", separator = ", ")}")
             state.copy(
                 flashCards = newFlashcards,
                 saveEnabled = newFlashcards.isNotEmpty()
@@ -99,6 +107,9 @@ constructor(
 
     override fun onSaveChanges() {
         viewModelScope.launch {
+            log("vm onSave changes")
+            log("vm toSave ${_uiState.value.flashCards.joinToString(prefix = "\n", separator = ", ")}")
+            log("vm toDelete ${deletedFlashcardIds.joinToString(prefix = "\n", separator = ", ")}")
             updateCardSetUseCase(
                 cardSetId = cardSetId,
                 cardSetName = _uiState.value.setName,
@@ -110,4 +121,3 @@ constructor(
     }
 
 }
-

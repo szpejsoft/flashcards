@@ -10,6 +10,7 @@ import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.repository.CardSetWithFlashcardsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class CardSetWithFlashcardsRepositoryImpl
@@ -31,14 +32,18 @@ constructor(
         flashcardsToSave: List<Flashcard>,
         flashcardIdsToDelete: List<Long>
     ) {
+        Timber.d("ptsz repo update: ${flashcardsToSave.joinToString(prefix = "\n ", separator = ", ")} ")
         db.withTransaction {
+            Timber.d("ptsz repo update in transaction 1 ")
             cardSetDao.update(cardSetId, cardSetName)
             if (flashcardIdsToDelete.isNotEmpty()) {
                 flashcardDao.delete(flashcardIdsToDelete)
             }
+            Timber.d("ptsz repo update in transaction 2 ")
             if (flashcardsToSave.isNotEmpty()) {
-                flashcardDao.insert(flashcardsToSave.toDb(cardSetId))
+                flashcardDao.upsert(flashcardsToSave.toDb(cardSetId))
             }
+            Timber.d("ptsz repo update in transaction 3 ")
         }
     }
 
@@ -46,7 +51,7 @@ constructor(
         db.withTransaction {
             val cardSetId = cardSetDao.insert(DbCardSet(name = cardSetName))
             val flashcardsDb = flashcards.toDb(cardSetId)
-            flashcardDao.insert(flashcardsDb)
+            flashcardDao.upsert(flashcardsDb)
         }
     }
 
