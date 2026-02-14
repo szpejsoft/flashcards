@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import com.szpejsoft.flashcards.R
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModel
 import com.szpejsoft.flashcards.presentation.cardsets.EditCardSetListViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
+import com.szpejsoft.flashcards.ui.screens.common.ScreenBackground
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 
 @Composable
@@ -35,7 +37,7 @@ fun EditCardSetListScreen(
     viewModel: EditCardSetListViewModel = hiltViewModel<EditCardSetListViewModelImpl>(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     EditCardSetListScreenContent(
         uiState = uiState,
         onAddButtonClick = onAddButtonClick,
@@ -59,6 +61,7 @@ private fun EditCardSetListScreenContent(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        ScreenBackground(Icons.Outlined.Edit)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)

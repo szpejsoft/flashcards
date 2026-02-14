@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,7 +38,7 @@ import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModel
 import com.szpejsoft.flashcards.presentation.cardsets.AddCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AddFlashcardDialog
 import com.szpejsoft.flashcards.ui.screens.common.ClickableFlashcard
-
+import com.szpejsoft.flashcards.ui.screens.common.ScreenBackground
 import com.szpejsoft.flashcards.ui.screens.common.Toolbox
 import com.szpejsoft.flashcards.ui.screens.common.UpdateFlashcardDialog
 
@@ -112,6 +113,7 @@ private fun AddCardSetScreenContent(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        ScreenBackground(Icons.Outlined.Edit)
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
