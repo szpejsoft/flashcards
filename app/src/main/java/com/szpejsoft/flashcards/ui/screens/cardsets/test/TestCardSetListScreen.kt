@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import com.szpejsoft.flashcards.domain.model.CardSet
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModel
 import com.szpejsoft.flashcards.presentation.test.TestCardSetListViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.CardSetCard
+import com.szpejsoft.flashcards.ui.screens.common.ScreenBackground
 
 @Composable
 fun TestCardSetListScreen(
@@ -42,6 +45,7 @@ private fun TestCardScreenContent(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        ScreenBackground(Icons.Outlined.Leaderboard)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)

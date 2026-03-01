@@ -92,7 +92,7 @@ class CardSetWithFlashcardsRepositoryTest : BaseTest() {
         //assert
         coVerify(exactly = 1) { cardSetDao.update(cardSetId, cardSetName) }
         coVerify(exactly = 0) { flashcardDao.delete(any<List<Long>>()) }
-        coVerify(exactly = 0) { flashcardDao.insert(any()) }
+        coVerify(exactly = 0) { flashcardDao.upsert(any()) }
     }
 
 
@@ -110,7 +110,7 @@ class CardSetWithFlashcardsRepositoryTest : BaseTest() {
         //assert
         coVerify(exactly = 1) { cardSetDao.update(cardSetId, cardSetName) }
         coVerify(exactly = 1) { flashcardDao.delete(listOf(13L, 17L)) }
-        coVerify(exactly = 0) { flashcardDao.insert(any()) }
+        coVerify(exactly = 0) { flashcardDao.upsert(any()) }
     }
 
     @Test
@@ -129,7 +129,7 @@ class CardSetWithFlashcardsRepositoryTest : BaseTest() {
         //assert
         coVerify(exactly = 1) { cardSetDao.update(cardSetId, cardSetName) }
         coVerify(exactly = 0) { flashcardDao.delete(any<List<Long>>()) }
-        coVerify(exactly = 1) { flashcardDao.insert(flashcardsToSave.toDb(17L)) }
+        coVerify(exactly = 1) { flashcardDao.upsert(flashcardsToSave.toDb(17L)) }
     }
 
     @Test
@@ -148,7 +148,7 @@ class CardSetWithFlashcardsRepositoryTest : BaseTest() {
         val expectedDbFlashcards = listOf(DbFlashcard(0, 17L, "obverse", "reverse"))
 
         coVerify(exactly = 1) { cardSetDao.insert(DbCardSet(name = cardSetName)) }
-        coVerify(exactly = 1) { flashcardDao.insert(expectedDbFlashcards) }
+        coVerify(exactly = 1) { flashcardDao.upsert(expectedDbFlashcards) }
     }
 }
 

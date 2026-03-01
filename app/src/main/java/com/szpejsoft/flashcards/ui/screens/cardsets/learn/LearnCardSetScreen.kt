@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -43,6 +44,7 @@ import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModel.UiState
 import com.szpejsoft.flashcards.presentation.learn.LearnCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AnswerProvider
 import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
+import com.szpejsoft.flashcards.ui.screens.common.ScreenBackground
 
 @Composable
 fun LearnCardSetScreen(
@@ -51,32 +53,31 @@ fun LearnCardSetScreen(
     viewModel: LearnCardSetViewModel = hiltViewModel<LearnCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
+    Box(modifier = modifier.fillMaxSize()) {
+        ScreenBackground(Icons.Outlined.Book)
+        when (val s = state) {
+            is FlashcardToLearn -> LearnCardSetContent(
+                state = s,
+                onCardLearned = viewModel::onCardLearned,
+                onCardNotLearned = viewModel::onCardNotLearned,
+                onAnswerProvided = viewModel::onAnswerProvided,
+                onLearnModeChanged = viewModel::onTestModeChanged,
+                onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+                onToastShown = viewModel::onToastShown
+            )
 
-    when (val s = state) {
-        is FlashcardToLearn -> LearnCardSetContent(
-            state = s,
-            modifier = modifier,
-            onCardLearned = viewModel::onCardLearned,
-            onCardNotLearned = viewModel::onCardNotLearned,
-            onAnswerProvided = viewModel::onAnswerProvided,
-            onLearnModeChanged = viewModel::onTestModeChanged,
-            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
-            onToastShown = viewModel::onToastShown
-        )
+            LearningFinished -> LearningFinishedContent(
+                onBackButtonClicked = onNavigateBack,
+            )
 
-        LearningFinished -> LearningFinishedContent(
-            onBackButtonClicked = onNavigateBack,
-            modifier = modifier
-        )
-
-        is WrongAnswer -> WrongAnswerContent(
-            state = s,
-            onCardLearned = viewModel::onCardLearned,
-            onCardNotLearned = viewModel::onCardNotLearned,
-            onLearnModeChanged = viewModel::onTestModeChanged,
-            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
-            modifier = modifier
-        )
+            is WrongAnswer -> WrongAnswerContent(
+                state = s,
+                onCardLearned = viewModel::onCardLearned,
+                onCardNotLearned = viewModel::onCardNotLearned,
+                onLearnModeChanged = viewModel::onTestModeChanged,
+                onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+            )
+        }
     }
 }
 

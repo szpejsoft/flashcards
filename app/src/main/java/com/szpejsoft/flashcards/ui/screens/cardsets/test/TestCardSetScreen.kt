@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModel.UiState.T
 import com.szpejsoft.flashcards.presentation.test.TestCardSetViewModelImpl
 import com.szpejsoft.flashcards.ui.screens.common.AnswerProvider
 import com.szpejsoft.flashcards.ui.screens.common.PracticeModeSettings
+import com.szpejsoft.flashcards.ui.screens.common.ScreenBackground
 
 @Composable
 fun TestCardSetScreen(
@@ -45,23 +47,23 @@ fun TestCardSetScreen(
     viewModel: TestCardSetViewModel = hiltViewModel<TestCardSetViewModelImpl>()
 ) {
     val state by viewModel.uiState.collectAsState()
+    Box(modifier = modifier) {
+        ScreenBackground(Icons.Outlined.Leaderboard)
+        when (val s = state) {
+            is FlashcardToTest -> TestCardSetContent(
+                state = s,
+                onCardLearned = viewModel::onCardLearned,
+                onCardNotLearned = viewModel::onCardNotLearned,
+                onAnswerProvided = viewModel::onAnswerProvided,
+                onTestModeChanged = viewModel::onTestModeChanged,
+                onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
+            )
 
-    when (val s = state) {
-        is FlashcardToTest -> TestCardSetContent(
-            state = s,
-            onCardLearned = viewModel::onCardLearned,
-            onCardNotLearned = viewModel::onCardNotLearned,
-            onAnswerProvided = viewModel::onAnswerProvided,
-            onTestModeChanged = viewModel::onTestModeChanged,
-            onCaseSensitiveChanged = viewModel::onCaseSensitiveChanged,
-            modifier = modifier
-        )
-
-        is TestFinished -> TestingFinishedContent(
-            state = s,
-            onBackButtonClicked = onNavigateBack,
-            modifier = modifier
-        )
+            is TestFinished -> TestingFinishedContent(
+                state = s,
+                onBackButtonClicked = onNavigateBack,
+            )
+        }
     }
 }
 

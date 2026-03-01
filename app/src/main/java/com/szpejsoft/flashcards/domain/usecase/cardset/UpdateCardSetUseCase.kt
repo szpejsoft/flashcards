@@ -2,6 +2,7 @@ package com.szpejsoft.flashcards.domain.usecase.cardset
 
 import com.szpejsoft.flashcards.domain.model.Flashcard
 import com.szpejsoft.flashcards.domain.repository.CardSetWithFlashcardsRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateCardSetUseCase
@@ -14,12 +15,16 @@ constructor(private val cardSetRepository: CardSetWithFlashcardsRepository) {
         flashcardsToSave: List<Flashcard>,
         flashcardIdsToDelete: List<Long>
     ) {
-        if (cardSetName.isBlank()) throw IllegalArgumentException("Card set name cannot be blank")
+        require(cardSetName.isNotBlank()) { "Card set name cannot be blank" }
+        Timber.d("ptsz uc update: ${flashcardsToSave.joinToString(prefix = "\n ", separator = ", ")} ")
         cardSetRepository.update(
             cardSetId,
             cardSetName,
-            flashcardsToSave.map { it.copy(id = 0L) },
+            flashcardsToSave.map { it.copy(id = it.sanitizeId()) },
             flashcardIdsToDelete
         )
     }
+
+    private fun Flashcard.sanitizeId() = if (id > 0) id else 0
+
 }

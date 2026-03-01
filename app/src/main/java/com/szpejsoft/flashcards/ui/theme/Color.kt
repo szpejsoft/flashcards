@@ -2,10 +2,13 @@ package com.szpejsoft.flashcards.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Deep Indigo Royal Blue Palette
+val IndigoPrimary = Color(0xFF4361EE)
+val IndigoSecondary = Color(0xFF4895EF)
+val IndigoAccent = Color(0xFFF72585)
+val IndigoBackground = Color(0xFFEDEDED)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Dark Mode Variants
+val IndigoPrimaryDark = Color(0xFF3F37C9)
+val IndigoSecondaryDark = Color(0xFF4361EE)
+val IndigoBackgroundDark = Color(0xFF121212)
